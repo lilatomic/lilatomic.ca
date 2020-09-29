@@ -6,10 +6,14 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
+const pluginTOC = require('eleventy-plugin-toc')
+
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
+
+  eleventyConfig.addPlugin(pluginTOC)
 
   eleventyConfig.setDataDeepMerge(true);
 
@@ -74,7 +78,9 @@ module.exports = function(eleventyConfig) {
     permalink: true,
     permalinkClass: "direct-link",
     permalinkSymbol: "#"
-  });
+  }).use(require('markdown-it-abbr')
+  ).use(require('markdown-it-footnote')
+  );
   eleventyConfig.setLibrary("md", markdownLibrary);
 
   // Browsersync Overrides

@@ -2,9 +2,18 @@
 layout: layouts/base.njk
 templateClass: tmpl-post
 ---
+
 <h1>{{ title }}</h1>
 
+{% if content | toc | safe %}
+  <aside>
+    {{ content | toc | safe }}
+  </aside>
+{% endif %}
+
+<article>
 {{ content | safe }}
+</article>
 
 <hr>
 <ul>

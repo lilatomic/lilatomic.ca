@@ -1,20 +1,19 @@
 {
-  "title": "Your Blog Name",
-  "url": "https://example.com/",
-  "description": "I am writing about my experiences as a naval navel-gazer.",
+  "title": "Lilatomic",
+  "url": "https://lilatomic.ca/",
+  "description": "A place for my things",
   "feed": {
-    "subtitle": "I am writing about my experiences as a naval navel-gazer.",
+    "subtitle": "My things",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
-    "id": "https://example.com/"
+    "id": "https://lilatomic.ca/"
   },
   "jsonfeed": {
     "path": "/feed/feed.json",
-    "url": "https://example.com/feed/feed.json"
+    "url": "https://lilatomic.ca/feed/feed.json"
   },
   "author": {
-    "name": "Your Name Here",
-    "email": "youremailaddress@example.com",
-    "url": "https://example.com/about-me/"
+    "name": "Lilatomic",
+    "url": "https://lilatomic.ca/about-me/"
   }
 }

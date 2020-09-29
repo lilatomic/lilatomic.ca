@@ -7,4 +7,4 @@ eleventyNavigation:
   order: 3
 ---
 
-I am a person that writes stuff.
+I do IT things, mostly Ansible and Azure because that's what they pay me for. I also do other things, which might appear here.

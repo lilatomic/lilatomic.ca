@@ -1,12 +1,15 @@
 :root {
-  --red: #C5004A;
-  --darkred: #7F0036;
-  --lightgray: #e0e0e0;
-  --gray: #C0C0C0;
-  --darkgray: #333;
-  --navy: #17050F;
-  --blue: #082840;
-  --white: #fff;
+  --accent: #594848;
+  --link_unvisited: #1a8fe8;
+
+  --tag_text: #fff;
+  --tag_body: #C5004A;
+
+  --nav_element: #4e86bb;
+
+  --mainbg: #1b2133;
+  --link_visited: #5586b3;
+  --maintext: #c3d1de;
 
   --padding: 1em;
 }
@@ -18,8 +21,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: system-ui, sans-serif;
-  color: var(--darkgray);
-  background-color: var(--white);
+  color: var(--maintext);
+  background-color: var(--mainbg);
 }
 p:last-child {
   margin-bottom: 0;
@@ -34,16 +37,16 @@ p,
   line-height: 1.45;
 }
 a[href] {
-  color: var(--blue);
+  color: var(--link_unvisited);
 }
 a[href]:visited {
-  color: var(--navy);
+  color: var(--link_visited);
 }
 main {
   padding: 1rem;
 
   width: 100%;
-  max-width: 75vw;
+  max-width: calc(75vw - var(--padding));
   box-sizing: border-box;
 
   margin-top: var(--padding);
@@ -54,7 +57,7 @@ main :first-child {
   margin-top: 0;
 }
 header {
-  border-bottom: 1px dashed var(--lightgray);
+  border-bottom: 1px dashed var(--accent);
 
   display: flex;
   flex-wrap: wrap;
@@ -66,6 +69,10 @@ header:after {
   display: table;
   clear: both;
 }
+#home {
+  color: var(--nav_element);
+}
+
 table {
   margin: 1em 0;
 }
@@ -141,8 +148,6 @@ pre {
 }
 
 /* Nav */
-
-
 .nav {
   width: 100%;
   max-width: 25vw;
@@ -152,27 +157,27 @@ pre {
   top: 0;
   right: 0;
   bottom: 0;
+  border-left: 1px dashed var(--accent);
 
   display: flex;
   flex-direction: column;
 }
 
 .nav ul {
-
   list-style: none;
   margin-left: 1em;
 
   display: flex;
   flex-direction: column;
-
-
 }
 .nav-item {
   display: inline-block;
   margin-right: 1em;
+  margin-bottom: 1em;
 }
 .nav-item a[href]:not(:hover) {
   text-decoration: none;
+  color: var(--nav_element);
 }
 .nav-item-active {
   font-weight: 700;
@@ -197,7 +202,7 @@ pre {
 .postlist-date,
 .postlist-item:before {
   font-size: 0.8125em; /* 13px /16 */
-  color: var(--darkgray);
+  color: var(--accent);
 }
 .postlist-date {
   word-spacing: -0.5px;
@@ -223,8 +228,8 @@ pre {
   font-size: 0.625em; /* 10px /16 */
   padding: 2px 4px;
   margin-left: 0.8em; /* 8px /10 */
-  background-color: var(--red);
-  color: var(--white);
+  background-color: var(--tag_body);
+  color: var(--tag_text);
   border-radius: 0.25em; /* 3px /12 */
   text-decoration: none;
 }

@@ -13,7 +13,7 @@
   <body>
     <main{% if templateClass %} class="{{ templateClass }}"{% endif %}>
       <header>
-        <h1 class="home"><a href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
+        <h1 class="home"><a id="home" href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
       </header>
       {{ content | safe }}
     </main>

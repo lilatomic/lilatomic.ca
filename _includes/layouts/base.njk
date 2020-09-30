@@ -19,7 +19,14 @@
     </main>
 
     <nav class="nav">
+          {% if content | toc | safe %}
+            <aside id="toc">
+              {{ content | toc | safe }}
+            </aside>
+          {% endif %}
+
       <ul>
+
       {%- for entry in collections.all | eleventyNavigation %}
         <li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a href="{{ entry.url | url }}">{{ entry.title }}</a></li>
       {%- endfor %}

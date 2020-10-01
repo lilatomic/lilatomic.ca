@@ -6,8 +6,15 @@ templateClass: tmpl-post
 <article>
 <h1>{{ title }}</h1>
 
+  {% if content | toc | safe %}
+  <aside id="toc">
+    {{ content | toc | safe }}
+  </aside>
+  {% endif %}
+
 {{ content | safe }}
 </article>
+
 
 
 <hr>

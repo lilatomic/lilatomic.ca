@@ -163,19 +163,11 @@ pre {
   width: var(--sidebar_width);
   padding: 0;
 
-  /*position: fixed;*/
-  /*top: 0;*/
-  /*right: 0;*/
-  /*bottom: 0;*/
   border-left: 1px dashed var(--accent);
-
-  display: flex;
-  flex-direction: row;
 }
 
 .nav ul {
   list-style: none;
-  /*max-width: 12.5vw;*/
   width: 100%;
 
   border-left: 1px dashed var(--accent);
@@ -203,7 +195,7 @@ pre {
   width: var(--sidebar_width);
 
   position: sticky;
-  top: 20vh;
+  top: 17vh;
   right: 0;
   bottom: 0;
   border-left: 1px dashed var(--accent);
@@ -293,37 +285,32 @@ a[href].direct-link:focus:visited,
 }
 
 /*smol horizontal*/
-@media screen and (max-width: 750px) {
-  .nav{
+@media screen and (max-width: 850px) {
+  #main {
     flex-direction: column;
-    /*max-width: 35vw;*/
     width: 100%;
+    max-width: none;
   }
-  .nav ul {
-    width: 100%;
-    border-left: none;
+  main {
+    max-width: none;
   }
   #toc {
+    top: 0;
     width: 100%;
-    border-bottom: 1px dashed var(--accent);
-    border-left: none;
+    position: relative;
+    float: none;
   }
-}
+  p {
+    max-width: none;
+  }
 
-/*smol vertical*/
-@media screen and (max-width: 750px) {
-  .nav{
-    flex-direction: column;
-    /*max-width: 35vw;*/
+  .nav {
     width: 100%;
+    position: relative;
   }
-  .nav ul {
-    width: 100%;
-    border-left: none;
-  }
-  #toc {
-    width: 100%;
-    border-bottom: 1px dashed var(--accent);
-    border-left: none;
+
+  .nav-item {
+    display: inline-block;
+    text-align: center;
   }
 }

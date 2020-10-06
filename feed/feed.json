@@ -1,0 +1,19 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Lilatomic",
+  "home_page_url": "https://lilatomic.ca/",
+  "feed_url": "https://lilatomic.ca/feed/feed.json",
+  "description": "A place for my things",
+  "author": {
+    "name": "Lilatomic",
+    "url": "https://lilatomic.ca/about-me/"
+  },
+  "items": [{
+      "id": "https://lilatomic.ca/posts/firstpost/",
+      "url": "https://lilatomic.ca/posts/firstpost/",
+      "title": "This is my first post.",
+      "content_html": "<h2 id=\"what's-happening-here\">What's happening here <a class=\"direct-link\" href=\"#what's-happening-here\">#</a></h2>\n<p>Couple things I'll be doing:</p>\n<ul>\n<li>Filling in practical documentation : sometimes you want to know how to use a technology to <em>solve a problem</em>, not just in the abstract. As I solve problems, I'll be putting the solution here</li>\n<li>Getting into the air howtos : there are a lot of tutorials which are the most basic of &quot;How to use technology X&quot;. But often there's a significant gap to actually using that effectively. So these Howto articles will go through using a tool more indepth.</li>\n<li>Reading reports : Mostly so I don't forget the things I've read, and maybe they'll be useful for you too.</li>\n<li>Ideas (mostly about software) : I have ideas, and while they're not all good, some of them might be interesting.</li>\n</ul>\n",
+      "date_published": "2020-09-30T00:00:00+00:00"
+    }
+  ]
+}

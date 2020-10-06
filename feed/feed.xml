@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Lilatomic</title>
+	<subtitle>My things</subtitle>
+	
+	<link href="https://lilatomic.ca/feed/feed.xml" rel="self"/>
+	<link href="https://lilatomic.ca/"/>
+	<updated>2020-09-30T00:00:00+00:00</updated>
+	<id>https://lilatomic.ca/</id>
+	<author>
+		<name>Lilatomic</name>
+		<email></email>
+	</author>
+	
+	<entry>
+		<title>This is my first post.</title>
+		<link href="https://lilatomic.ca/posts/firstpost/"/>
+		<updated>2020-09-30T00:00:00+00:00</updated>
+		<id>https://lilatomic.ca/posts/firstpost/</id>
+		<content type="html">&lt;h2 id=&quot;what&#39;s-happening-here&quot;&gt;What&#39;s happening here &lt;a class=&quot;direct-link&quot; href=&quot;#what&#39;s-happening-here&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Couple things I&#39;ll be doing:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Filling in practical documentation : sometimes you want to know how to use a technology to &lt;em&gt;solve a problem&lt;/em&gt;, not just in the abstract. As I solve problems, I&#39;ll be putting the solution here&lt;/li&gt;
+&lt;li&gt;Getting into the air howtos : there are a lot of tutorials which are the most basic of &amp;quot;How to use technology X&amp;quot;. But often there&#39;s a significant gap to actually using that effectively. So these Howto articles will go through using a tool more indepth.&lt;/li&gt;
+&lt;li&gt;Reading reports : Mostly so I don&#39;t forget the things I&#39;ve read, and maybe they&#39;ll be useful for you too.&lt;/li&gt;
+&lt;li&gt;Ideas (mostly about software) : I have ideas, and while they&#39;re not all good, some of them might be interesting.&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+	</entry>
+</feed>

@@ -9,6 +9,8 @@ tags:
   - dhall
 layout: layouts/post.njk
 ---
+*[NPE]: Null Pointer Exception
+
 # Learning Kubernetes with dhall-kubernetes
 
 ## Episode 1 : Introduction
@@ -72,4 +74,57 @@ Let's convert those manifests!
 
 ### drupal.yml
 
-let's start with the configmap. 
+
+## Reference
+
+Some items relate more to using dhall-kubernetes than to Mr. Geerling's introduction to kubernetes. I've stashed them here until I decide that they're too large and they become their own articles.
+
+### Handling failure
+
+One problem we run into is that some fields which we _know_ will be present cannot be validated to actually be there. For example, we want to access the name of the configmap, which can be found in the `metadata.name` attribute. However, this attribute can be unset (at least according to the schema. Kubernetes might be sad, but it won't be sad in advance). If you're used to most programming languages, we would either let it throw an NPE, or we would throw some other exception and abort the whole process. It's tempting to try to emulate that behaviour in dhall, and you can get something close with `assert`:
+
+``` dhall
+let Optional/null =
+      https://raw.githubusercontent.com/dhall-lang/dhall-lang/master/Prelude/Optional/null.dhall
+
+let q = Some 3
+let _ = assert : Optional/null Natural q ≡ False
+in {=}
+```
+
+But trying to use assertions in function bodies doesn't work. This is because assertions in dhall are designed for writing tests, not for checking input values. In fact, assertions are evaluated at [type-checking time](https://docs.dhall-lang.org/tutorials/Language-Tour.html#tests). So that's not really useful for us. We can reach (not too deeply) into the functional toolbox and use `Optionals` to ensure that our functions always return something, even if that something is nothing. We can then, when wiring everything together, use some other functional tricks to launch our assert.
+
+The first part of the solution is to have our functions return an `Optional Type`. This will allow us to return `None Type` if things don't make sense. We then want to collect the results into a list so we can iterate over them all at once. We could do fancier FP things, but we're already gathering things into a `List ./typeUnion.dhall`, so turning it into a `List (Optional ./typeUnion.dhall)` is convenient and clear for anyone. Lastly, we assert that none of these are `None` with a handy call to `any` : 
+``` dhall
+{% include resources/kubernetes101_with_dhall/CheckManifest.dhall %}
+
+-- And then in the real file
+
+let k8sManifest = ???
+
+let _ = assert : check k8sManifest ≡ True
+```
+
+I would like to point out, though, that a better solution is to make illegal (or just dumb) states unrepresentable. One example is something we've done extensively: We've used a function to ensure that the same value is used in the spots where they need to match. This is sometimes called a Construction Assurance, or something to that effect. 
+
+One difficulty with this route is that the types in dhall-kubernetes sometimes lack the expressiveness we need. As a concrete example, the `ConfigMap.ObjectMeta.name` property is of type `Optional Text`. But we know we set it! We can sidestep this by defining a smarter type. This is an example implementation for ConfigMap:
+
+``` dhall
+{ name : Text
+, namespace : Text
+, data : List { mapKey : Text, mapValue : Text }
+}
+```
+
+We can pass this one around instead of the k8s resource itself, guaranteeing that `name` is always set.
+
+These non-api types can do more than just constrain fields to exist (or not exist). They can also refine the type definition to clarify why so many fields are optional. For example, the (now deprecated) Helm Chart for setting up a docker registry contains a [whole bunch of options](https://github.com/helm/charts/blob/master/stable/docker-registry/values.yaml) for storage. But this doesn't make sense, since you can only have 1 storage! So you could create a dhall union type to represent different storage types, and then a dhall type representing the registry would have a storage type as a field. Sketch implementation:
+
+``` dhall
+let storage_s3 = {???}
+let storage_local = {???}
+...
+let registry_storage = < s3 storage_s3 | local storage_local | ... > 
+
+let registry = { storage : registry_storage }
+```

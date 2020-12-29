@@ -74,6 +74,33 @@ Let's convert those manifests!
 
 ### drupal.yml
 
+#### ConfigMap
+
+Let's start with the configmap. We're going to tke advantage of dhall's ability to load files as text to keep the drupal config as a separate file. This makes it possible to edit the file with syntax highlighters, linters, and validation tooling. It also makes it easier for drupal experts to just do their job without having to copypaste things into k8s manifest.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/drupal-config.dhall %}
+```
+
+I've set it up to accept a namespace and a name. It would be alright to hardcode these; but since we'll need to cross-reference the name in other places, I've kept it injectable. This way, we can have a variable in the dhall file which coordinates the whole deployment. This single variable will ensure that we always have the names in sync.
+
+#### PersistentVolumeClaim
+
+Nothing special about this PVC. Do be careful about what things are `Optional`s as they will require `Some`.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/drupal-files-pvc.dhall %}
+```
+
+#### Deployment
+
+The Deployment is where we'll be able to show off some of how dhall can keep properties in sync with each other, like with the `label`s.
+
+The Deployment has a lot of components to get right. To get more informative errors from the dhall checker, you can work on it in pieces. You can also default with the empty record, like `k8s.DeploymentSpec::{=}`, to fill in some of typecheck holes and get the ones you are interested in.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/drupal-deployment.dhall %}
+```
 
 ## Reference
 

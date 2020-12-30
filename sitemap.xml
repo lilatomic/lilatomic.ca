@@ -22,62 +22,77 @@
   </url>
   
   <url>
+    <loc>https://lilatomic.ca/posts/pytest_for_functional_tests/</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  
+  <url>
     <loc>https://lilatomic.ca/about/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/posts/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/colophon/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/page-list/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/dhall/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/using/</loc>
-    <lastmod>2020-12-09</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lilatomic.ca/tags/off-topic/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/VB/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/dotnet/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/hindsight/</loc>
-    <lastmod>2020-12-09</lastmod>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/python/</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/infra/</loc>
+    <lastmod>2020-12-30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/off-topic/</loc>
+    <lastmod>2020-12-30</lastmod>
   </url>
 </urlset>

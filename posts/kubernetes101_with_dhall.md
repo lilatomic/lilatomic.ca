@@ -10,6 +10,8 @@ tags:
 layout: layouts/post.njk
 ---
 *[NPE]: Null Pointer Exception
+*[kv-pairs]: Key-Value Pairs
+*[k8s]: Kubernetes
 
 # Learning Kubernetes with dhall-kubernetes
 
@@ -94,7 +96,24 @@ Nothing special about this PVC. Do be careful about what things are `Optional`s 
 
 #### Deployment
 
-The Deployment is where we'll be able to show off some of how dhall can keep properties in sync with each other, like with the `label`s.
+The Deployment is where we'll be able to use dhall to keep properties in sync with each other, like with the `label`s and the volume names.
+
+We can also use Dhall to pull out some common functionality. Here, I pull out a little helper to generate the the `Probe`s. Most of the time, I will want to use the `tcpSocket`-type of probe. So I can pull this out into its own file so I can use it all over. It also allows us to not need to remember all the syntax for it, and only specify the things we can about.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/mkProbe.dhall %}
+```
+
+We can also use Dhall to give structure to "unstructured" fields. Here, the `resources` section is (by the spec) just kv-pairs for the requests and limits. But we want to give them cpu and memory, and we probably also have reasonable defaults that we normally want. In the `container-resource.dhall` file, we have 4 items we export:
+
+1. Type : a Record Type which describes the fields we want
+
+1. default : the defaults for that type. This makes it easier to override specific values
+
+1. mkResources : this function transforms the requirements Type into the k8s type
+
+1. default_resources : this is just a convenience for me, it is just the default which has been turned into the k8s type
+
 
 The Deployment has a lot of components to get right. To get more informative errors from the dhall checker, you can work on it in pieces. You can also default with the empty record, like `k8s.DeploymentSpec::{=}`, to fill in some of typecheck holes and get the ones you are interested in.
 
@@ -102,56 +121,20 @@ The Deployment has a lot of components to get right. To get more informative err
 {% include resources/kubernetes101_with_dhall/ep04/drupal-deployment.dhall %}
 ```
 
+#### Bundling things all together
+
+We can create a list similar to the last time we did this. Here, we're going to leave it easy to modify the namespace, by wrapping the whole thing in a function. If we wanted to ship this to other people, we would probably want to export the function itself.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/drupal.dhall %}
+```
+
+One thing to note is that we have to be careful with the Deployment, since the names for the ConfigMap and the PVC can be interchanged. This is because they are both `Text` types. Some type systems will let you define types which are backed by other types but are still disctinct. That is, we could say that `PVCName` and `ConfigMapName` are both backed by `Text`, but they cannot be assigned to each other. This doesn't work in Dhall, since they will both be normalised to `Text`. I haven't found a good way around this, which isn't great; but this is similar to many commonly used programming languages where there isn't really a way to distinguish between different `string`s or `bool`s. 
+
+One way to push the problem a bit farther up is to use a portfolio for these arguments. We could define a record `{ PVCName : Text, ConfigMapName : Text }` and pass that around. This makes it harder to confuse the two while passing them around. This Record type also helps people load them correctly because the fields are explicitly named, which hopefully helps minimise those types of errors.
+
+
 ## Reference
 
 Some items relate more to using dhall-kubernetes than to Mr. Geerling's introduction to kubernetes. I've stashed them here until I decide that they're too large and they become their own articles.
 
-### Handling failure
-
-One problem we run into is that some fields which we _know_ will be present cannot be validated to actually be there. For example, we want to access the name of the configmap, which can be found in the `metadata.name` attribute. However, this attribute can be unset (at least according to the schema. Kubernetes might be sad, but it won't be sad in advance). If you're used to most programming languages, we would either let it throw an NPE, or we would throw some other exception and abort the whole process. It's tempting to try to emulate that behaviour in dhall, and you can get something close with `assert`:
-
-``` dhall
-let Optional/null =
-      https://raw.githubusercontent.com/dhall-lang/dhall-lang/master/Prelude/Optional/null.dhall
-
-let q = Some 3
-let _ = assert : Optional/null Natural q ≡ False
-in {=}
-```
-
-But trying to use assertions in function bodies doesn't work. This is because assertions in dhall are designed for writing tests, not for checking input values. In fact, assertions are evaluated at [type-checking time](https://docs.dhall-lang.org/tutorials/Language-Tour.html#tests). So that's not really useful for us. We can reach (not too deeply) into the functional toolbox and use `Optionals` to ensure that our functions always return something, even if that something is nothing. We can then, when wiring everything together, use some other functional tricks to launch our assert.
-
-The first part of the solution is to have our functions return an `Optional Type`. This will allow us to return `None Type` if things don't make sense. We then want to collect the results into a list so we can iterate over them all at once. We could do fancier FP things, but we're already gathering things into a `List ./typeUnion.dhall`, so turning it into a `List (Optional ./typeUnion.dhall)` is convenient and clear for anyone. Lastly, we assert that none of these are `None` with a handy call to `any` : 
-``` dhall
-{% include resources/kubernetes101_with_dhall/CheckManifest.dhall %}
-
--- And then in the real file
-
-let k8sManifest = ???
-
-let _ = assert : check k8sManifest ≡ True
-```
-
-I would like to point out, though, that a better solution is to make illegal (or just dumb) states unrepresentable. One example is something we've done extensively: We've used a function to ensure that the same value is used in the spots where they need to match. This is sometimes called a Construction Assurance, or something to that effect. 
-
-One difficulty with this route is that the types in dhall-kubernetes sometimes lack the expressiveness we need. As a concrete example, the `ConfigMap.ObjectMeta.name` property is of type `Optional Text`. But we know we set it! We can sidestep this by defining a smarter type. This is an example implementation for ConfigMap:
-
-``` dhall
-{ name : Text
-, namespace : Text
-, data : List { mapKey : Text, mapValue : Text }
-}
-```
-
-We can pass this one around instead of the k8s resource itself, guaranteeing that `name` is always set.
-
-These non-api types can do more than just constrain fields to exist (or not exist). They can also refine the type definition to clarify why so many fields are optional. For example, the (now deprecated) Helm Chart for setting up a docker registry contains a [whole bunch of options](https://github.com/helm/charts/blob/master/stable/docker-registry/values.yaml) for storage. But this doesn't make sense, since you can only have 1 storage! So you could create a dhall union type to represent different storage types, and then a dhall type representing the registry would have a storage type as a field. Sketch implementation:
-
-``` dhall
-let storage_s3 = {???}
-let storage_local = {???}
-...
-let registry_storage = < s3 storage_s3 | local storage_local | ... > 
-
-let registry = { storage : registry_storage }
-```

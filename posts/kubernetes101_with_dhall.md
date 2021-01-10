@@ -12,14 +12,17 @@ layout: layouts/post.njk
 *[NPE]: Null Pointer Exception
 *[kv-pairs]: Key-Value Pairs
 *[k8s]: Kubernetes
+*[PVC]: Persistant Volume Claim
 
 # Learning Kubernetes with dhall-kubernetes
 
-## Episode 1 : Introduction
-
-## Episode 2 : Containers
+This is mostly me trying to use dhall-kubernetes effectively. I am using Jeff Geerling's Kubernetes 101 series as an exercise set. I figure that following along with a paced course on k8s will allow me to discover neat ways of using dhall-kubernetes to make manifests which are better in almost all ways than straight YAML.
 
 ## Episode 3 : Deploying Apps
+
+The first manifests we deploy are for a drupal app. We could always bash everything together in the same Dhall file and ignore all the features of Dhall. For example, we could have the namespace parameter specified at every location where it is used. This would limit the gains of using Dhall to a type-checked config. But there is a cost to this type-checking, since Dhall (and especially dhall-kubernetes) force us to be very specific about everything. This includes fields which are technically optional but it is almost certainly a mistake to leave blank, like the name of a PVC.
+
+So we're going to jump in making reasonable assumptions about what might work. You can follow along here with my thought process, and I'll try to collect the results of this process into a separate article.
 
 ### Deploying the hello-go app
 
@@ -133,8 +136,41 @@ One thing to note is that we have to be careful with the Deployment, since the n
 
 One way to push the problem a bit farther up is to use a portfolio for these arguments. We could define a record `{ PVCName : Text, ConfigMapName : Text }` and pass that around. This makes it harder to confuse the two while passing them around. This Record type also helps people load them correctly because the fields are explicitly named, which hopefully helps minimise those types of errors.
 
+### MariaDB
 
-## Reference
+#### PersistentVolumeClaim
 
-Some items relate more to using dhall-kubernetes than to Mr. Geerling's introduction to kubernetes. I've stashed them here until I decide that they're too large and they become their own articles.
+This is identical to the other PVC, except for the name. We can just reuse the function we had for that. We might want to rename the file and consider extracting this to a separate function (with a parameter for the size) so that we can reuse it everywhere. Or we don't have to, YAML gives us no ability to reuse these pieces. (Well, there are [YAML Anchors](https://yaml.org/spec/1.2/spec.html#id2785586), but I have never seen these in the wild.)
+
+#### Deployment 
+
+We create a handy helper to transform maps into the specific type. Having to do a bit of munging for what would otherwise just be kv-pairs in YAML is a bit of a pain point for using Dhall. If you have some helpers it's just a bit more ceremony.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/mkEnv.dhall %}
+```
+
+The deployment is pretty similar to the drupal one. Note that we make it really easy to change the credentials. Security is everyone's business.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/mariadb-deployment.dhall %}
+```
+
+#### Service
+
+The service is also very similar to the other one. So let's refactor it. I've put a single parameter here for the port, and I've used the full dhall-kubernetes type. I could have wrapped the port in a custom record and built it, but I didn't think there was a need for that, since it's a fairly simple resource. (Unlike with `ObjectMeta`, where I there's a bit of fiddling to marshall it.). I've also decided to only accept a single port. In most cases, this will be fine, since I will only be exposing a singly port, and this function signature maps closer to that use case. In cases where I'd need more ports, there are a few options: I could just write the thing as a one-off, I could write a new function, or I could use one of Dhall's fun record-modifier operations.
+
+``` dhall 
+{% include resources/kubernetes101_with_dhall/ep04/service.dhall %}
+```
+
+#### Tying things together
+
+We just make one big k8s list of things which includes all of our things. We use Dhall's ability to include values from environment variables to pass in the DB credentials. This way, we don't have to write them into the config file, but they'll show up when we render the file with those variables set.
+
+``` dhall
+{% include resources/kubernetes101_with_dhall/ep04/mariadb.dhall %}
+```
+
+
 

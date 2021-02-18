@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SSL with Microstack</title>
+	<meta name="description" content="Microstack is Openstack in a Snap! let&#39;s add some SSL to it">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="Lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="Lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">Lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>SSL with Microstack</h1>
+
+  
+  <aside id="toc">
+    <nav class="toc">
+        <ol><li><a href="#setting-up-https-on-horizon-(the-dashboard)">Setting up HTTPS on Horizon (the dashboard)</a></li><li><a href="#ssl-cert">SSL Cert</a></li><li><a href="#nginx">Nginx</a></li></ol></nav>
+  </aside>
+  
+<div class="content">
+<h1 id="ssl-with-microstack">SSL with Microstack <a class="direct-link" href="#ssl-with-microstack">#</a></h1>
+<h2 id="setting-up-https-on-horizon-(the-dashboard)">Setting up HTTPS on Horizon (the dashboard) <a class="direct-link" href="#setting-up-https-on-horizon-(the-dashboard)">#</a></h2>
+<p>Let's follow the docs <a href="https://docs.openstack.org/horizon/latest/admin/customize-configure.html#configure-dashboard">here</a></p>
+<p>The config files for microstack are all in the snap directory, so look in <code>/var/snap/microstack/common/etc</code>. We want to change the hostname by replacing the relevant lines:</p>
+<p>:/common/etc/local_settings.d/_05_snap_tweaks.py</p>
+<pre class="language-python"><code class="language-python"><span class="highlight-line">OPENSTACK_HOST <span class="token operator">=</span> <span class="token string">""</span></span><br><span class="highlight-line">ALLOWED_HOSTS <span class="token operator">=</span> <span class="token string">""</span></span></code></pre>
+<h2 id="ssl-cert">SSL Cert <a class="direct-link" href="#ssl-cert">#</a></h2>
+<p>I tossed my cert and key into :/common/etc/ssl/private . Make sure to give it appropriate permissions</p>
+<h2 id="nginx">Nginx <a class="direct-link" href="#nginx">#</a></h2>
+<p>The config for horizon lives in :/common/etc/nginx/snap/sites-enabled/horizon.conf . I replaced the <code>listen</code> directive, gave it a <code>server_name</code>, and added the <code>ssl_certificate</code> and <code>ssl_certificate_key</code>. I found that giving the absolute path to the SSL folder worked. That gives us:</p>
+<pre class="language-nginx"><code class="language-nginx"><span class="highlight-line"><span class="token keyword">server</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">	<span class="token keyword">listen</span> <span class="token number">443</span> <span class="token keyword">ssl</span><span class="token punctuation">;</span></span><br><span class="highlight-line">	<span class="token keyword">server_name</span> alpacloud<span class="token punctuation">.</span>lilatomic<span class="token punctuation">.</span>ca<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">	<span class="token keyword">ssl_certificate</span> <span class="token operator">/</span>var<span class="token operator">/</span>snap<span class="token operator">/</span>microstack<span class="token operator">/</span>common<span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>private<span class="token operator">/</span>certificate<span class="token punctuation">.</span>pem<span class="token punctuation">;</span></span><br><span class="highlight-line">	<span class="token keyword">ssl_certificate_key</span> <span class="token operator">/</span>var<span class="token operator">/</span>snap<span class="token operator">/</span>microstack<span class="token operator">/</span>common<span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>private<span class="token operator">/</span>private<span class="token operator">-</span>key<span class="token punctuation">.</span>pem<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">	<span class="token keyword">client_max_body_size</span> <span class="token number">16</span>G<span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">	<span class="token keyword">error_log</span> syslog<span class="token punctuation">:</span><span class="token keyword">server</span><span class="token operator">=</span>unix<span class="token punctuation">:</span><span class="token operator">/</span>dev<span class="token operator">/</span>log<span class="token punctuation">;</span></span><br><span class="highlight-line">	<span class="token keyword">access_log</span> syslog<span class="token punctuation">:</span><span class="token keyword">server</span><span class="token operator">=</span>unix<span class="token punctuation">:</span><span class="token operator">/</span>dev<span class="token operator">/</span>log<span class="token punctuation">;</span></span><br><span class="highlight-line">	<span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">		<span class="token keyword">include</span> <span class="token operator">/</span>snap<span class="token operator">/</span>microstack<span class="token operator">/</span><span class="token number">222</span><span class="token operator">/</span>usr<span class="token operator">/</span>conf<span class="token operator">/</span>uwsgi_params<span class="token punctuation">;</span></span><br><span class="highlight-line">		uwsgi_param SCRIPT_NAME <span class="token string">''</span><span class="token punctuation">;</span></span><br><span class="highlight-line">		uwsgi_pass unix<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token operator">/</span>var<span class="token operator">/</span>snap<span class="token operator">/</span>microstack<span class="token operator">/</span>common<span class="token operator">/</span>run<span class="token operator">/</span>horizon<span class="token punctuation">.</span>sock<span class="token punctuation">;</span></span><br><span class="highlight-line">	<span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span></code></pre>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Previous: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/microstack/ -->
+</body>
+</html>

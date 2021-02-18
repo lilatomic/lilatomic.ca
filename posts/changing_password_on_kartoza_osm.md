@@ -1,6 +1,6 @@
 ---
 title: Changing the password on kartoza/docker-osm
-description: "docker:docker" is not acceptable"
+description: '"docker:docker" is not acceptable'
 date: 2021-02-10
 tags:
   - kartoza/osm

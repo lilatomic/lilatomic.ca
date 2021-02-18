@@ -5,12 +5,98 @@
 	
 	<link href="https://lilatomic.ca/feed/feed.xml" rel="self"/>
 	<link href="https://lilatomic.ca/"/>
-	<updated>2020-12-30T00:00:00+00:00</updated>
+	<updated>2021-02-17T00:00:00+00:00</updated>
 	<id>https://lilatomic.ca/</id>
 	<author>
 		<name>Lilatomic</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Writing an Action Plugin in Ansible</title>
+		<link href="https://lilatomic.ca/posts/ansible_writing_action_plugin/"/>
+		<updated>2021-02-17T00:00:00+00:00</updated>
+		<id>https://lilatomic.ca/posts/ansible_writing_action_plugin/</id>
+		<content type="html">&lt;h1 id=&quot;writing-an-action-plugin-in-ansible&quot;&gt;Writing an Action Plugin in Ansible &lt;a class=&quot;direct-link&quot; href=&quot;#writing-an-action-plugin-in-ansible&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;It&#39;s common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Including a task list&lt;/li&gt;
+&lt;li&gt;Module plugin&lt;/li&gt;
+&lt;li&gt;Action plugin&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Including a task list is the most straightforward: just have an &lt;code&gt;import_tasks&lt;/code&gt; directive. You can set variables for that task with an attached &lt;code&gt;vars&lt;/code&gt; attribute. There are several downsides to this method. The most obvious is that there isn&#39;t a good way of distributing task lists, either with Ansible-Galaxy or without it. Another downside is that there is a lack of documentation. Yet another is that it can be complicated to provide some basic defaults, formatting, validation, and debugging.&lt;/p&gt;
+&lt;p&gt;Ansible Module plugins might sound like the right thing, especially since the Ansible documentation says that if you use the &lt;code&gt;command&lt;/code&gt; module a lot you might want to write one of these. When you look into the documentation, the difference between these and an Action plugin becomes murky. The capabilities of each aren&#39;t clearly outlined, despite them being practically welded to each other. You may also find documentation which says that when resolving what action to take from a task in a playbook, Ansible will first look for a match for the task action in the Action plugins and, if one isn&#39;t found, in the Modules.&lt;/p&gt;
+&lt;p&gt;The short distinction is that Modules are the code which will get uploaded to the target machine and then launched, and Action modules run on the controller. Action plugins have access to useful Ansible function, like &lt;code&gt;_execute_module&lt;/code&gt;, which allows you to wrap an existing directive (or launch a specially-built &lt;code&gt;command&lt;/code&gt;). Note that these executed modules function like you&#39;d expect: on the remote machine.&lt;/p&gt;
+&lt;p&gt;So, most likely, you&#39;ll want to use an Action plugin.&lt;/p&gt;
+&lt;h2 id=&quot;basic-outline&quot;&gt;Basic outline &lt;a class=&quot;direct-link&quot; href=&quot;#basic-outline&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The basic outline of a plugin is as follows:&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#!/usr/bin/python #1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 2&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; __future__ &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; absolute_import&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; division&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; print_function&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;__metaclass__ &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;type&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; ansible&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;plugins&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;action &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; ActionBase  &lt;span class=&quot;token comment&quot;&gt;# 3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ActionModule&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ActionBase&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;# 4&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; tmp&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; task_vars&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;# 5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;		&lt;span class=&quot;token builtin&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;tmp&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;tmp&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; task_vars&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;task_vars&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;# 6&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;# 7&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;The shebang. Just go with it.&lt;/li&gt;
+&lt;li&gt;The Python2 stuff. Just go with it.&lt;/li&gt;
+&lt;li&gt;Import the plugin base&lt;/li&gt;
+&lt;li&gt;Create a class called ActionModule. To name the plugin, put it in a file with that name.&lt;/li&gt;
+&lt;li&gt;Make the &lt;code&gt;run&lt;/code&gt; method&lt;/li&gt;
+&lt;li&gt;Invoke the &lt;code&gt;super().run&lt;/code&gt; method&lt;/li&gt;
+&lt;li&gt;Return results as a dict&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;common-things-you&#39;d-want-to-do&quot;&gt;Common things you&#39;d want to do &lt;a class=&quot;direct-link&quot; href=&quot;#common-things-you&#39;d-want-to-do&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;run-another-module%2Faction-plugin&quot;&gt;Run another module/action plugin &lt;a class=&quot;direct-link&quot; href=&quot;#run-another-module%2Faction-plugin&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Inside of your &lt;code&gt;run&lt;/code&gt; method:&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;module_name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;???&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;module_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;???&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;???&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_execute_module&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;#1&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	module_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;module_name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	module_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;module_args&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	task_vars&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;task_vars&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;#2&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	tmp&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;tmp &lt;span class=&quot;token comment&quot;&gt;#2&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;use the &lt;code&gt;self._execute_module&lt;/code&gt; method&lt;/li&gt;
+&lt;li&gt;generally pass these forward, don&#39;t forget to provide them&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;run-a-freeform-command&quot;&gt;Run a freeform command &lt;a class=&quot;direct-link&quot; href=&quot;#run-a-freeform-command&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;If you just want to wrap a task like&lt;/p&gt;
+&lt;pre class=&quot;language-yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Run thing&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;  &lt;span class=&quot;token key atrule&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;    &lt;span class=&quot;token key atrule&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Some freeform text&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will need to provide the &lt;code&gt;cmd&lt;/code&gt; arg as the value of &amp;quot;_raw_params&amp;quot; to the module_args.&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;cmd&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ls -la&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_execute_module&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	module_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;module_name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	module_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;_raw_params&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; cmd&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	task_vars&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;task_vars&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;	tmp&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;tmp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;adding-a-fact&quot;&gt;Adding a fact &lt;a class=&quot;direct-link&quot; href=&quot;#adding-a-fact&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Ansible wants you to use a Fact plugin for these, but sometimes a fact only makes sense mid-playbook. Simply set the &amp;quot;ansible_facts&amp;quot; key with a dictionary of the facts you want to add:&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ansible_facts&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;FACT&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>Changing the password on kartoza/docker-osm</title>
+		<link href="https://lilatomic.ca/posts/changing_password_on_kartoza_osm/"/>
+		<updated>2021-02-10T00:00:00+00:00</updated>
+		<id>https://lilatomic.ca/posts/changing_password_on_kartoza_osm/</id>
+		<content type="html">&lt;p&gt;Default credentials are not acceptable. &lt;a href=&quot;https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/04-Authentication_Testing/02-Testing_for_Default_Credentials&quot;&gt;OWASP link&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I made my changes on commit &lt;a href=&quot;https://github.com/kartoza/docker-osm/commit/90735fae170a18bb1c288c0503cf9905561c973d&quot;&gt;90735fae170a18bb1c288c0503cf9905561c973d&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;There are several places the username and password must be changed:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Docker compose:
+&lt;ol&gt;
+&lt;li&gt;services.db.environment.POSTGRES_USER&lt;/li&gt;
+&lt;li&gt;services.db.environment.POSTGRES_PASS&lt;/li&gt;
+&lt;li&gt;services.db.environment.POSTGRES_DBNAME&lt;/li&gt;
+&lt;li&gt;services.imposm.environment.POSTGRES_USER&lt;/li&gt;
+&lt;li&gt;services.imposm.environment.POSTGRES_PASS&lt;/li&gt;
+&lt;li&gt;services.imposm.environment.POSTGRES_DBNAME&lt;/li&gt;
+&lt;li&gt;services.osmenrich.environment.POSTGRES_USER&lt;/li&gt;
+&lt;li&gt;services.osmenrich.environment.POSTGRES_PASS&lt;/li&gt;
+&lt;li&gt;services.osmenrich.environment.POSTGRES_DBNAME&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;settings/qgis_style.sql
+&lt;ol&gt;
+&lt;li&gt;l40 change OWNER&lt;/li&gt;
+&lt;li&gt;l54 change OWNER&lt;/li&gt;
+&lt;li&gt;l814 change docker to osm&lt;/li&gt;
+&lt;li&gt;l1589 change docker to osm&lt;/li&gt;
+&lt;li&gt;l1860 change docker to osm&lt;/li&gt;
+&lt;li&gt;l2154 change docker to osm&lt;/li&gt;
+&lt;li&gt;l2423 change docker to osm&lt;/li&gt;
+&lt;li&gt;l3027 change docker to osm&lt;/li&gt;
+&lt;li&gt;l3297 change docker to osm&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Using Pytest for Testing Deployments</title>

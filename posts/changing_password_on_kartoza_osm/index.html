@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Changing the password on kartoza/docker-osm</title>
+	<meta name="description" content="&quot;docker:docker&quot; is not acceptable">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="Lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="Lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">Lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>Changing the password on kartoza/docker-osm</h1>
+
+  
+  <aside id="toc">
+    
+  </aside>
+  
+<div class="content">
+<p>Default credentials are not acceptable. <a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/04-Authentication_Testing/02-Testing_for_Default_Credentials">OWASP link</a></p>
+<p>I made my changes on commit <a href="https://github.com/kartoza/docker-osm/commit/90735fae170a18bb1c288c0503cf9905561c973d">90735fae170a18bb1c288c0503cf9905561c973d</a>.</p>
+<p>There are several places the username and password must be changed:</p>
+<ol>
+<li>Docker compose:
+<ol>
+<li>services.db.environment.POSTGRES_USER</li>
+<li>services.db.environment.POSTGRES_PASS</li>
+<li>services.db.environment.POSTGRES_DBNAME</li>
+<li>services.imposm.environment.POSTGRES_USER</li>
+<li>services.imposm.environment.POSTGRES_PASS</li>
+<li>services.imposm.environment.POSTGRES_DBNAME</li>
+<li>services.osmenrich.environment.POSTGRES_USER</li>
+<li>services.osmenrich.environment.POSTGRES_PASS</li>
+<li>services.osmenrich.environment.POSTGRES_DBNAME</li>
+</ol>
+</li>
+<li>settings/qgis_style.sql
+<ol>
+<li>l40 change OWNER</li>
+<li>l54 change OWNER</li>
+<li>l814 change docker to osm</li>
+<li>l1589 change docker to osm</li>
+<li>l1860 change docker to osm</li>
+<li>l2154 change docker to osm</li>
+<li>l2423 change docker to osm</li>
+<li>l3027 change docker to osm</li>
+<li>l3297 change docker to osm</li>
+</ol>
+</li>
+</ol>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Next: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li><li>Previous: <a href="/posts/pytest_for_functional_tests/">Using Pytest for Testing Deployments</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/changing_password_on_kartoza_osm/ -->
+</body>
+</html>

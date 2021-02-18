@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Writing an Action Plugin in Ansible</title>
+	<meta name="description" content="How to write an Action Plugin in Ansible. These let you add custom tasks to your playbooks">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="Lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="Lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">Lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>Writing an Action Plugin in Ansible</h1>
+
+  
+  <aside id="toc">
+    <nav class="toc">
+        <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></li><li><a href="#run-a-freeform-command">Run a freeform command</a></li><li><a href="#adding-a-fact">Adding a fact</a></li></ol></li></ol></nav>
+  </aside>
+  
+<div class="content">
+<h1 id="writing-an-action-plugin-in-ansible">Writing an Action Plugin in Ansible <a class="direct-link" href="#writing-an-action-plugin-in-ansible">#</a></h1>
+<p>It's common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.</p>
+<ol>
+<li>Including a task list</li>
+<li>Module plugin</li>
+<li>Action plugin</li>
+</ol>
+<p>Including a task list is the most straightforward: just have an <code>import_tasks</code> directive. You can set variables for that task with an attached <code>vars</code> attribute. There are several downsides to this method. The most obvious is that there isn't a good way of distributing task lists, either with Ansible-Galaxy or without it. Another downside is that there is a lack of documentation. Yet another is that it can be complicated to provide some basic defaults, formatting, validation, and debugging.</p>
+<p>Ansible Module plugins might sound like the right thing, especially since the Ansible documentation says that if you use the <code>command</code> module a lot you might want to write one of these. When you look into the documentation, the difference between these and an Action plugin becomes murky. The capabilities of each aren't clearly outlined, despite them being practically welded to each other. You may also find documentation which says that when resolving what action to take from a task in a playbook, Ansible will first look for a match for the task action in the Action plugins and, if one isn't found, in the Modules.</p>
+<p>The short distinction is that Modules are the code which will get uploaded to the target machine and then launched, and Action modules run on the controller. Action plugins have access to useful Ansible function, like <code>_execute_module</code>, which allows you to wrap an existing directive (or launch a specially-built <code>command</code>). Note that these executed modules function like you'd expect: on the remote machine.</p>
+<p>So, most likely, you'll want to use an Action plugin.</p>
+<h2 id="basic-outline">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
+<p>The basic outline of a plugin is as follows:</p>
+<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token comment">#!/usr/bin/python #1</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token comment"># 2</span></span><br><span class="highlight-line"><span class="token keyword">from</span> __future__ <span class="token keyword">import</span> absolute_import<span class="token punctuation">,</span> division<span class="token punctuation">,</span> print_function</span><br><span class="highlight-line"></span><br><span class="highlight-line">__metaclass__ <span class="token operator">=</span> <span class="token builtin">type</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>action <span class="token keyword">import</span> ActionBase  <span class="token comment"># 3</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">class</span> <span class="token class-name">ActionModule</span><span class="token punctuation">(</span>ActionBase<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 4</span></span><br><span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> tmp<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> task_vars<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 5</span></span><br><span class="highlight-line">		<span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>run<span class="token punctuation">(</span>tmp<span class="token operator">=</span>tmp<span class="token punctuation">,</span> task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">)</span>  <span class="token comment"># 6</span></span><br><span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment"># 7</span></span><br><span class="highlight-line"></span></code></pre>
+<ol>
+<li>The shebang. Just go with it.</li>
+<li>The Python2 stuff. Just go with it.</li>
+<li>Import the plugin base</li>
+<li>Create a class called ActionModule. To name the plugin, put it in a file with that name.</li>
+<li>Make the <code>run</code> method</li>
+<li>Invoke the <code>super().run</code> method</li>
+<li>Return results as a dict</li>
+</ol>
+<h2 id="common-things-you'd-want-to-do">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
+<h3 id="run-another-module%2Faction-plugin">Run another module/action plugin <a class="direct-link" href="#run-another-module%2Faction-plugin">#</a></h3>
+<p>Inside of your <code>run</code> method:</p>
+<pre class="language-python"><code class="language-python"><span class="highlight-line">module_name <span class="token operator">=</span> <span class="token string">"???"</span></span><br><span class="highlight-line">module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"???"</span><span class="token punctuation">:</span><span class="token string">"???"</span><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span> <span class="token comment">#1</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span>module_args<span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span> <span class="token comment">#2</span></span><br><span class="highlight-line">	tmp<span class="token operator">=</span>tmp <span class="token comment">#2</span></span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
+<ol>
+<li>use the <code>self._execute_module</code> method</li>
+<li>generally pass these forward, don't forget to provide them</li>
+</ol>
+<h3 id="run-a-freeform-command">Run a freeform command <a class="direct-link" href="#run-a-freeform-command">#</a></h3>
+<p>If you just want to wrap a task like</p>
+<pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Run thing</span><br><span class="highlight-line">  <span class="token key atrule">command</span><span class="token punctuation">:</span></span><br><span class="highlight-line">    <span class="token key atrule">cmd</span><span class="token punctuation">:</span> <span class="token string">"Some freeform text"</span></span></code></pre>
+<p>You will need to provide the <code>cmd</code> arg as the value of &quot;_raw_params&quot; to the module_args.</p>
+<pre class="language-python"><code class="language-python"><span class="highlight-line">cmd<span class="token operator">=</span><span class="token string">"ls -la"</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"_raw_params"</span><span class="token punctuation">:</span> cmd<span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span></span><br><span class="highlight-line">	tmp<span class="token operator">=</span>tmp</span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
+<h3 id="adding-a-fact">Adding a fact <a class="direct-link" href="#adding-a-fact">#</a></h3>
+<p>Ansible wants you to use a Fact plugin for these, but sometimes a fact only makes sense mid-playbook. Simply set the &quot;ansible_facts&quot; key with a dictionary of the facts you want to add:</p>
+<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"ansible_facts"</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">"FACT"</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">}</span></span></code></pre>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Previous: <a href="/posts/changing_password_on_kartoza_osm/">Changing the password on kartoza/docker-osm</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/ansible_writing_action_plugin/ -->
+</body>
+</html>

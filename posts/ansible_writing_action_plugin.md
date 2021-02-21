@@ -31,13 +31,11 @@ The basic outline of a plugin is as follows:
 {% include resources/ansible_plugins/action/basic.py %}
 ```
 
-1. The shebang. Just go with it.
-2. The Python2 stuff. Just go with it.
-3. Import the plugin base
-4. Create a class called ActionModule. To name the plugin, put it in a file with that name.
-5. Make the `run` method
-6. Invoke the `super().run` method
-7. Return results as a dict
+1. Import the plugin base
+2. Create a class called ActionModule. To name the plugin, put it in a file with that name.
+3. Make the `run` method
+4. Invoke the `super().run` method
+5. Return results as a dict
 
 ## Common things you'd want to do
 
@@ -53,12 +51,13 @@ result = self._execute_module( #1
 	module_name=module_name,
 	module_args=module_args,
 	task_vars=task_vars, #2
-	tmp=tmp #2
+	#3
 )
 ```
 
 1. use the `self._execute_module` method
 2. generally pass these forward, don't forget to provide them
+3. tmp no longer has any effect, if the comments are to be believed, so we don't need to forward it.
 
 ### Run a freeform command
 
@@ -89,4 +88,12 @@ Ansible wants you to use a Fact plugin for these, but sometimes a fact only make
 
 ```python
 return {"ansible_facts":{"FACT":1}}
+```
+
+### Using an existing filter
+
+If you want to use an existing filter pluging (perhaps to format your output), you can just import them from the Ansible package:
+
+```python
+from ansible.plugins.filter.core import to_json, quote
 ```

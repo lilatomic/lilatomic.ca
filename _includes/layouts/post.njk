@@ -16,7 +16,17 @@ templateClass: tmpl-post
 </div>
 </article>
 
-
+{% if revisions %}
+<hr>
+<aside>
+<h2>Revisions</h2>
+<ol>
+  {% for rev in revisions %}
+  <li> {{ rev.date | readableDate }} : {{ rev.desc }} </li>
+  {% endfor %}
+</ol>
+</aside>
+{% endif %}
 
 <hr>
 <ul>

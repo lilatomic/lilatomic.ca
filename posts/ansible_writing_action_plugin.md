@@ -1,7 +1,12 @@
 ---
 title: Writing an Action Plugin in Ansible
 description: How to write an Action Plugin in Ansible. These let you add custom tasks to your playbooks
-date: 2021-02-17
+date: 2021-02-22
+revisions:
+  - date: 2021-02-17
+    desc: "first published"
+  - date: 2021-02-22
+    desc: "+ section on documenting the action plugin"
 tags:
   - ansible
 layout: layouts/post.njk

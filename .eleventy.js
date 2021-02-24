@@ -103,6 +103,10 @@ module.exports = function (eleventyConfig) {
 		ghostMode: false
 	});
 
+	eleventyConfig.addShortcode("include_raw", function(path){
+		return fs.readFileSync("_includes/resources/" + path)
+	})
+
 	return {
 		templateFormats: [
 			"md",

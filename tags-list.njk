@@ -8,7 +8,12 @@ eleventyNavigation:
 ---
 <h1>Tags</h1>
 
-{% for tag in collections.tagList %}
-  {% set tagUrl %}/tags/{{ tag }}/{% endset %}
-  <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
-{% endfor %}
+<div class="tagcontainer">
+  {% for tag in collections.tagList | sort %}
+  <div class="tagitem">
+    {% set tagUrl %}/tags/{{ tag }}/{% endset %}
+    <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
+    {% if tag|lower in tag_descriptions %}{{ tag_descriptions[tag|lower] | safe}}{% endif %}
+  </div>
+  {% endfor %}
+</div>

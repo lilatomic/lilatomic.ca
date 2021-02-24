@@ -1,0 +1,13 @@
+{
+	"ansible": "<a href=\"https://www.ansible.com/\">Ansible!</a>",
+	"dhall": "<a href=\"https://dhall-lang.org/\">Dhall!</a>",
+	"off-topic": "stuff not tech related/meta stuff",
+	"infra": "infrastructure",
+	"python": "<a href=\"https://www.python.org/\">Python 3!</a>",
+	"vb": "<a href=\"https://docs.microsoft.com/en-us/dotnet/visual-basic/\">VB :(</a>",
+	"eleventy": "<a href=\"https://www.11ty.dev/\">11ty</a>",
+	"hindsight": "That thing I solved that one time and maybe you'll need it",
+	"trying": "I try things and report back",
+	"using": "Documenting how to do a thing"
+
+}

@@ -9,6 +9,7 @@
       <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
       {%- endif -%}
     {% endfor %}
+    <div>{{ post.data.description }}</div>
   </li>
 {% endfor %}
 </ol>

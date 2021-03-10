@@ -184,6 +184,9 @@ code .highlight-line:before {
 	padding: 0;
 
 	border-left: 1px dashed var(--accent);
+	position: fixed;
+	float: right;
+	right: 0px;
 }
 
 .nav ul {
@@ -211,7 +214,7 @@ code .highlight-line:before {
 
 /* TOC */
 #toc {
-	height: 100%;
+	height: 83vh;
 	width: var(--sidebar_width);
 
 	position: sticky;
@@ -221,6 +224,12 @@ code .highlight-line:before {
 	border-left: 1px dashed var(--accent);
 
 	float: right;
+	overflow-y: scroll;
+	font-size: x-small;
+}
+
+#toc ol {
+	padding-left: 2em;
 }
 
 /* Posts list */

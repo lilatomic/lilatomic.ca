@@ -1,19 +1,19 @@
 {
-  "title": "Lilatomic",
-  "url": "https://lilatomic.ca/",
-  "description": "A place for my things",
-  "feed": {
-    "subtitle": "My things",
-    "filename": "feed.xml",
-    "path": "/feed/feed.xml",
-    "id": "https://lilatomic.ca/"
-  },
-  "jsonfeed": {
-    "path": "/feed/feed.json",
-    "url": "https://lilatomic.ca/feed/feed.json"
-  },
-  "author": {
-    "name": "Lilatomic",
-    "url": "https://lilatomic.ca/about-me/"
-  }
+	"title": "lilatomic",
+	"url": "https://lilatomic.ca/",
+	"description": "A place for my things",
+	"feed": {
+		"subtitle": "My things",
+		"filename": "feed.xml",
+		"path": "/feed/feed.xml",
+		"id": "https://lilatomic.ca/"
+	},
+	"jsonfeed": {
+		"path": "/feed/feed.json",
+		"url": "https://lilatomic.ca/feed/feed.json"
+	},
+	"author": {
+		"name": "lilatomic",
+		"url": "https://lilatomic.ca/about-me/"
+	}
 }

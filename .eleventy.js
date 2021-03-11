@@ -8,6 +8,13 @@ const markdownItAnchor = require("markdown-it-anchor");
 
 const pluginTOC = require('eleventy-plugin-toc')
 
+const groupBy = function(xs, extractor) {
+	return xs.reduce(function(rv, x) {
+	  (rv[extractor(x)] = rv[extractor(x)] || []).push(x);
+	  return rv;
+	}, {});
+  };
+
 module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginRss);
 	eleventyConfig.addPlugin(pluginSyntaxHighlight, {
@@ -67,6 +74,19 @@ module.exports = function (eleventyConfig) {
 		// returning an array in addCollection works in Eleventy 0.5.3
 		return [...tagSet];
 	});
+
+	eleventyConfig.addCollection("seriesList", function (collection) {
+		let seriesSet = new Set();
+
+		var items = groupBy(collection.getAll().filter(
+			x => "series" in x.data
+		), x => x.data.series)
+
+		var out = Object.entries(items)
+		var out = Object.entries(items).map(e => [e[0], e[1].sort((a,b)=> a.data.date - b.data.date)])
+		return out
+	})
+
 
 	eleventyConfig.addPassthroughCopy("img");
 	eleventyConfig.addPassthroughCopy("css");

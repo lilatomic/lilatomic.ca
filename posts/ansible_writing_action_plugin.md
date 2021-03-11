@@ -9,6 +9,8 @@ revisions:
     desc: "+ section on documenting the action plugin"
 tags:
   - ansible
+#   - "series/ansible_plugins"
+series: [ansible plugins]
 layout: layouts/post.njk
 ---
 

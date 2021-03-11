@@ -1,0 +1,25 @@
+---
+permalink: /series/
+layout: layouts/home.njk
+
+eleventyNavigation:
+  key: Series
+  order: 4
+---
+<h1>Series</h1>
+
+<div class="tagcontainer">
+  {% for s in collections['seriesList'] | sort %}
+  <div class="tagitem">
+    {% set seriesUrl %}/series/{{ s[0] }}/{% endset %}
+    <a href="{{ seriesUrl | url }}" class="post-tag">{{ s[0] }}</a>
+
+
+  </div>
+
+
+  {% endfor %}
+
+
+
+</div>

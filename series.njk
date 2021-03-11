@@ -1,0 +1,26 @@
+---
+pagination:
+  data: collections.seriesList
+  size: 1
+  alias: series
+  filter:
+    - all
+    - nav
+    - post
+    - posts
+    - tagList
+    - seriesList
+  addAllPagesToCollections: true
+layout: layouts/home.njk
+eleventyComputed:
+  title: Member of series “{{ series[0] }}”
+permalink: /series/{{ series[0] }}/
+---
+<h1>Series “{{ series[0] }}”</h1>
+
+
+{% set postslist = (series[1]) %}
+{% include "postslist.njk" %}
+
+
+<p>See <a href="{{ '/series/' | url }}">other series</a>.</p>

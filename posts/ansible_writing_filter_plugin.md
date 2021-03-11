@@ -5,6 +5,7 @@ date: 2021-02-24
 revisions:
 tags:
   - ansible
+series: [ansible plugins]
 layout: layouts/post.njk
 ---
 

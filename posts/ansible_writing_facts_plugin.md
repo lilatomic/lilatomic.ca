@@ -4,6 +4,7 @@ description: How to write an Action Plugin in Ansible. These let you load variab
 date: 2021-03-10
 tags:
   - ansible
+series: [ansible plugins]
 layout: layouts/post.njk
 ---
 

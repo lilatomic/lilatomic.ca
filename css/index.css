@@ -299,6 +299,16 @@ a[href].post-tag:visited {
 	border-bottom: 1px dashed var(--accent);
 }
 
+#tagbox p {
+	display: inline;
+}
+
+/* Series */
+
+#seriesbox p {
+	display: inline;
+}
+
 /* Warning */
 .warning {
 	background-color: #ffc;

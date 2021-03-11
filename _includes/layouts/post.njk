@@ -4,7 +4,31 @@ templateClass: tmpl-post
 ---
 
 <article>
+
+
 <h1>{{ title }}</h1>
+
+{% if tags %}
+<aside id="tagbox">
+<p>Tags</p>
+{% for tag in tags %}
+  {%- if collections.tagList.indexOf(tag) != -1 -%}
+  {% set tagUrl %}/tags/{{ tag }}/{% endset %}
+  <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
+  {%- endif -%}
+{% endfor %}
+</aside>
+{% endif %}
+
+{% if series %}
+<aside id="seriesbox">
+<p> Member of series: </p>
+{% for s in series %}
+  {% set seriesUrl %}/series/{{ s }}/{% endset %}
+  <a href="{{ seriesUrl | url }}" class="post-tag">{{ s }}</a>
+{% endfor %}
+</aside>
+{% endif %}
 
   {% if content | toc | safe %}
   <aside id="toc">

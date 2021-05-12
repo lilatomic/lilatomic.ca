@@ -10,7 +10,7 @@ layout: layouts/post.njk
 
 # Writing a Vars Plugin in Ansible
 
-Often there are facts you wish were just ambiently available, especially if you are working with cloud infrastructure. For example, you might want to have your subscription id, tenant id, user object id, contents of a resource group, and many other things. You could have tasks which set these as facts, but that severly limits your ability to resume at a task.
+Often there are facts you wish were just ambiently available, especially if you are working with cloud infrastructure. For example, you might want to have your subscription id, tenant id, user object id, contents of a resource group, and many other things. You could have tasks which set these as facts, but that severely limits your ability to resume at a task.
 
 ## Basic outline
 

@@ -26,11 +26,11 @@
 	},
 	"homepage": "https://github.com/11ty/eleventy-base-blog#readme",
 	"devDependencies": {
-		"@11ty/eleventy": "^0.11.1",
+		"@11ty/eleventy": "^0.12.1",
 		"@11ty/eleventy-navigation": "^0.1.6",
-		"@11ty/eleventy-plugin-rss": "^1.1.0",
-		"@11ty/eleventy-plugin-syntaxhighlight": "^3.1.0",
-		"luxon": "^1.26.0",
+		"@11ty/eleventy-plugin-rss": "^1.1.1",
+		"@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
+		"luxon": "^1.27.0",
 		"markdown-it": "^8.4.2",
 		"markdown-it-anchor": "^5.3.0",
 		"spellchecker-cli": "^4.8.0"
@@ -38,7 +38,7 @@
 	"dependencies": {
 		"eleventy-plugin-toc": "^1.1.0",
 		"markdown-it-abbr": "^1.0.4",
-		"markdown-it-footnote": "^3.0.2",
+		"markdown-it-footnote": "^3.0.3",
 		"npm": "^7.19.0",
 		"npx": "^10.2.2"
 	}

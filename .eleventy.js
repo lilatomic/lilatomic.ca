@@ -3,17 +3,18 @@ const fs = require("fs");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
+const pluginLinkTo = require("eleventy-plugin-link_to");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
 const pluginTOC = require('eleventy-plugin-toc')
 
-const groupBy = function(xs, extractor) {
-	return xs.reduce(function(rv, x) {
-	  (rv[extractor(x)] = rv[extractor(x)] || []).push(x);
-	  return rv;
+const groupBy = function (xs, extractor) {
+	return xs.reduce(function (rv, x) {
+		(rv[extractor(x)] = rv[extractor(x)] || []).push(x);
+		return rv;
 	}, {});
-  };
+};
 
 module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginRss);
@@ -23,6 +24,8 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginNavigation);
 
 	eleventyConfig.addPlugin(pluginTOC)
+
+	eleventyConfig.addPlugin(pluginLinkTo);
 
 	eleventyConfig.setDataDeepMerge(true);
 
@@ -83,7 +86,7 @@ module.exports = function (eleventyConfig) {
 		), x => x.data.series)
 
 		var out = Object.entries(items)
-		var out = Object.entries(items).map(e => [e[0], e[1].sort((a,b)=> a.data.date - b.data.date)])
+		var out = Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
 		return out
 	})
 
@@ -146,7 +149,7 @@ module.exports = function (eleventyConfig) {
 		// You can also pass this in on the command line using `--pathprefix`
 		// pathPrefix: "/",
 
-		markdownTemplateEngine: "liquid",
+		markdownTemplateEngine: "njk",
 		htmlTemplateEngine: "njk",
 		dataTemplateEngine: "njk",
 

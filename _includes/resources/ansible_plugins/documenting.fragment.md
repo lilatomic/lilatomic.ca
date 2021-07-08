@@ -8,10 +8,11 @@ You can include only the sections of the documentation that you want to appear. 
 
 These have to be python strings which contain the YAML. This makes it kinda gross to work on, since you have no YAML syntax highlighting to help you. Here's a stub python file (feel free to change the license line):
 
+{% raw %}
+
 ```python
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 # Copyright: (c) {{ year }}, {{ Your Name }} <{{ your email }}>
 # GNU Affero General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/agpl-3.0.txt)
 
@@ -35,3 +36,5 @@ RETURN = r"""
   sample:
 """
 ```
+
+{% endraw %}

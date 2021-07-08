@@ -57,7 +57,7 @@ So that's a bit complicated, but it's actually pretty easy to get a barebones ve
 .../plugins/httpapi/http.py
 
 ```python
-{% include resources/ansible_plugins/httpapi/httpapi/basic.py %}
+{% include "resources/ansible_plugins/httpapi/httpapi/basic.py" %}
 ```
 
 Wow there's actually a lot going on here just to submit requests, and we haven't even gotten into authentication.
@@ -74,7 +74,7 @@ For the return, note that we're rebuilding most of the response ourselves. This 
 .../plugins/modules/http.py
 
 ```python
-{% include resources/ansible_plugins/httpapi/modules/basic.py %}
+{% include "resources/ansible_plugins/httpapi/modules/basic.py" %}
 ```
 
 We start with the argument spec. This is sorta nice for automatically performing parameter validation for us. For example, if we mistyped the one of the parameter names, we'd get a warning that that parameter wasn't allowed. That's checked during the AnsibleModule instantiation.

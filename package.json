@@ -30,6 +30,7 @@
 		"@11ty/eleventy-navigation": "^0.1.6",
 		"@11ty/eleventy-plugin-rss": "^1.1.1",
 		"@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
+		"eleventy-plugin-link_to": "^0.4.0",
 		"luxon": "^1.27.0",
 		"markdown-it": "^8.4.2",
 		"markdown-it-anchor": "^5.3.0",

@@ -35,7 +35,7 @@ So, most likely, you'll want to use an Action plugin.
 The basic outline of a plugin is as follows:
 
 ```python
-{% include resources/ansible_plugins/action/basic.py %}
+{% include "resources/ansible_plugins/action/basic.py" %}
 ```
 
 1. Import the plugin base
@@ -48,7 +48,7 @@ The basic outline of a plugin is as follows:
 
 If you want your documentation to work with the Ansible tooling (showing up nicely in the docs, working with `ansible-doc`), you have to create an Ansible Module for that as well. The module can contain only documentation.
 
-{% include resources/ansible_plugins/documenting.fragment.md %}
+{% include "resources/ansible_plugins/documenting.fragment.md" %}
 
 ## Common things you'd want to do
 

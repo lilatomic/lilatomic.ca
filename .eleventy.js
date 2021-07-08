@@ -128,7 +128,7 @@ module.exports = function (eleventyConfig) {
 
 	const resource_path = "_includes/resources/";
 	eleventyConfig.addShortcode("include_raw", function (path) {
-		return fs.readFileSync(resource_path + path);
+		return String(fs.readFileSync(resource_path + path));
 	});
 
 	return {

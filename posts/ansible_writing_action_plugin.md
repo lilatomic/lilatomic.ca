@@ -105,7 +105,7 @@ return {"ansible_facts":{"FACT":1}}
 
 ### Using an existing filter
 
-If you want to use an existing filter pluging (perhaps to format your output), you can just import them from the Ansible package:
+If you want to use an existing filter plugin (perhaps to format your output), you can just import them from the Ansible package:
 
 ```python
 from ansible.plugins.filter.core import to_json, quote

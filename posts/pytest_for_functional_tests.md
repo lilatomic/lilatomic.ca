@@ -8,11 +8,11 @@ tags:
   - using
 layout: layouts/post.njk
 ---
-*[CD]: Continuous deliivery
-*[DB]: Database
-*[K8s]: Kubernetes
-*[SaaS]: Software as a Service
-*[SLF]: ServerLess Function
+
+_[CD]: Continuous delivery
+_[DB]: Database
+_[K8s]: Kubernetes
+_[SaaS]: Software as a Service \*[SLF]: ServerLess Function
 
 # Using Pytest for Testing Deployments
 
@@ -24,25 +24,19 @@ Functional tests are tests against the whole application, as deployed. And if yo
 
 One of the problems with testing deployments is that the process can be fairly lengthy (maybe it needs to spin up a DB or K8s cluster). Tests will require the same Deployment step, though might have different setups. For example, you might have an application which can receive events from a messagequeue, a storage account, or from HTTP requests through an API Gateway. You would want to test that it consumes from all 3 sources, and would need to set up those test resources individually; but it's the same application under test.
 
-This type of setup can be generalised to any sort of batch process. For example, you might be testing infrastructure compliance tooling, where you trigger the "evaluate" function and _all_ resources will be scanned and remediated. Triggering the "evaluate" multiple times is time-prohibitive and unecessary, since each compliance rule will be evaluated individually. Another example would be a service which needs to be submitted to a job processor. It might be impractical to submit individual jobs for every test, because of per-job overhead. 
+This type of setup can be generalised to any sort of batch process. For example, you might be testing infrastructure compliance tooling, where you trigger the "evaluate" function and _all_ resources will be scanned and remediated. Triggering the "evaluate" multiple times is time-prohibitive and unnecessary, since each compliance rule will be evaluated individually. Another example would be a service which needs to be submitted to a job processor. It might be impractical to submit individual jobs for every test, because of per-job overhead.
 
 ## What
 
-In this situation, we'd like to have:
-	1. several tests : It is critical that these tests are independent and look like normal tests. Solutions which will involve collecting a pile of assertions (or worse, asserting them sequentially so you only get the first failure)
-	2. with individual setup steps (as stated above, they may have different requirements)
-	3. sharing a common setup step (this is the big, time-consuming step)
-	4. which occurs after the individual setups (if the setups occur after big deploy step, it is actually pretty easy to do with pytest, since their failure wouldn't count as a failed prerequisite)
-	5. which will not be impacted by the failure of any individual test setup (obviously, the failure of the messagequeue input should not impact testing the storage account)
-
+In this situation, we'd like to have: 1. several tests : It is critical that these tests are independent and look like normal tests. Solutions which will involve collecting a pile of assertions (or worse, asserting them sequentially so you only get the first failure) 2. with individual setup steps (as stated above, they may have different requirements) 3. sharing a common setup step (this is the big, time-consuming step) 4. which occurs after the individual setups (if the setups occur after big deploy step, it is actually pretty easy to do with pytest, since their failure wouldn't count as a failed prerequisite) 5. which will not be impacted by the failure of any individual test setup (obviously, the failure of the messagequeue input should not impact testing the storage account)
 
 ## How
 
 This is my "reasonable" solution to the problem. I walk through each step to explain it. Skip ahead to the [full solution](#full-solution)
 
-1. Several tests : Nothing complicated. The `order` fixture lets us see the execution order of fixtures. It has a `session` scope so it lasts accross all of our tests. It also stands in for other common dependencies, like credentials or whatever.
+1. Several tests : Nothing complicated. The `order` fixture lets us see the execution order of fixtures. It has a `session` scope so it lasts across all of our tests. It also stands in for other common dependencies, like credentials or whatever.
 
-``` python
+```python
 import pytest
 
 @pytest.fixture(scope="session")
@@ -54,12 +48,12 @@ def order():
 def test_0(order):
 	order.append("test_0")
 def test_1(order):
-	order.append("test_1")	
+	order.append("test_1")
 ```
 
 2. With individual fixtures : these are our setup filters. They're straightforward for now, but we'll need to make some modifications to them later. The first thing we'll do is to mark them with a `class` scope, which will be used to make them run only once. It might not be necessary because of pytest's fun fixture scoping rules, but I just mark them this way since it doesn't really make a difference to me.
 
-``` python
+```python
 import pytest
 @pytest.fixture(scope="class")
 def setup_0(order):
@@ -72,7 +66,7 @@ def setup_1(order):
 
 3. Sharing a common setup step : This is our Big Thing. I've taken inspiration from the pytest page for [running multiple asserts safely](https://docs.pytest.org/en/latest/fixture.html#running-multiple-assert-statements-safely). We make a Test Class to hold all the tests which depend on the big setup. This allows us to create the Big Thing as a class-scoped fixture. The important thing about this fixture is that it is `autouse`, so it will automatically occur before all the tests. This does force us to put all the tests in this class, but that doesn't seem to be a really hard thing to do.
 
-``` python
+```python
 import pytest
 
 class TestBatch:
@@ -83,13 +77,12 @@ class TestBatch:
 	def test_0(order, setup_0):
 		order.append("test_0")
 	def test_1(order, setup_1):
-		order.append("test_1")	
+		order.append("test_1")
 ```
 
-4.	Which occurs after the individual setups : Unfortunatly, this doesn't _quite_ work, since the `setup` operations don't have to occur before the `deploy`. So we need to add them as dependencies to the `deploy` operation. The duplication of these setups is a bit not great. If I figure something better out I'll let you know. I think it's still reasonably fine to say that there's an extra step to register something as needing to happend before the deploy
+4. Which occurs after the individual setups : Unfortunately, this doesn't _quite_ work, since the `setup` operations don't have to occur before the `deploy`. So we need to add them as dependencies to the `deploy` operation. The duplication of these setups is a bit not great. If I figure something better out I'll let you know. I think it's still reasonably fine to say that there's an extra step to register something as needing to happened before the deploy
 
-
-``` python
+```python
 import pytest
 
 class TestBatch:
@@ -100,13 +93,14 @@ class TestBatch:
 	def test_0(order, setup_0):
 		order.append("test_0")
 	def test_1(order, setup_1):
-		order.append("test_1")	
+		order.append("test_1")
 ```
 
 5. Which will not be impacted by the failure of any individual test setup : You may have notices that since the `setup` are fixture dependencies of `deploy`, their failure will cause the whole `deploy` to not start and all the tests to fail. So we'll have a fun way of catching those exceptions, and we'll explode them in the relevant test, so that only that test fails. It's not the greatest that you have to do this for all the setups.
 
 :/conftest.py
-``` python
+
+```python
 import pytest
 from decorator import deorate
 
@@ -125,7 +119,8 @@ def unshroud(a):
 ```
 
 :/test.py
-``` python
+
+```python
 import pytest
 from conftest import shroud, unshroud
 
@@ -152,14 +147,14 @@ class TestBatch:
 		order.append("test_0")
 	def test_1(self, order, setup_1):
 		unshroud(setup_1)
-		order.append("test_1")	
+		order.append("test_1")
 ```
-
 
 ## Full Solution
 
 :/conftest.py
-``` python
+
+```python
 import pytest
 from decorator import deorate
 
@@ -178,7 +173,8 @@ def unshroud(a):
 ```
 
 :/test.py
-``` python
+
+```python
 import pytest
 from conftest import shroud, unshroud
 

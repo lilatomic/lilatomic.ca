@@ -103,7 +103,7 @@ Sometimes you've got a field which is a value of Type a _or_ Type b. A sum type 
 
 1. Register it in the ':/render.dhall'
 
-1. Use it by accessing the constructor you want. Note that the renderer is the same, since they're ultimatly the same type:
+1. Use it by accessing the constructor you want. Note that the renderer is the same, since they're ultimately the same type:
 
 	``` dhall
 	let Systemd = ../types.dhall

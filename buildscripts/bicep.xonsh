@@ -1,0 +1,4 @@
+#! /usr/bin/env xonsh
+cd './_includes/resources/bicep'
+
+$(az bicep build -f 'bicep_00.bicep')

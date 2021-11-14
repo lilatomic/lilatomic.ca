@@ -1,4 +1,10 @@
 #! /usr/bin/env xonsh
 cd './_includes/resources/bicep'
 
-$(az bicep build -f 'bicep_00.bicep')
+basic_bicep_files = [
+	'00_bicep.bicep',
+	'01_bicep.bicep',
+]
+
+for f in basic_bicep_files:
+	$(az bicep build -f @(f))

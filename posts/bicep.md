@@ -99,7 +99,7 @@ Even ignoring "advanced" use cases for modifying modules, adding role assignment
 It honestly looks pretty alright attaching role assignments if you don't have to cross module boundaries. You can just reference the resource:
 
 ```bicep
-{% include_raw "bicep/04_bicep.bicep", 13, 20 %}
+{% include_raw "bicep/04_bicep.bicep", 18, 24 %}
 ```
 
 If you do have to cross module boundaries, it gets kludgy.
@@ -131,7 +131,7 @@ It's also fairly clean to do, you just have to create the MI and assign it permi
 and then running it is a bit of stuff but not too much:
 
 ```bicep
-{% include_raw "bicep/06_bicep.bicep", 63, 91 %}
+{% include_raw "bicep/06_bicep.bicep", 62, 90 %}
 ```
 
 This feature isn't specific to Bicep. It is personally a bit exciting, since it might solve some headaches at work. Bicep has the added convenience of letting you load the contents of a script from a local file when preparing the template. This lets you actually test the script.

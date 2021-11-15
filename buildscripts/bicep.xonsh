@@ -14,4 +14,4 @@ basic_bicep_files = [
 ]
 
 for f in basic_bicep_files:
-	$(az bicep build -f @(f))
+	$[az bicep build -f @(f)]

@@ -46,12 +46,13 @@
 
   
   <aside id="toc">
-    <nav class="toc">
-        <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#documenting-your-plugin">Documenting your plugin</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></li><li><a href="#run-a-freeform-command">Run a freeform command</a></li><li><a href="#adding-a-fact">Adding a fact</a></li><li><a href="#using-an-existing-filter">Using an existing filter</a></li></ol></li></ol></nav>
+    <nav class="toc" >
+        <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#documenting-your-plugin">Documenting your plugin</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></li><li><a href="#run-a-freeform-command">Run a freeform command</a></li><li><a href="#adding-a-fact">Adding a fact</a></li><li><a href="#using-an-existing-filter">Using an existing filter</a></li></ol></li></ol>
+      </nav>
   </aside>
   
 <div class="content">
-<h1 id="writing-an-action-plugin-in-ansible">Writing an Action Plugin in Ansible <a class="direct-link" href="#writing-an-action-plugin-in-ansible">#</a></h1>
+<h1 id="writing-an-action-plugin-in-ansible" tabindex="-1">Writing an Action Plugin in Ansible <a class="direct-link" href="#writing-an-action-plugin-in-ansible">#</a></h1>
 <p>It's common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.</p>
 <ol>
 <li>Including a task list</li>
@@ -62,7 +63,7 @@
 <p>Ansible Module plugins might sound like the right thing, especially since the Ansible documentation says that if you use the <code>command</code> module a lot you might want to write one of these. When you look into the documentation, the difference between these and an Action plugin becomes murky. The capabilities of each aren't clearly outlined, despite them being practically welded to each other. You may also find documentation which says that when resolving what action to take from a task in a playbook, Ansible will first look for a match for the task action in the Action plugins and, if one isn't found, in the Modules.</p>
 <p>The short distinction is that Modules are the code which will get uploaded to the target machine and then launched, and Action modules run on the controller. Action plugins have access to useful Ansible function, like <code>_execute_module</code>, which allows you to wrap an existing directive (or launch a specially-built <code>command</code>). Note that these executed modules function like you'd expect: on the remote machine.</p>
 <p>So, most likely, you'll want to use an Action plugin.</p>
-<h2 id="basic-outline">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
+<h2 id="basic-outline" tabindex="-1">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
 <p>The basic outline of a plugin is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>action <span class="token keyword">import</span> ActionBase  <span class="token comment"># 1</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">class</span> <span class="token class-name">ActionModule</span><span class="token punctuation">(</span>ActionBase<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 2</span></span><br><span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> tmp<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> task_vars<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 3</span></span><br><span class="highlight-line">		<span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>run<span class="token punctuation">(</span>tmp<span class="token operator">=</span>tmp<span class="token punctuation">,</span> task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">)</span>  <span class="token comment"># 4</span></span><br><span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment"># 5</span></span><br><span class="highlight-line"></span></code></pre>
 <ol>
@@ -72,7 +73,7 @@
 <li>Invoke the <code>super().run</code> method</li>
 <li>Return results as a dict</li>
 </ol>
-<h2 id="documenting-your-plugin">Documenting your plugin <a class="direct-link" href="#documenting-your-plugin">#</a></h2>
+<h2 id="documenting-your-plugin" tabindex="-1">Documenting your plugin <a class="direct-link" href="#documenting-your-plugin">#</a></h2>
 <p>If you want your documentation to work with the Ansible tooling (showing up nicely in the docs, working with <code>ansible-doc</code>), you have to create an Ansible Module for that as well. The module can contain only documentation.</p>
 <p>You can include only the sections of the documentation that you want to appear. Here's the <a href="https://docs.ansible.com/ansible/2.10/dev_guide/developing_modules_documenting.html">full referece</a> for the version this article was written to. For convenience, here they are:</p>
 <ul>
@@ -84,8 +85,8 @@
 </ul>
 <p>These have to be python strings which contain the YAML. This makes it kinda gross to work on, since you have no YAML syntax highlighting to help you. Here's a stub python file (feel free to change the license line):</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token comment">#!/usr/bin/python</span></span><br><span class="highlight-line"><span class="token comment"># -*- coding: utf-8 -*-</span></span><br><span class="highlight-line"><span class="token comment"># Copyright: (c) {{ year }}, {{ Your Name }} &lt;{{ your email }}></span></span><br><span class="highlight-line"><span class="token comment"># GNU Affero General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/agpl-3.0.txt)</span></span><br><span class="highlight-line"></span><br>DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br><span class="highlight-line">module:</span><br><span class="highlight-line">short_description:</span><br><span class="highlight-line">description:</span><br><span class="highlight-line">  -</span><br><span class="highlight-line">version_added: "0.1.0"</span><br><span class="highlight-line">options:</span><br>"""</span><br><span class="highlight-line"></span><br>EXAMPLES <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br>"""</span><br><span class="highlight-line"></span><br>RETURN <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br><span class="highlight-line">{{ key }}:</span><br><span class="highlight-line">  desctiption:</span><br><span class="highlight-line">  returned:</span><br><span class="highlight-line">  type:</span><br><span class="highlight-line">  sample:</span><br>"""</span></code></pre>
-<h2 id="common-things-you'd-want-to-do">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
-<h3 id="run-another-module%2Faction-plugin">Run another module/action plugin <a class="direct-link" href="#run-another-module%2Faction-plugin">#</a></h3>
+<h2 id="common-things-you'd-want-to-do" tabindex="-1">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
+<h3 id="run-another-module%2Faction-plugin" tabindex="-1">Run another module/action plugin <a class="direct-link" href="#run-another-module%2Faction-plugin">#</a></h3>
 <p>Inside of your <code>run</code> method:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">module_name <span class="token operator">=</span> <span class="token string">"???"</span></span><br><span class="highlight-line">module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"???"</span><span class="token punctuation">:</span><span class="token string">"???"</span><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span> <span class="token comment">#1</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span>module_args<span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span> <span class="token comment">#2</span></span><br><span class="highlight-line">	<span class="token comment">#3</span></span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
 <ol>
@@ -93,15 +94,15 @@
 <li>generally pass these forward, don't forget to provide them</li>
 <li>tmp no longer has any effect, if the comments are to be believed, so we don't need to forward it.</li>
 </ol>
-<h3 id="run-a-freeform-command">Run a freeform command <a class="direct-link" href="#run-a-freeform-command">#</a></h3>
+<h3 id="run-a-freeform-command" tabindex="-1">Run a freeform command <a class="direct-link" href="#run-a-freeform-command">#</a></h3>
 <p>If you just want to wrap a task like</p>
 <pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Run thing</span><br><span class="highlight-line">  <span class="token key atrule">command</span><span class="token punctuation">:</span></span><br><span class="highlight-line">    <span class="token key atrule">cmd</span><span class="token punctuation">:</span> <span class="token string">"Some freeform text"</span></span></code></pre>
 <p>You will need to provide the <code>cmd</code> arg as the value of &quot;_raw_params&quot; to the module_args.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">cmd<span class="token operator">=</span><span class="token string">"ls -la"</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"_raw_params"</span><span class="token punctuation">:</span> cmd<span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span></span><br><span class="highlight-line">	tmp<span class="token operator">=</span>tmp</span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
-<h3 id="adding-a-fact">Adding a fact <a class="direct-link" href="#adding-a-fact">#</a></h3>
+<h3 id="adding-a-fact" tabindex="-1">Adding a fact <a class="direct-link" href="#adding-a-fact">#</a></h3>
 <p>Ansible wants you to use a Fact plugin for these, but sometimes a fact only makes sense mid-playbook. Simply set the &quot;ansible_facts&quot; key with a dictionary of the facts you want to add:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"ansible_facts"</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">"FACT"</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">}</span></span></code></pre>
-<h3 id="using-an-existing-filter">Using an existing filter <a class="direct-link" href="#using-an-existing-filter">#</a></h3>
+<h3 id="using-an-existing-filter" tabindex="-1">Using an existing filter <a class="direct-link" href="#using-an-existing-filter">#</a></h3>
 <p>If you want to use an existing filter plugin (perhaps to format your output), you can just import them from the Ansible package:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">.</span>core <span class="token keyword">import</span> to_json<span class="token punctuation">,</span> quote</span></code></pre>
 
@@ -141,6 +142,8 @@
 						href="/about/">About Me</a></li>
 				<li class="nav-item"><a
 						href="/colophon/">Colophon</a></li>
+				<li class="nav-item"><a
+						href="/feedlist/">Feeds</a></li>
 			</ul>
 		</nav>
 	</div>

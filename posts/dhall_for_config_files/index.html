@@ -39,13 +39,14 @@
 
   
   <aside id="toc">
-    <nav class="toc">
-        <ol><li><a href="#setting-up-a-dhall-project">Setting up a Dhall project</a></li><li><a href="#adding-a-type">Adding a type</a></li><li><a href="#adding-a-renderer-for-a-type">Adding a renderer for a type</a></li><li><a href="#adding-examples">Adding examples</a></li></ol></nav>
+    <nav class="toc" >
+        <ol><li><a href="#setting-up-a-dhall-project">Setting up a Dhall project</a></li><li><a href="#adding-a-type">Adding a type</a></li><li><a href="#adding-a-renderer-for-a-type">Adding a renderer for a type</a></li><li><a href="#adding-examples">Adding examples</a></li></ol>
+      </nav>
   </aside>
   
 <div class="content">
-<h1 id="dhall-for-config-files">Dhall for Config Files <a class="direct-link" href="#dhall-for-config-files">#</a></h1>
-<h2 id="setting-up-a-dhall-project">Setting up a Dhall project <a class="direct-link" href="#setting-up-a-dhall-project">#</a></h2>
+<h1 id="dhall-for-config-files" tabindex="-1">Dhall for Config Files <a class="direct-link" href="#dhall-for-config-files">#</a></h1>
+<h2 id="setting-up-a-dhall-project" tabindex="-1">Setting up a Dhall project <a class="direct-link" href="#setting-up-a-dhall-project">#</a></h2>
 <p>Let's start with the standard directory used in the <a href="https://github.com/dhall-lang/dhall-nethack/blob/master/types.dhall">dhall-nethack repo</a></p>
 <ul>
 <li>types.dhall : this file is a convenient import of all the types</li>
@@ -54,7 +55,7 @@
 <li>render/ : this is where we put all of our render functions</li>
 </ul>
 <p>Neat!</p>
-<h2 id="adding-a-type">Adding a type <a class="direct-link" href="#adding-a-type">#</a></h2>
+<h2 id="adding-a-type" tabindex="-1">Adding a type <a class="direct-link" href="#adding-a-type">#</a></h2>
 <ol>
 <li>
 <p>Add your type as a record in a file under the :/types/ directory.</p>
@@ -74,7 +75,7 @@
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token keyword">let</span> <span class="token class-name">Systemd</span> <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">/</span>types<span class="token punctuation">.</span>dhall</span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">let</span> t</span><br><span class="highlight-line">    <span class="token operator">:</span> <span class="token class-name">Systemd</span><span class="token punctuation">.</span><span class="token class-name">SystemdUnit</span></span><br><span class="highlight-line">    <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token class-name">Unit</span><span class="token punctuation">.</span><span class="token class-name">Description</span> <span class="token operator">=</span> <span class="token string">"hello"</span></span><br><span class="highlight-line">      <span class="token punctuation">,</span> <span class="token class-name">Service</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token class-name">User</span> <span class="token operator">=</span> <span class="token string">"me"</span><span class="token punctuation">,</span> <span class="token class-name">ExecStart</span> <span class="token operator">=</span> <span class="token string">"/usr/bin/bash pwd"</span> <span class="token punctuation">}</span></span><br><span class="highlight-line">      <span class="token punctuation">,</span> <span class="token class-name">Install</span><span class="token punctuation">.</span><span class="token class-name">WantedBy</span> <span class="token operator">=</span> <span class="token string">"multi_user.target"</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">in</span>  <span class="token punctuation">{</span> <span class="token class-name">Unit</span><span class="token punctuation">.</span><span class="token class-name">Description</span> <span class="token operator">=</span> <span class="token string">"hello"</span></span><br><span class="highlight-line">    <span class="token punctuation">,</span> <span class="token class-name">Service</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token class-name">User</span> <span class="token operator">=</span> <span class="token string">"me"</span><span class="token punctuation">,</span> <span class="token class-name">ExecStart</span> <span class="token operator">=</span> <span class="token string">"/usr/bin/bash pwd"</span> <span class="token punctuation">}</span></span><br><span class="highlight-line">    <span class="token punctuation">,</span> <span class="token class-name">Install</span><span class="token punctuation">.</span><span class="token class-name">WantedBy</span> <span class="token operator">=</span> <span class="token string">"multi_user.target"</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span></span></code></pre>
 </li>
 </ol>
-<h2 id="adding-a-renderer-for-a-type">Adding a renderer for a type <a class="direct-link" href="#adding-a-renderer-for-a-type">#</a></h2>
+<h2 id="adding-a-renderer-for-a-type" tabindex="-1">Adding a renderer for a type <a class="direct-link" href="#adding-a-renderer-for-a-type">#</a></h2>
 <p>If you need to output to a format other than JSON or YAML, you'll need to write your renderers and pass it through <code>dhall text</code></p>
 <ol>
 <li>
@@ -100,7 +101,7 @@
 <p>If you have a standard format you're building to, you can create a helper for easier importing. The example builds systemd unit files, so we might create one like</p>
 <p>:/toSystemdUnit</p>
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token punctuation">.</span><span class="token punctuation">/</span>render<span class="token punctuation">/</span><span class="token class-name">SystemdUnit</span><span class="token punctuation">.</span>dhall</span></code></pre>
-<h2 id="adding-examples">Adding examples <a class="direct-link" href="#adding-examples">#</a></h2>
+<h2 id="adding-examples" tabindex="-1">Adding examples <a class="direct-link" href="#adding-examples">#</a></h2>
 <p>Everyone loves seeing examples of how to use your stuff, so let's add those. They're just a file located in the expected directory :/examples</p>
 <p>:/examples/templated_unit.dhall</p>
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token keyword">let</span> <span class="token class-name">Systemd</span> <span class="token operator">=</span> <span class="token punctuation">..</span><span class="token punctuation">/</span>types<span class="token punctuation">.</span>dhall</span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">let</span> jupyterhub_unit</span><br><span class="highlight-line">    <span class="token operator">:</span> <span class="token class-name">Text</span> <span class="token operator">→</span> <span class="token class-name">Systemd</span><span class="token punctuation">.</span><span class="token class-name">SystemdUnit</span></span><br><span class="highlight-line">    <span class="token operator">=</span> <span class="token operator">λ</span><span class="token punctuation">(</span>config_location <span class="token operator">:</span> <span class="token class-name">Text</span><span class="token punctuation">)</span> <span class="token operator">→</span></span><br><span class="highlight-line">        <span class="token punctuation">{</span> <span class="token class-name">Unit</span><span class="token punctuation">.</span><span class="token class-name">Description</span> <span class="token operator">=</span> <span class="token string">"JupyterHub"</span></span><br><span class="highlight-line">        <span class="token punctuation">,</span> <span class="token class-name">Service</span> <span class="token operator">=</span></span><br><span class="highlight-line">          <span class="token punctuation">{</span> <span class="token class-name">User</span> <span class="token operator">=</span> <span class="token string">"jupyterhub"</span></span><br><span class="highlight-line">          <span class="token punctuation">,</span> <span class="token class-name">ExecStart</span> <span class="token operator">=</span> <span class="token string">"/opt/jupyterhub/bin/jupyterhub -f <span class="token interpolation"><span class="token punctuation">${</span><span class="token expression language-dhall">config_location</span><span class="token punctuation">}</span></span>"</span></span><br><span class="highlight-line">          <span class="token punctuation">}</span></span><br><span class="highlight-line">        <span class="token punctuation">,</span> <span class="token class-name">Install</span><span class="token punctuation">.</span><span class="token class-name">WantedBy</span> <span class="token operator">=</span> <span class="token string">"multi_user.target"</span></span><br><span class="highlight-line">        <span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">in</span>  jupyterhub_unit</span></code></pre>
@@ -133,6 +134,8 @@
 						href="/about/">About Me</a></li>
 				<li class="nav-item"><a
 						href="/colophon/">Colophon</a></li>
+				<li class="nav-item"><a
+						href="/feedlist/">Feeds</a></li>
 			</ul>
 		</nav>
 	</div>

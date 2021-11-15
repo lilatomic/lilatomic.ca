@@ -105,3 +105,15 @@ It honestly looks pretty alright attaching role assignments if you don't have to
 If you do have to cross module boundaries, it gets kludgy.
 
 I also haven't found a way to get a reference in a parent module of resources named in the child module. That is, if a module names a resource and passes that as an output, I can't use that to construct the `existing` reference. It complains that it needs something resolvable at the start of the deployment time...
+
+## Scopes
+
+There are many scopes which are not "the current resources group". Obviously, "another resource group". But also new resource groups are subscription-level objects, and there are Management Groups and Tenancies too.
+
+In Bicep, you only specify the scope type that a file targets. The actual value must be passed in during its invocation. For example, to create a resource group and deploy a module to it, we can specify a file at the `'subscription'` target scope and then tell the module to deploy at the scope of the resource group we just created:
+
+```bicep
+{% include_raw "bicep/05_main.bicep" %}
+```
+
+You can also use functions to materialise the scopes you need. For example, you can get the tenant scope with the `tenant()` function, and a resource group with `resourceGroup('name-of-rg')`.

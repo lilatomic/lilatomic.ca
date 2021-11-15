@@ -92,5 +92,16 @@ Modules function basically exactly like the ARM Deployments they become. So modu
 
 I see this as a missed opportunity. I think they could have provided much more helpful modules. I think that having each module correspond to an ARM Deployment was a bad choice that severely limits their options. For example, they can't output an entire resource from the module.
 And although Bicep claims to be declarative, that isn't leveraged. Every resource declaration might as well be the correstponding az-cli command for all you can do with it. It's not possible to modify the resources defined in a module from outside it. For example, a module might have hard-coded a value on the assumption that no-one would need to change it. But now someone _does_ need to change it ("This data isn't speed-critical, can you put in at _cold_ tier?"). So you can't just modify that for this one case, and you have to crack open the original template and add _another_ paremeter that is used by only 1 group. Eventually your template starts to look like a helm chart, with more holes than not.
+Even ignoring "advanced" use cases for modifying modules, adding role assignments to resources is a basic requirement and is a bit kludgy.
 
-## Child and Extension resources
+## Extensions : Roles, Policies, Locks, and Diagnostics
+
+It honestly looks pretty alright attaching role assignments if you don't have to cross module boundaries. You can just reference the resource:
+
+```bicep
+{% include_raw "bicep/04_bicep.bicep", 13, 20 %}
+```
+
+If you do have to cross module boundaries, it gets kludgy.
+
+I also haven't found a way to get a reference in a parent module of resources named in the child module. That is, if a module names a resource and passes that as an output, I can't use that to construct the `existing` reference. It complains that it needs something resolvable at the start of the deployment time...

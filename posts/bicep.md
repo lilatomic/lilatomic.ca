@@ -12,7 +12,7 @@ buildscript: bicep.xonsh
 
 # Having fun with Azure Bicep
 
-Bicep is a different way of deploying resources on Azure. It is hopefully less painful than ARM templates.
+Bicep is a different way of deploying resources on Azure. It is hopefully less painful than ARM templates. Following are my thoughts as I evaluate bicep as something we should incorporate in our stack. Hopefully they're useful for you if you're doing the same.
 
 First I have to make fun of Azure for creating their own language instead of embedding it in existing languages like AWS did with the CDK. In the FAQ they have this gem explaining their reasoning:
 
@@ -22,7 +22,7 @@ First I have to make fun of Azure for creating their own language instead of emb
 
 I don't think creating a new language is the way to not have to get started with a new language.
 
-## The most basic BICEP
+## Some basic BICEP
 
 You can start by using bicep as less verbose ARM template right away. You can just put everything in bicep format, which requires a bit less ceremony than ARM templates.
 
@@ -57,3 +57,31 @@ which renders to this in ARM template so you don't have to write this:
 The variable system is pretty underwhelming, and closely matches the capabilities of ARM templates. For example, you can have Object types, but you can't type their fields. There are some more advanced functions, like `intersection` and `union`, but nothing approaching the capabilities of Dhall. Decorators allow for constraining the values of parameters, but they too aren't anything special. They're missing some fairly basic operations (like forcing alpha-numeric) and therefore can't describe most of the contstraints on Azure resources. This limitation is probably why there aren't decorators to enforce the constraints on azure resources. For example, you can't specify that a parameter must be a valid storageAccount access tier, perhaps by doing something like `@Microsoft.Storage/storageAccounts@2021-06-01.properties.accessTier`. The `@description` parameter is said to in some way be used in cases where bicep templates are made available in the portal. Parameter files are still JSON-only. There also isn't a command to scaffold to create a parameters file ready to be filled, which would be useful, since it knows which parameters need to be defined.
 
 One neat feature is that you can involve a keyvault as a secret-store in the bicep template. It's limited to only assigning to a module parameter with a secure decorator. And you also can't push values to the keyvault. So again, it's basically like a slightly more convenient way of writing ARM templates.
+
+## Control flow
+
+Control flow is honestly pretty bad. It's one of the places where the veil between Bicep and ARM grows thin. You can conditionally deploy resources, but this is applied at the resource level. For an example of why this is bad: If you were in the tutorial and wanted to enable SQL auditing, you would need to create an "auditSettings" resource and a "storageAccounts" resource. If you wanted to conditionally enable this in production, you would need to add a condition for both of these. You would also need to add the condition to every parameter referencing the conditionally deployed resource. So instead of 1 condition, we have 4. And that's just in this example:
+
+```bicep
+{% include_raw "bicep/03_bicep.bicep", 47, 65 %}
+```
+
+Instead, we could have been able to define something like:
+
+```bicep
+{% include_raw "bicep/03_dream.bicep", 47, 66 %}
+```
+
+But we can't, because Bicep is not a language for deploying Azure resources, it's a language for creating ARM templates. It is simply not able to support constructs which are not representable to ARM templates. It is also not able to support partial application (binding some arguments), so that a Bicep file could generate a slightly simpler Bicep file.
+
+A further limitation is that you cannot define a resource twice, even if the conditions are mutually exclusive. You also can't use the ternary to select between 2 separate definitions for the same resource. So if you wanted to change a storage account's sku, accessTier, name, and many other parameters, you have to apply the ternary to each of those.
+
+You seem to be able to use the ternary to fudge something by reassigning to a variable, but it's messy. Also, you can't give the different versions of the resource the same name, because obviously that clashes.
+
+```bicep
+{% include_raw "bicep/03_hack.bicep", 25, 25 %}
+```
+
+The for-loops are functional. You get the item, the index, and also an opportunity to filter things with an `if` statement. The syntax is similar to Python for-comprehensions. There are some fancy features related to parallelism, like a batch size. You can also nest loops, which is not always guaranteed in these types of DSLs. For some situations, you only get the index and not the item, so it's more like a C-style loop. Not the end of the world, but still not ideal.
+
+## Modules

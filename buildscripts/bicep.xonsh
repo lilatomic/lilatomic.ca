@@ -5,6 +5,8 @@ basic_bicep_files = [
 	'00_bicep.bicep',
 	'01_bicep.bicep',
 	'02_main.bicep',
+	'03_bicep.bicep',
+	'03_hack.bicep',
 ]
 
 for f in basic_bicep_files:

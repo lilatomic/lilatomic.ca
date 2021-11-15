@@ -44,6 +44,7 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2020-11-01-preview' = {
   sku: sqlDatabaseSku
 }
 
+// reminder, this doesn't work
 if (auditingEnabled) {
   resource auditStorageAccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
     name: auditStorageAccountName

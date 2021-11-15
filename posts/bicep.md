@@ -69,7 +69,7 @@ Control flow is honestly pretty bad. It's one of the places where the veil betwe
 Instead, we could have been able to define something like:
 
 ```bicep
-{% include_raw "bicep/03_dream.bicep", 47, 66 %}
+{% include_raw "bicep/03_dream.bicep", 47, 67 %}
 ```
 
 But we can't, because Bicep is not a language for deploying Azure resources, it's a language for creating ARM templates. It is simply not able to support constructs which are not representable to ARM templates. It is also not able to support partial application (binding some arguments), so that a Bicep file could generate a slightly simpler Bicep file.

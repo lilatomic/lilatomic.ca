@@ -85,3 +85,12 @@ You seem to be able to use the ternary to fudge something by reassigning to a va
 The for-loops are functional. You get the item, the index, and also an opportunity to filter things with an `if` statement. The syntax is similar to Python for-comprehensions. There are some fancy features related to parallelism, like a batch size. You can also nest loops, which is not always guaranteed in these types of DSLs. For some situations, you only get the index and not the item, so it's more like a C-style loop. Not the end of the world, but still not ideal.
 
 ## Modules
+
+Modules are just Azure Deployment resources expressed in Bicep. Because of this, they introduce a new object for whatever DAG-based workflow engine executes ARM templates. This means that if you had a single module with a quick item which was depended on by another quick item and a slow item, and you extracted the quick item and the slow item into a module, the other quick item will now have to wait for the module to finish, which means waiting for the long item.
+
+Modules function basically exactly like the ARM Deployments they become. So modules don't export their contents. If you need to gain access to that information, you have to use outputs and fiddle with passing the correct information. You also can't just output the whole resource, so you'll either have to output all the parameters you need or reconstitute the resource with `existing`.
+
+I see this as a missed opportunity. I think they could have provided much more helpful modules. I think that having each module correspond to an ARM Deployment was a bad choice that severely limits their options. For example, they can't output an entire resource from the module.
+And although Bicep claims to be declarative, that isn't leveraged. Every resource declaration might as well be the correstponding az-cli command for all you can do with it. It's not possible to modify the resources defined in a module from outside it. For example, a module might have hard-coded a value on the assumption that no-one would need to change it. But now someone _does_ need to change it ("This data isn't speed-critical, can you put in at _cold_ tier?"). So you can't just modify that for this one case, and you have to crack open the original template and add _another_ paremeter that is used by only 1 group. Eventually your template starts to look like a helm chart, with more holes than not.
+
+## Child and Extension resources

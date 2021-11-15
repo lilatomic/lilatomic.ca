@@ -135,3 +135,11 @@ and then running it is a bit of stuff but not too much:
 ```
 
 This feature isn't specific to Bicep. It is personally a bit exciting, since it might solve some headaches at work. Bicep has the added convenience of letting you load the contents of a script from a local file when preparing the template. This lets you actually test the script.
+
+## Summary
+
+In the end, this is just a less painful way to write ARM templates. Bicep isn't a replacement for ARM templates so much as it's a replacement for JSON. It's obviously less painful than JSON for ARM templates, and obviously we'll be using it instead of JSON.
+
+I even think this might be better than az-cli commands, since it is about as verbose but comes with fun idempotency features. The problem becomes integrating it with other deployment tools, such as Ansible. The parameters file is pretty gross but does allow for specifying things as structured data, but so is templating a parent module with the parameters filled in. I'll probably look for a cooler solution, maybe an Ansible plugin.
+
+But it's no CDK, and still has _all_ of the problems that ARM templates.

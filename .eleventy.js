@@ -127,16 +127,22 @@ module.exports = function (eleventyConfig) {
 	});
 
 	const resource_path = "_includes/resources/";
-	eleventyConfig.addShortcode("include_raw", function (path, start=1, end=-1) {
-		let lines = fs.readFileSync(resource_path + path).toString().split("\n")
-		var selected_lines
-		if (end === -1){
-			selected_lines = lines.slice(start-1)
-		} else {
-			selected_lines = lines.slice(start-1, end)
+	eleventyConfig.addShortcode(
+		"include_raw",
+		function (path, start = 1, end = -1) {
+			let lines = fs
+				.readFileSync(resource_path + path)
+				.toString()
+				.split("\n");
+			var selected_lines;
+			if (end === -1) {
+				selected_lines = lines.slice(start - 1);
+			} else {
+				selected_lines = lines.slice(start - 1, end);
+			}
+			return String(selected_lines.join("\n"));
 		}
-		return String(selected_lines.join("\n"));
-	});
+	);
 
 	return {
 		templateFormats: [

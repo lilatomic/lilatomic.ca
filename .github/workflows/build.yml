@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - prod
+      - cicd
 
 jobs:
   deploy:
@@ -14,7 +15,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: "16.x"
 
       - run: npm ci
 

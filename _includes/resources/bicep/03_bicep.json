@@ -1,0 +1,107 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1008.15138",
+      "templateHash": "3310888212816115250"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "The Azure region into which the resources should be deployed."
+      }
+    },
+    "sqlServerAdministratorLogin": {
+      "type": "secureString",
+      "metadata": {
+        "description": "The administrator login username for the SQL server."
+      }
+    },
+    "sqlServerAdministratorLoginPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "The administrator login password for the SQL server."
+      }
+    },
+    "sqlDatabaseSku": {
+      "type": "object",
+      "defaultValue": {
+        "name": "Standard",
+        "tier": "Standard"
+      },
+      "metadata": {
+        "description": "The name and tier of the SQL database SKU."
+      }
+    },
+    "environmentName": {
+      "type": "string",
+      "allowedValues": [
+        "Development",
+        "Production"
+      ]
+    },
+    "auditStorageAccountName": {
+      "type": "string",
+      "defaultValue": "[format('bearaudit{0}', uniqueString(resourceGroup().id))]"
+    }
+  },
+  "functions": [],
+  "variables": {
+    "sqlServerName": "[format('teddy{0}{1}', parameters('location'), uniqueString(resourceGroup().id))]",
+    "sqlDatabaseName": "TeddyBear",
+    "auditingEnabled": "[equals(parameters('environmentName'), 'Production')]",
+    "storageAccountSkuName": "Standard_LRS"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2020-11-01-preview",
+      "name": "[variables('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "[parameters('sqlServerAdministratorLogin')]",
+        "administratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2020-11-01-preview",
+      "name": "[format('{0}/{1}', variables('sqlServerName'), variables('sqlDatabaseName'))]",
+      "location": "[parameters('location')]",
+      "sku": "[parameters('sqlDatabaseSku')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+      ]
+    },
+    {
+      "condition": "[variables('auditingEnabled')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-02-01",
+      "name": "[parameters('auditStorageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[variables('storageAccountSkuName')]"
+      },
+      "kind": "StorageV2"
+    },
+    {
+      "condition": "[variables('auditingEnabled')]",
+      "type": "Microsoft.Sql/servers/auditingSettings",
+      "apiVersion": "2020-11-01-preview",
+      "name": "[format('{0}/{1}', variables('sqlServerName'), 'default')]",
+      "properties": {
+        "state": "Enabled",
+        "storageEndpoint": "[if(variables('auditingEnabled'), reference(resourceId('Microsoft.Storage/storageAccounts', parameters('auditStorageAccountName'))).primaryEndpoints.blob, '')]",
+        "storageAccountAccessKey": "[if(variables('auditingEnabled'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('auditStorageAccountName')), '2021-02-01').keys[0].value, '')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('auditStorageAccountName'))]",
+        "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+      ]
+    }
+  ]
+}

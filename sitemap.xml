@@ -47,11 +47,6 @@
   </url>
   
   <url>
-    <loc>https://lilatomic.ca/posts/eleventy_include_code_verbatim/</loc>
-    <lastmod>2021-02-24</lastmod>
-  </url>
-  
-  <url>
     <loc>https://lilatomic.ca/posts/ansible_writing_facts_plugin/</loc>
     <lastmod>2021-03-10</lastmod>
   </url>
@@ -74,6 +69,11 @@
   <url>
     <loc>https://lilatomic.ca/posts/bicep/</loc>
     <lastmod>2021-11-14</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/posts/eleventy_include_code_verbatim/</loc>
+    <lastmod>2021-11-15</lastmod>
   </url>
   
   <url>

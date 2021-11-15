@@ -117,3 +117,21 @@ In Bicep, you only specify the scope type that a file targets. The actual value 
 ```
 
 You can also use functions to materialise the scopes you need. For example, you can get the tenant scope with the `tenant()` function, and a resource group with `resourceGroup('name-of-rg')`.
+
+## Doing arbitrary things with deployment scripts
+
+Deployment scripts are scripts run in docker containers as part of an ARM deployment. They use a managed identity (user assigned) to run. You can have them do basically whatever.
+
+It's also fairly clean to do, you just have to create the MI and assign it permissions:
+
+```bicep
+{% include_raw "bicep/06_bicep.bicep", 1, 20 %}
+```
+
+and then running it is a bit of stuff but not too much:
+
+```bicep
+{% include_raw "bicep/06_bicep.bicep", 63, 91 %}
+```
+
+This feature isn't specific to Bicep. It is personally a bit exciting, since it might solve some headaches at work. Bicep has the added convenience of letting you load the contents of a script from a local file when preparing the template. This lets you actually test the script.

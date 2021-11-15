@@ -10,6 +10,7 @@ basic_bicep_files = [
 	'04_main.bicep',
 	'05_main.bicep',
 	'05_tenant.bicep',
+	'06_bicep.bicep',
 ]
 
 for f in basic_bicep_files:

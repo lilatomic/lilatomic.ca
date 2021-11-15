@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1008.15138",
+      "templateHash": "17202698033877643968"
+    }
+  },
+  "parameters": {
+    "environmentName": {
+      "type": "string",
+      "allowedValues": [
+        "Development",
+        "Production"
+      ]
+    }
+  },
+  "functions": [],
+  "variables": {
+    "isProd": "[equals(parameters('environmentName'), 'Production')]"
+  },
+  "resources": [
+    {
+      "condition": "[not(variables('isProd'))]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-02-01",
+      "name": "biceptest27924",
+      "location": "canadaeast",
+      "sku": {
+        "name": "F1"
+      }
+    },
+    {
+      "condition": "[variables('isProd')]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2021-02-01",
+      "name": "bicepprod27924",
+      "location": "canadaeast",
+      "sku": {
+        "name": "F1"
+      }
+    }
+  ],
+  "outputs": {
+    "appServicePlan": {
+      "type": "string",
+      "value": "[if(variables('isProd'), reference(resourceId('Microsoft.Web/serverfarms', 'bicepprod27924'), '2021-02-01', 'full'), reference(resourceId('Microsoft.Web/serverfarms', 'biceptest27924'), '2021-02-01', 'full')).name]"
+    }
+  }
+}

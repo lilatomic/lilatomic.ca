@@ -161,7 +161,7 @@ We can also restart it as follows, although I'm not sure it's clearer.
 
 This simple executor suggests an alternative for mocking the functions that our orchestrator calls out to. Instead of trying to patch those functions, we could simply execute the function-under-test with an executor which will provide the answers we need. This means that we can't use fun mocking libraries out-of-the-box, but it also means that we might not need to use them.
 
-## Examining the source code
+## Background : Examining the source code
 
 Microsoft has been open-sourcing a lot of their stuff. This is very convenient for them: Every time their documentation is missing something very basic, if it happens to be important enough for a company, that company might pay someone to dig into that code and write up that documentation.
 
@@ -210,4 +210,36 @@ We then get this as the trace. We _also_ get a `Non-Deterministic workflow detec
  ['Tokyo', 'Seattle', 'London', 'Done']]
 ```
 
-## Constructing an executor
+## Mocking durable functions
+
+With all the background done, it looks like there are 3 parts to the challenge of implementing mocking for ADF:
+
+1. feeding in a DurableOrchestrationContext
+2. creating a mock executor
+3. mocking the evaluation of remote calls
+
+### DurableOrchestrationContext
+
+There's a bit of shimming that you have to do to get one of these created, but you can just fake all the values and it seems to work as well as we need it to.
+
+```python
+{% include_raw "azure_functions/durable_testing_python/03_simple_test.py", 8, 11 %}
+```
+
+### Creating a mock executor
+
+We've done most of the generator work for the executor. Now we have to build it to actually interpret the Tasks that are given to it. There are a few task types that we have to handle: `AtomicTask`, `WhenAllTask`, `WhenAnyTask`. We can also handle `RetryAbleTask` (subclass of `WhenAllTask`) and `TimerTask` (subclass of `AtomicTask`) separately if we choose, although I'm going to leave that as a contribution for the reader. Handling these is mostly a matter of dispatching down to the `AtomicTask`s in the `CompoundTask`s. After that, we just need to unwrap the requested `Action` and dispatch that to our mocks.
+
+### Mocking the evaluation of remote calls
+
+The `Action` itself has 3 properties we care about:
+
+- type (`ActionType`) : the category of thing we want invoked, like an Activity Function or a SubOrchestrator
+- function name : the name of that thing we want invoked
+- intput\_ : the paylod to send to that function
+
+So now it's just a matter of building a system which can dispatch the first 2 and pass in the 3rd item. This too isn't hard. One hiccough is that some of the types are sortof equivalent from a unit-testing point of view (`CALL_ACTIVITY` vs `CALL_ACTIVITY_WITH_RETRY`). We don't need to handle `WHEN_ANY` or `WHEN_ALL` because we expand those into the component tasks, although we do need to add a way of determining which task to resolve.
+
+## Making a useful mocking library
+
+This executor is competent enough at walking through a function, but it lacks the ability to intelligently verify calls like other popular mocking libraries.

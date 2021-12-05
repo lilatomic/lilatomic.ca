@@ -242,4 +242,5 @@ So now it's just a matter of building a system which can dispatch the first 2 an
 
 ## Making a useful mocking library
 
-This executor is competent enough at walking through a function, but it lacks the ability to intelligently verify calls like other popular mocking libraries.
+This executor is competent enough at walking through a function, but it lacks the ability to intelligently verify calls like other popular mocking libraries. Good thing all of our functions accept Task objects which contain the function invocation and the argument.
+We should try for a similar API to `unittest.mock`. It's a bit of gruntwork, and it doesn't have as pretty formatting, but it's functional

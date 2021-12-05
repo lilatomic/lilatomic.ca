@@ -1,0 +1,5 @@
+#! /usr/bin/env xonsh
+cd './_includes/resources/azure_functions/durable_testing_python'
+
+$[pip3 install -r frozen_requirements.txt]
+$[python3 -m pytest]

@@ -9,10 +9,13 @@ tags:
 layout: layouts/post.njk
 ---
 
-_[CD]: Continuous delivery
-_[DB]: Database
-_[K8s]: Kubernetes
-_[SaaS]: Software as a Service \*[SLF]: ServerLess Function
+<!-- prettier-ignore-start -->
+*[CD]: Continuous delivery
+*[DB]: Database
+*[K8s]: Kubernetes
+*[SaaS]: Software as a Service 
+*[SLF]: ServerLess Function
+<!-- prettier-ignore-end -->
 
 # Using Pytest for Testing Deployments
 

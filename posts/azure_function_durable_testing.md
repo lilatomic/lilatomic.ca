@@ -11,8 +11,10 @@ layout: layouts/post.njk
 buildscript: azure_function_durable_testing.xonsh
 ---
 
-_[ADF]: Azure Durable Function
-_[SLF]: ServerLess Function
+<!-- prettier-ignore-start -->
+*[ADF]: Azure Durable Function
+*[SLF]: ServerLess Function
+<!-- prettier-ignore-end -->
 
 # Testing Azure Durable Functions in Python
 

@@ -6,11 +6,17 @@ tags:
   - serverless
   - azure
   - testing
+  - python
 layout: layouts/post.njk
 buildscript: azure_function_durable_testing.xonsh
 ---
 
+_[ADF]: Azure Durable Function
+_[SLF]: ServerLess Function
+
 # Testing Azure Durable Functions in Python
+
+[TLDR](#making-a-useful-mocking-library)
 
 Azure Durable Functions allow you to use Azure Serverless Functions to make workflows and to implement a number of standard patterns for enterprise systems. Obviously, we'd like to test our code. But the Serverless paradigm does not lend itself well to rapid cycle times and deep testing. Every deploy-test-evaluate cycle to a testing instance in Azure takes about 5 minutes, especially if you've bought into the whole stack and are monitoring with AppInsights. Plus, it's difficult to test for error conditions if you have to actually produce them in an environment rather than being able to mock them in. Wouldn't it be nice if we could test these function like they were normal functions with all the techniques and tools that we developed for those?
 
@@ -143,9 +149,9 @@ Well that makes sense. It's a bit weird that the return value comes in the `Stop
 
 Let's pretend that instead of mocking out the dispatching, we actually wanted to run the ADF. With the knowledge we gained from exploring generators previously, we know that we'll have 3 different conditions to handle:
 
-- the initial task will be submitted through the priming (with `send(None)`)
+- the initial task which will be submitted through the priming (with `send(None)`)
 - all the intermediate executions
-- the return value will be sent in a `StopIteration
+- the return value which will be sent in a `StopIteration`
 
 We can then bang out the following executor:
 
@@ -153,7 +159,7 @@ We can then bang out the following executor:
 {% include_raw "azure_functions/durable_testing_python/01_executor.py", 26, 37 %}
 ```
 
-We can also restart it as follows, although I'm not sure it's clearer.
+We can also restart it equivalently as follows, although I'm not sure it's clearer.
 
 ```python
 {% include_raw "azure_functions/durable_testing_python/01_executor_alternative.py", 26, 37 %}
@@ -175,7 +181,7 @@ The 3rd is the important one. The executor is called [TaskOrchestrationExecutor]
 
 ### User code generator
 
-We'll start closes to our code: the `resume_user_code` function. I'll first point out that they catch the StopIteration and mark that as the function output, just like out little executor. The most interesting part is:
+We'll start closest to our code: the `resume_user_code` function. I'll first point out that they catch the `StopIteration` and mark that as the function output, just like out little executor. The most interesting part is:
 
 ```python
 # resume orchestration with a resolved task's value
@@ -223,12 +229,16 @@ With all the background done, it looks like there are 3 parts to the challenge o
 There's a bit of shimming that you have to do to get one of these created, but you can just fake all the values and it seems to work as well as we need it to.
 
 ```python
-{% include_raw "azure_functions/durable_testing_python/03_simple_test.py", 8, 11 %}
+{% include_raw "azure_functions/durable_testing_python/03_with_mocking/simple.py", 16, 24 %}
 ```
 
 ### Creating a mock executor
 
 We've done most of the generator work for the executor. Now we have to build it to actually interpret the Tasks that are given to it. There are a few task types that we have to handle: `AtomicTask`, `WhenAllTask`, `WhenAnyTask`. We can also handle `RetryAbleTask` (subclass of `WhenAllTask`) and `TimerTask` (subclass of `AtomicTask`) separately if we choose, although I'm going to leave that as a contribution for the reader. Handling these is mostly a matter of dispatching down to the `AtomicTask`s in the `CompoundTask`s. After that, we just need to unwrap the requested `Action` and dispatch that to our mocks.
+
+```python
+{% include_raw "azure_functions/durable_testing_python/03_with_mocking/simple.py", 98, 108 %}
+```
 
 ### Mocking the evaluation of remote calls
 
@@ -240,7 +250,13 @@ The `Action` itself has 3 properties we care about:
 
 So now it's just a matter of building a system which can dispatch the first 2 and pass in the 3rd item. This too isn't hard. One hiccough is that some of the types are sortof equivalent from a unit-testing point of view (`CALL_ACTIVITY` vs `CALL_ACTIVITY_WITH_RETRY`). We don't need to handle `WHEN_ANY` or `WHEN_ALL` because we expand those into the component tasks, although we do need to add a way of determining which task to resolve.
 
+There's honestly not much special with this code, so I'm just going to skip talking about it. you can see the whole resources in the repo.
+
 ## Making a useful mocking library
 
 This executor is competent enough at walking through a function, but it lacks the ability to intelligently verify calls like other popular mocking libraries. Good thing all of our functions accept Task objects which contain the function invocation and the argument.
-We should try for a similar API to `unittest.mock`. It's a bit of gruntwork, and it doesn't have as pretty formatting, but it's functional
+We should try for a similar API to `unittest.mock`. Implementing it is straightforward, although does require a bit of gruntwork. Reporting results is where most of the utility comes from, and I'll admit that I skimped on that.
+
+```python
+{% include_raw "azure_functions/durable_testing_python/04_verify_mocking/executor.py" %}
+```

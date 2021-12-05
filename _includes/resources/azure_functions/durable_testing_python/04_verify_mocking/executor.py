@@ -54,6 +54,9 @@ class MockExecutor:
 		self.handlers = handlers
 		self._select_winning_task = _select_winning_task or self._select_random_task
 
+		self._calls = []
+		self._invocations = []
+
 	@staticmethod
 	def _select_random_task(task: dftask.WhenAnyTask):
 		"""Resolve a WhenAnyTask by selecting a random Task. This is used as the default"""
@@ -108,6 +111,7 @@ class MockExecutor:
 			return ret.value
 
 	def _handle(self, task: dftask.TaskBase):
+		self._invocations.append(task)
 		if isinstance(task, dftask.AtomicTask):
 			return self._handle_task(task)
 		elif isinstance(task, dftask.WhenAllTask):
@@ -116,6 +120,7 @@ class MockExecutor:
 			return self._handle_task_any(task)
 
 	def _handle_task(self, task):
+		self._calls.append(task)
 		return self._handle_action(task._get_action())
 
 	def _handle_task_all(self, task: dftask.WhenAllTask):
@@ -131,3 +136,86 @@ class MockExecutor:
 		return self.handlers[self._collapse_types(action.action_type)][
 			action.function_name
 		](json.loads(action.input_))
+
+	def invocations(self):
+		"""
+		RMIs that are submitted for execution through `yield` statements.
+		WhenAllTasks will have subcalls nested within it.
+		WhenAnyTasks will have _all_ of their subcalls nested as children
+		"""
+		return self._invocations
+
+	def calls(self):
+		"""
+		RMIs that are actually executed
+		`WhenAllTask`s will not be included, but their children will
+		`WhenAnyTask`s will not be included, and only the "winning" task will be included
+		"""
+		return self._calls
+
+	def _find_calls_matching_action(
+		self, predicate: Callable[[dftask.TaskBase, dfactions.Action], bool]
+	) -> List[dftask.TaskBase]:
+		calls_and_actions = ((t, t._get_action()) for t in self.calls())
+		# matched = next(ca for ca in calls_and_actions if predicate(*ca), (None, None))
+		matched = filter(lambda ca: predicate(*ca), calls_and_actions)
+		tasks = map(lambda ca: ca[0], matched)
+		return list(tasks)
+
+	def _find_called(self, action_type, function_name) -> List[dftask.TaskBase]:
+		def _p(c, a):
+			return a.action_type == action_type and a.function_name == function_name
+
+		return self._find_calls_matching_action(_p)
+
+	def assert_called(self, action_type, function_name):
+		assert len(self._find_called(action_type, function_name)) > 0
+
+	def assert_called_once(self, action_type, function_name):
+		assert len(self._find_called(action_type, function_name)) == 1
+
+	def _find_called_with(self, action: dfactions.Action):
+		action_as_json = action.to_json()
+
+		def _p(c, a):
+			return a.to_json() == action_as_json
+
+		return self._find_calls_matching_action(_p)
+
+	def assert_called_with(self, action: dfactions.Action):
+		c = self.calls()[-1]
+		assert c._get_action().to_json() == action.to_json()
+
+	def assert_called_once_with(self, action: dfactions.Action):
+		self.assert_called_once(action.action_type, action.function_name)
+		assert len(self._find_called_with(action)) == 1
+
+	def assert_any_call(self, action: dfactions.Action):
+		assert len(self._find_called_with(action)) > 0
+
+	def assert_has_calls(
+		self, actions: Iterable[dfactions.Action], any_order: bool = False
+	):
+		if any_order:
+			for action in actions:
+				self.assert_any_call(action)
+		else:
+			remaining_calls = iter(self.calls())
+			remaining_actions = iter(actions)
+
+			def find_next_call_matching(a: dfactions.Action):
+				while True:
+					call = next(remaining_calls)
+					if call._get_action().to_json() == a.to_json():
+						return
+
+			for action in remaining_actions:
+				try:
+					find_next_call_matching(action)
+				except StopIteration:
+					unmatched = [action] + list(remaining_actions)
+					raise AssertionError("not all calls matched", unmatched)
+
+	def assert_not_called(self, action_type, function_name):
+		assert len(self._find_called(action_type, function_name)) == 0
+		

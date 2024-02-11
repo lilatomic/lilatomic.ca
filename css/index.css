@@ -276,15 +276,17 @@ a[href].post-tag:visited {
 
 /* Tag List */
 .tagcontainer {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-auto-rows: 1fr;
 	max-width: 100%;
+	align-items: stretch;
 }
 
 .tagitem {
-	flex: 1 1 0px;
 	min-width: 25%;
-	margin: 0.5rem;
+	width: 100%;
+	padding: 0.5rem;
 	border-bottom: 1px dashed var(--accent);
 }
 

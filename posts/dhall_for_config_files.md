@@ -112,8 +112,8 @@ If you need to output to a format other than JSON or YAML, you'll need to write 
 
 1. And you can run the dhall with `dhall text`
 
-	``` bash
-	> dhall text --file f.dhall
+	``` command-line
+	dhall text --file f.dhall
 	[Unit]
 	Description=hello
 	[Service]

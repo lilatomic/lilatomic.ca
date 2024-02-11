@@ -362,3 +362,7 @@ a[href].direct-link:focus:visited,
 .content h1 {
 	display: none;
 }
+
+code.language-command-line :first-child {
+	font-weight: bold;
+}

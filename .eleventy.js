@@ -86,7 +86,6 @@ module.exports = function (eleventyConfig) {
 			x => "series" in x.data
 		), x => x.data.series)
 
-		var out = Object.entries(items)
 		var out = Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
 		return out
 	})

@@ -22,10 +22,7 @@
 
 			
 <article>
-
-
 <h1>Writing an Action Plugin in Ansible</h1>
-
 
 <aside id="tagbox">
 <p>Tags</p>
@@ -44,13 +41,13 @@
 </aside>
 
 
-  
-  <aside id="toc">
-    <nav class="toc" >
+
+<aside id="toc">
+	<nav class="toc" >
         <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#documenting-your-plugin">Documenting your plugin</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></li><li><a href="#run-a-freeform-command">Run a freeform command</a></li><li><a href="#adding-a-fact">Adding a fact</a></li><li><a href="#using-an-existing-filter">Using an existing filter</a></li></ol></li></ol>
       </nav>
-  </aside>
-  
+</aside>
+
 <div class="content">
 <h1 id="writing-an-action-plugin-in-ansible" tabindex="-1">Writing an Action Plugin in Ansible <a class="direct-link" href="#writing-an-action-plugin-in-ansible">#</a></h1>
 <p>It's common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.</p>
@@ -65,7 +62,14 @@
 <p>So, most likely, you'll want to use an Action plugin.</p>
 <h2 id="basic-outline" tabindex="-1">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
 <p>The basic outline of a plugin is as follows:</p>
-<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>action <span class="token keyword">import</span> ActionBase  <span class="token comment"># 1</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token keyword">class</span> <span class="token class-name">ActionModule</span><span class="token punctuation">(</span>ActionBase<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 2</span></span><br><span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> tmp<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> task_vars<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 3</span></span><br><span class="highlight-line">		<span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>run<span class="token punctuation">(</span>tmp<span class="token operator">=</span>tmp<span class="token punctuation">,</span> task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">)</span>  <span class="token comment"># 4</span></span><br><span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment"># 5</span></span><br><span class="highlight-line"></span></code></pre>
+<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>action <span class="token keyword">import</span> ActionBase  <span class="token comment"># 1</span></span>
+<span class="highlight-line"></span>
+<span class="highlight-line"></span>
+<span class="highlight-line"><span class="token keyword">class</span> <span class="token class-name">ActionModule</span><span class="token punctuation">(</span>ActionBase<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 2</span></span>
+<span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> tmp<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> task_vars<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 3</span></span>
+<span class="highlight-line">		<span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>run<span class="token punctuation">(</span>tmp<span class="token operator">=</span>tmp<span class="token punctuation">,</span> task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">)</span>  <span class="token comment"># 4</span></span>
+<span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>  <span class="token comment"># 5</span></span>
+<span class="highlight-line"></span></code></pre>
 <ol>
 <li>Import the plugin base</li>
 <li>Create a class called ActionModule. To name the plugin, put it in a file with that name.</li>
@@ -84,11 +88,42 @@
 <li>RETURN</li>
 </ul>
 <p>These have to be python strings which contain the YAML. This makes it kinda gross to work on, since you have no YAML syntax highlighting to help you. Here's a stub python file (feel free to change the license line):</p>
-<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token comment">#!/usr/bin/python</span></span><br><span class="highlight-line"><span class="token comment"># -*- coding: utf-8 -*-</span></span><br><span class="highlight-line"><span class="token comment"># Copyright: (c) {{ year }}, {{ Your Name }} &lt;{{ your email }}></span></span><br><span class="highlight-line"><span class="token comment"># GNU Affero General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/agpl-3.0.txt)</span></span><br><span class="highlight-line"></span><br>DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br><span class="highlight-line">module:</span><br><span class="highlight-line">short_description:</span><br><span class="highlight-line">description:</span><br><span class="highlight-line">  -</span><br><span class="highlight-line">version_added: "0.1.0"</span><br><span class="highlight-line">options:</span><br>"""</span><br><span class="highlight-line"></span><br>EXAMPLES <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br>"""</span><br><span class="highlight-line"></span><br>RETURN <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""<br><span class="highlight-line">{{ key }}:</span><br><span class="highlight-line">  desctiption:</span><br><span class="highlight-line">  returned:</span><br><span class="highlight-line">  type:</span><br><span class="highlight-line">  sample:</span><br>"""</span></code></pre>
+<pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token comment">#!/usr/bin/python</span></span>
+<span class="highlight-line"><span class="token comment"># -*- coding: utf-8 -*-</span></span>
+<span class="highlight-line"><span class="token comment"># Copyright: (c) {{ year }}, {{ Your Name }} &lt;{{ your email }}></span></span>
+<span class="highlight-line"><span class="token comment"># GNU Affero General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/agpl-3.0.txt)</span></span>
+<span class="highlight-line"></span>
+DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
+<span class="highlight-line">module:</span>
+<span class="highlight-line">short_description:</span>
+<span class="highlight-line">description:</span>
+<span class="highlight-line">  -</span>
+<span class="highlight-line">version_added: "0.1.0"</span>
+<span class="highlight-line">options:</span>
+"""</span>
+<span class="highlight-line"></span>
+EXAMPLES <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
+"""</span>
+<span class="highlight-line"></span>
+RETURN <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
+<span class="highlight-line">{{ key }}:</span>
+<span class="highlight-line">  desctiption:</span>
+<span class="highlight-line">  returned:</span>
+<span class="highlight-line">  type:</span>
+<span class="highlight-line">  sample:</span>
+"""</span></code></pre>
 <h2 id="common-things-you'd-want-to-do" tabindex="-1">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
 <h3 id="run-another-module%2Faction-plugin" tabindex="-1">Run another module/action plugin <a class="direct-link" href="#run-another-module%2Faction-plugin">#</a></h3>
 <p>Inside of your <code>run</code> method:</p>
-<pre class="language-python"><code class="language-python"><span class="highlight-line">module_name <span class="token operator">=</span> <span class="token string">"???"</span></span><br><span class="highlight-line">module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"???"</span><span class="token punctuation">:</span><span class="token string">"???"</span><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span> <span class="token comment">#1</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span>module_args<span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span> <span class="token comment">#2</span></span><br><span class="highlight-line">	<span class="token comment">#3</span></span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
+<pre class="language-python"><code class="language-python"><span class="highlight-line">module_name <span class="token operator">=</span> <span class="token string">"???"</span></span>
+<span class="highlight-line">module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"???"</span><span class="token punctuation">:</span><span class="token string">"???"</span><span class="token punctuation">}</span></span>
+<span class="highlight-line"></span>
+<span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span> <span class="token comment">#1</span></span>
+<span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span>
+<span class="highlight-line">	module_args<span class="token operator">=</span>module_args<span class="token punctuation">,</span></span>
+<span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span> <span class="token comment">#2</span></span>
+<span class="highlight-line">	<span class="token comment">#3</span></span>
+<span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
 <ol>
 <li>use the <code>self._execute_module</code> method</li>
 <li>generally pass these forward, don't forget to provide them</li>
@@ -96,9 +131,18 @@
 </ol>
 <h3 id="run-a-freeform-command" tabindex="-1">Run a freeform command <a class="direct-link" href="#run-a-freeform-command">#</a></h3>
 <p>If you just want to wrap a task like</p>
-<pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Run thing</span><br><span class="highlight-line">  <span class="token key atrule">command</span><span class="token punctuation">:</span></span><br><span class="highlight-line">    <span class="token key atrule">cmd</span><span class="token punctuation">:</span> <span class="token string">"Some freeform text"</span></span></code></pre>
+<pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Run thing</span>
+<span class="highlight-line">  <span class="token key atrule">command</span><span class="token punctuation">:</span></span>
+<span class="highlight-line">    <span class="token key atrule">cmd</span><span class="token punctuation">:</span> <span class="token string">"Some freeform text"</span></span></code></pre>
 <p>You will need to provide the <code>cmd</code> arg as the value of &quot;_raw_params&quot; to the module_args.</p>
-<pre class="language-python"><code class="language-python"><span class="highlight-line">cmd<span class="token operator">=</span><span class="token string">"ls -la"</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span></span><br><span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span><br><span class="highlight-line">	module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"_raw_params"</span><span class="token punctuation">:</span> cmd<span class="token punctuation">}</span><span class="token punctuation">,</span></span><br><span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span></span><br><span class="highlight-line">	tmp<span class="token operator">=</span>tmp</span><br><span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
+<pre class="language-python"><code class="language-python"><span class="highlight-line">cmd<span class="token operator">=</span><span class="token string">"ls -la"</span></span>
+<span class="highlight-line"></span>
+<span class="highlight-line">result <span class="token operator">=</span> self<span class="token punctuation">.</span>_execute_module<span class="token punctuation">(</span></span>
+<span class="highlight-line">	module_name<span class="token operator">=</span>module_name<span class="token punctuation">,</span></span>
+<span class="highlight-line">	module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"_raw_params"</span><span class="token punctuation">:</span> cmd<span class="token punctuation">}</span><span class="token punctuation">,</span></span>
+<span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span></span>
+<span class="highlight-line">	tmp<span class="token operator">=</span>tmp</span>
+<span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
 <h3 id="adding-a-fact" tabindex="-1">Adding a fact <a class="direct-link" href="#adding-a-fact">#</a></h3>
 <p>Ansible wants you to use a Fact plugin for these, but sometimes a fact only makes sense mid-playbook. Simply set the &quot;ansible_facts&quot; key with a dictionary of the facts you want to add:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"ansible_facts"</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">"FACT"</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">}</span></span></code></pre>

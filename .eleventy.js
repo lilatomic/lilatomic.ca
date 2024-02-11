@@ -20,6 +20,7 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginRss);
 	eleventyConfig.addPlugin(pluginSyntaxHighlight, {
 		alwaysWrapLineHighlights: true,
+		lineSeparator: "\n",
 	});
 	eleventyConfig.addPlugin(pluginNavigation);
 

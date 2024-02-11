@@ -4,10 +4,7 @@ templateClass: tmpl-post
 ---
 
 <article>
-
-
 <h1>{{ title }}</h1>
-
 {% if tags %}
 <aside id="tagbox">
 <p>Tags</p>
@@ -30,11 +27,11 @@ templateClass: tmpl-post
 </aside>
 {% endif %}
 
-  {% if content | toc | safe %}
-  <aside id="toc">
-    {{ content | toc | safe }}
-  </aside>
-  {% endif %}
+{% if content | toc | safe %}
+<aside id="toc">
+	{{ content | toc | safe }}
+</aside>
+{% endif %}
 <div class="content">
 {{ content | safe }}
 </div>

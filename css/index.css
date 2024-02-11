@@ -205,11 +205,11 @@ code .highlight-line:before {
 
 /* TOC */
 #toc {
-	height: 83vh;
+	/*height: 83vh;*/
 	width: var(--sidebar_width);
 
 	position: sticky;
-	top: 17vh;
+	top: 20vh;
 	right: 0;
 	bottom: 0;
 	border-left: 1px dashed var(--accent);

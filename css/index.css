@@ -358,3 +358,7 @@ a[href].direct-link:focus:visited,
 		text-align: center;
 	}
 }
+
+.content h1 {
+	display: none;
+}

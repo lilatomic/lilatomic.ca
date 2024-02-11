@@ -184,8 +184,6 @@ code .highlight-line:before {
 	list-style: none;
 	width: 100%;
 
-	border-left: 1px dashed var(--accent);
-
 	display: flex;
 	flex-direction: column;
 }

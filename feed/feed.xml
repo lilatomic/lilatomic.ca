@@ -5,12 +5,55 @@
 	
 	<link href="https://lilatomic.ca/feed/feed.xml" rel="self"/>
 	<link href="https://lilatomic.ca/"/>
-	<updated>2021-11-30T00:00:00Z</updated>
+	<updated>2024-02-11T00:00:00Z</updated>
 	<id>https://lilatomic.ca/</id>
 	<author>
 		<name>lilatomic</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>The DNS Shenanigans that make Azure Private Endpoints Work</title>
+		<link href="https://lilatomic.ca/posts/azure-private-endpoint-dns/"/>
+		<updated>2024-02-11T00:00:00Z</updated>
+		<id>https://lilatomic.ca/posts/azure-private-endpoint-dns/</id>
+		<content type="html">&lt;!-- prettier-ignore-start --&gt;
+&lt;!-- prettier-ignore-end --&gt;
+&lt;h1 id=&quot;the-dns-shenanigans-that-make-azure-private-endpoints-work&quot; tabindex=&quot;-1&quot;&gt;The &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; Shenanigans that make Azure Private Endpoints Work &lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/azure-private-endpoint-dns/#the-dns-shenanigans-that-make-azure-private-endpoints-work&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;In Azure, you can create a &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; to an IaaS service, like blobstores. These allow you to have a &amp;quot;local&amp;quot; IP in a &lt;abbr title=&quot;Virtual network&quot;&gt;VNet&lt;/abbr&gt; to the &amp;quot;internet&amp;quot; resource. Convenient. Just as convenient is that you can access them via their public &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; name: &amp;quot;&lt;a href=&quot;http://myblobs.blob.core.windows.net/&quot;&gt;myblobs.blob.core.windows.net&lt;/a&gt;&amp;quot; will work whether you&#39;re on the public Internet or your &lt;abbr title=&quot;Virtual network&quot;&gt;VNet&lt;/abbr&gt;.&lt;br /&gt;
+How this works is interesting. The &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; name needs to resolve to a public IP on the Internet, but your custom local IP on your &lt;abbr title=&quot;Virtual network&quot;&gt;VNet&lt;/abbr&gt;. Not only are these 2 different, but one is in Public IP space and the other is (probably) in &lt;a href=&quot;https://en.wikipedia.org/wiki/Private_network&quot;&gt;RFC1918&lt;/a&gt; IP space.&lt;/p&gt;
+&lt;h2 id=&quot;how-it-works&quot; tabindex=&quot;-1&quot;&gt;How it works &lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/azure-private-endpoint-dns/#how-it-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Let&#39;s examine the shenanigans that make this work by stepping through all the &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; configurations.&lt;/p&gt;
+&lt;h3 id=&quot;a-resource-with-no-pes&quot; tabindex=&quot;-1&quot;&gt;A resource with no PEs &lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/azure-private-endpoint-dns/#a-resource-with-no-pes&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;You&#39;d expect this &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; to function normally: Just a pointer to an IP. It&#39;s more complicated, as Azure adds some redirect elements to make redundancy scenarios easier. For an &lt;abbr title=&quot;Locally Redundant Storage, a redundancy level in Azure that stores data in 1 zone&quot;&gt;LRS&lt;/abbr&gt; storage account, it&#39;s simply a &lt;abbr title=&quot;Canonical name, a pointer to another domain name&quot;&gt;CNAME&lt;/abbr&gt; to (presumably) a datacentre&#39;s name and then an A to the IP:&lt;/p&gt;
+&lt;pre class=&quot;language-command-line&quot;&gt;&lt;code class=&quot;language-command-line&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;dig +noall +answer myblobstorenopelrs.blob.core.windows.net&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorenopelrs.blob.core.windows.net. 60 IN CNAME	blob.yto22prdstr05a.store.core.windows.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.yto22prdstr05a.store.core.windows.net. 86202 IN A 20.60.242.11&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For a storage account with &lt;abbr title=&quot;Zone Redundant Storage, a redundancy level in Azure that stores data in multiple zones&quot;&gt;ZRS&lt;/abbr&gt;, there are multiple datacentres/zones that keep the data. We see the redirect to the &lt;a href=&quot;http://store.core.windows.net/&quot;&gt;store.core.windows.net&lt;/a&gt; domain this time redirect to a trafficmanager endpoint. This allows Azure to balance traffic between the 3 zones, which are the 3 A records.&lt;/p&gt;
+&lt;pre class=&quot;language-command-line&quot;&gt;&lt;code class=&quot;language-command-line&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;dig +noall +answer myblobstorenope.blob.core.windows.net&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorenope.blob.core.windows.net. 7 IN	CNAME	blob.yto21prdstrz05a.store.core.windows.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.yto21prdstrz05a.store.core.windows.net. 7 IN CNAME	blob.YTO21PrdStrz05A.trafficmanager.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	20.150.16.196&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	52.239.189.228&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	20.150.31.4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;a-resource-with-a-pe&quot; tabindex=&quot;-1&quot;&gt;A resource with a &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; &lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/azure-private-endpoint-dns/#a-resource-with-a-pe&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Adding a &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; to a resource engages the &lt;abbr title=&quot;Private Link&quot;&gt;PL&lt;/abbr&gt; &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; machinery. This adds a redirection to a &lt;a href=&quot;http://privatelink.blob.core.windows.net/&quot;&gt;privatelink.blob.core.windows.net&lt;/a&gt;. It&#39;s this privatelink name that adds the decoupling that can redirect to the correct endpoint.&lt;/p&gt;
+&lt;p&gt;On the public Internet, this just forwards to the same datacentre or trafficmanager name as before:&lt;/p&gt;
+&lt;pre class=&quot;language-command-line&quot;&gt;&lt;code class=&quot;language-command-line&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;dig +noall +answer myblobstorepe.blob.core.windows.net&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorepe.blob.core.windows.net. 60 IN	CNAME	myblobstorepe.privatelink.blob.core.windows.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorepe.privatelink.blob.core.windows.net. 60 IN CNAME blob.yto22prdstr03c.store.core.windows.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;blob.yto22prdstr03c.store.core.windows.net. 86279 IN A 20.60.43.235&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;On the side of the &lt;abbr title=&quot;Virtual network&quot;&gt;VNet&lt;/abbr&gt;, this is supposed to redirect to the &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt;. Some additional infra/magic makes this work. The &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; itself has the option of integrating with a Private &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; Zone Group. This is the default. And, if you&#39;ve created this in the portal, it&#39;ll even create the privatelink &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; zone for you (in this case, &lt;a href=&quot;http://blob.privatelink.core.windows.net/&quot;&gt;blob.privatelink.core.windows.net&lt;/a&gt;). This Private &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; Zone Group must also be linked with the &lt;abbr title=&quot;Virtual network&quot;&gt;VNet&lt;/abbr&gt; for the records to show up with the Azure resolver (the default). (If you&#39;re using your own resolver, you&#39;ll want to figure out some really fun &lt;a href=&quot;https://en.wikipedia.org/wiki/Split-horizon_DNS&quot;&gt;split-horizon &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt;&lt;/a&gt; and automatic loading of config into it.)&lt;/p&gt;
+&lt;pre class=&quot;language-command-line&quot;&gt;&lt;code class=&quot;language-command-line&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;dig +noall +answer myblobstorepe.blob.core.windows.net&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorepe.blob.core.windows.net. 60 IN	CNAME	myblobstorepe.privatelink.blob.core.windows.net.&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;myblobstorepe.privatelink.blob.core.windows.net. 10 IN A 10.0.0.10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;shenanigans!&quot; tabindex=&quot;-1&quot;&gt;Shenanigans! &lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/azure-private-endpoint-dns/#shenanigans!&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This leads to some complications. There&#39;s &lt;a href=&quot;https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns&quot;&gt;a doc&lt;/a&gt; on Azure that has some big red boxes about this. Let&#39;s go over them and include implementations of the workaround.&lt;/p&gt;
+&lt;p&gt;The privatelink &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; zone is needed for the &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; to work. This &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; zone will only contain entries of PEs linked to it. But, every resource that has a &lt;abbr title=&quot;Private Endpoint&quot;&gt;PE&lt;/abbr&gt; anywhere has the &lt;abbr title=&quot;Canonical name, a pointer to another domain name&quot;&gt;CNAME&lt;/abbr&gt; redirect to a private endpoint. This means that if you try to use the public endpoint to access a resource that has a private endpoint, you will receive an NX for the privatelink domain and won&#39;t be able to. For example, our Private &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; zone from above only contains a record for &lt;a href=&quot;http://myblobstorepe.privatelink.blob.core.windows.net/&quot;&gt;myblobstorepe.privatelink.blob.core.windows.net&lt;/a&gt;, and it doesn&#39;t have a record for &lt;a href=&quot;http://publicblob.privatelink.core.windows.net/&quot;&gt;publicblob.privatelink.core.windows.net&lt;/a&gt;; therefore, we get NXDOMAIN and can&#39;t access a publicly accessible resource.&lt;/p&gt;
+&lt;p&gt;This requirement for a private &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; zone that will NX other records also prevents you from using service endpoints and private endpoints together in similar circumstances. You&#39;ll have to complete the &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; chain yourself.&lt;/p&gt;
+&lt;p&gt;One solution is to add the missing &lt;abbr title=&quot;Domain Name System&quot;&gt;DNS&lt;/abbr&gt; record manually. In our example, we could add the record &lt;code&gt;publicblob.privatelink.blob.core.windows.net. 60 IN CNAME blob.yto22prdstr03c.store.core.windows.net.&lt;/code&gt;. This is fiddly. Finding the value for the target requires some manual intervention. The target is obviously internal to Azure. I have no idea how often or if ever it changes. From my experience, it hasn&#39;t changed in a year. But is also clearly linked to the region and zones the storage account is in, so it could change suddenly if the owner of the storage account reconfigures it in ways that would seem safe.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Testing Azure Durable Functions in Python</title>
@@ -2979,14 +3022,14 @@ RETURN &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span clas
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;And you can run the dhall with &lt;code&gt;dhall text&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; dhall text &lt;span class=&quot;token parameter variable&quot;&gt;--file&lt;/span&gt; f.dhall&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Unit&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;Description&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;hello&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Service&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;me&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;ExecStart&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/usr/bin/bash &lt;span class=&quot;token builtin class-name&quot;&gt;pwd&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;Install&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;WantedBy&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;multi_user.target&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-command-line&quot;&gt;&lt;code class=&quot;language-command-line&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;dhall text --file f.dhall&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;[Unit]&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;Description=hello&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;[Service]&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;User=me&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;ExecStart=/usr/bin/bash pwd&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;[Install]&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;WantedBy=multi_user.target&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;If you have a standard format you&#39;re building to, you can create a helper for easier importing. The example builds systemd unit files, so we might create one like&lt;/p&gt;

@@ -82,6 +82,11 @@
   </url>
   
   <url>
+    <loc>https://lilatomic.ca/posts/azure-private-endpoint-dns/</loc>
+    <lastmod>2024-02-11</lastmod>
+  </url>
+  
+  <url>
     <loc>https://lilatomic.ca/about/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
@@ -132,12 +137,17 @@
   </url>
   
   <url>
-    <loc>https://lilatomic.ca/tags/serverless/</loc>
+    <loc>https://lilatomic.ca/tags/azure/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
   
   <url>
-    <loc>https://lilatomic.ca/tags/azure/</loc>
+    <loc>https://lilatomic.ca/tags/hindsight/</loc>
+    <lastmod>2024-02-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/serverless/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
   
@@ -177,11 +187,6 @@
   </url>
   
   <url>
-    <loc>https://lilatomic.ca/tags/hindsight/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
     <loc>https://lilatomic.ca/tags/eleventy/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
@@ -192,22 +197,22 @@
   </url>
   
   <url>
-    <loc>https://lilatomic.ca/tags/infra/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lilatomic.ca/tags/openstack/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
     <loc>https://lilatomic.ca/tags/VB/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/dotnet/</loc>
+    <lastmod>2024-02-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/infra/</loc>
+    <lastmod>2024-02-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/openstack/</loc>
     <lastmod>2024-02-11</lastmod>
   </url>
   

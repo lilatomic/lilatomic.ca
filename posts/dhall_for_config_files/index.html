@@ -130,14 +130,14 @@
 </li>
 <li>
 <p>And you can run the dhall with <code>dhall text</code></p>
-<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token operator">></span> dhall text <span class="token parameter variable">--file</span> f.dhall</span>
-<span class="highlight-line"><span class="token punctuation">[</span>Unit<span class="token punctuation">]</span></span>
-<span class="highlight-line"><span class="token assign-left variable">Description</span><span class="token operator">=</span>hello</span>
-<span class="highlight-line"><span class="token punctuation">[</span>Service<span class="token punctuation">]</span></span>
-<span class="highlight-line"><span class="token assign-left variable">User</span><span class="token operator">=</span>me</span>
-<span class="highlight-line"><span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/usr/bin/bash <span class="token builtin class-name">pwd</span></span>
-<span class="highlight-line"><span class="token punctuation">[</span>Install<span class="token punctuation">]</span></span>
-<span class="highlight-line"><span class="token assign-left variable">WantedBy</span><span class="token operator">=</span>multi_user.target</span></code></pre>
+<pre class="language-command-line"><code class="language-command-line"><span class="highlight-line">dhall text --file f.dhall</span>
+<span class="highlight-line">[Unit]</span>
+<span class="highlight-line">Description=hello</span>
+<span class="highlight-line">[Service]</span>
+<span class="highlight-line">User=me</span>
+<span class="highlight-line">ExecStart=/usr/bin/bash pwd</span>
+<span class="highlight-line">[Install]</span>
+<span class="highlight-line">WantedBy=multi_user.target</span></code></pre>
 </li>
 </ol>
 <p>If you have a standard format you're building to, you can create a helper for easier importing. The example builds systemd unit files, so we might create one like</p>

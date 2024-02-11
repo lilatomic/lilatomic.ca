@@ -29,7 +29,7 @@
 		"@11ty/eleventy": "^2.0.1",
 		"@11ty/eleventy-navigation": "^0.3.2",
 		"@11ty/eleventy-plugin-rss": "^1.1.1",
-		"@11ty/eleventy-plugin-syntaxhighlight": "^3.2.0",
+		"@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
 		"eleventy-plugin-link_to": "^0.4.0",
 		"markdown-it": "^12.2.0",
 		"markdown-it-anchor": "^8.4.1",

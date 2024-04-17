@@ -8,10 +8,6 @@ tags:
 layout: layouts/post.njk
 ---
 
-<!-- prettier-ignore-start -->
-*[PE]: Private Endpoint
-<!-- prettier-ignore-end -->
-
 # Migrating a project from tox to Pants
 
 Tox is a fine environment manager and test command runner. I think the Pants build system has advantages. I'm also a contributor. Let's port one of [my projects, grafanaramadillo](https://github.com/lilatomic/grafanarmadillo). TLDR: [MR HERE](https://github.com/lilatomic/grafanarmadillo/pull/19)

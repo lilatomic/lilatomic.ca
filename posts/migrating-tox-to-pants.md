@@ -14,11 +14,11 @@ layout: layouts/post.njk
 
 # Migrating a project from tox to Pants
 
-Tox is a fine environment manager and test command runner. I think the Pants build system has advantages. I'm also a contributor. Let's port one of my projects.
+Tox is a fine environment manager and test command runner. I think the Pants build system has advantages. I'm also a contributor. Let's port one of [my projects, grafanaramadillo](https://github.com/lilatomic/grafanarmadillo). TLDR: [MR HERE](https://github.com/lilatomic/grafanarmadillo/pull/19)
 
 ## Initialise Pants
 
-After [getting Pants](https://www.pantsbuild.org/2.18/docs/getting-started/installing-pants), run `pants --version` to initialise the repository. This gives us an empty Pants config file. We're going to bump the version up to at least 2.20, because we've done some great work making it easier to incorporate tools. (It'll be released soon!)
+After [getting Pants](https://www.pantsbuild.org/2.18/docs/getting-started/installing-pants), run `pants --version` to initialise the repository. This gives us an empty Pants config file. We're going to bump the version up to at least 2.20, because we've done some great work making it easier to incorporate tools.
 
 ```toml
 {% include_raw "tox2pants/pants.0.toml" %}

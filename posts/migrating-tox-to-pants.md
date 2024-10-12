@@ -104,15 +104,18 @@ We need to set our `[GLOBAL].pythonpath` to include the directory where our in-r
 ### A tool from PyPI
 
 Adding a tool with the adhoc backend is really easy.
+
 1. create a new resolve
    ```toml
    [python.resolves]
    radon = "devtools/radon.lock"
    ```
+
 2. create the requirements for the tool in a BUILD file
    ```python
    python_requirement(name="radon", requirements=["radon"], resolve="radon")
    ```
+
 3. create a `code_quality_tool` target in a BUILD file. There are a few things to note here. Pants can pick up the entrypoints of some requiremets automatically and can convert them into a runnable target. If Pants can't for your tool, you can wrap it in a `pex_binary` target and define the entrypoint (see this section for an [example of wrapping with pex_binary](#a-tool-from-your-repo)). Another thing to note is that `code_quality_tool`s operate on raw files, not on targets, so you must set the `file_glob_include`.
    ```python
    code_quality_tool(
@@ -122,10 +125,12 @@ Adding a tool with the adhoc backend is really easy.
  	   file_glob_include=["src/**/*.py"],
    )
    ```
+
 4. create an in-repo plugin using the rule-builder-helper. The helper provides all the rules, so you just need to create a file `register.py` inside of your plugin's module and generate a `python_sources` target for it.
    ```toml
-   {% include_raw "tox2pants/radon.py" %}
+   {% include_raw "tox2pants/radon.py", 1, -1, "   " %}
    ```
+
 5. register your plugin by adding your plugin to the `[GLOBAL].backend_packages`
    ```toml
    backend_packages = [

@@ -129,7 +129,7 @@ module.exports = function (eleventyConfig) {
 	const resource_path = "_includes/resources/";
 	eleventyConfig.addShortcode(
 		"include_raw",
-		function (path, start = 1, end = -1) {
+		function (path, start = 1, end = -1, indent="") {
 			let lines = fs
 				.readFileSync(resource_path + path)
 				.toString()
@@ -140,7 +140,7 @@ module.exports = function (eleventyConfig) {
 			} else {
 				selected_lines = lines.slice(start - 1, end);
 			}
-			return String(selected_lines.join("\n"));
+			return String(selected_lines.map(line => indent + line).join("\n"));
 		}
 	);
 

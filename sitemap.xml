@@ -87,137 +87,147 @@
   </url>
   
   <url>
+    <loc>https://lilatomic.ca/posts/migrating-tox-to-pants/</loc>
+    <lastmod>2024-03-22</lastmod>
+  </url>
+  
+  <url>
     <loc>https://lilatomic.ca/about/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/posts/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/colophon/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/feedlist/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/page-list/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/series/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/series/ansible%20plugins/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/ansible/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/azure/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/hindsight/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/serverless/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/testing/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/python/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/trying/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/bicep/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lilatomic.ca/tags/dhall/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lilatomic.ca/tags/using/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/kartoza/osm/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/dhall/</loc>
+    <lastmod>2024-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/using/</loc>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/eleventy/</loc>
-    <lastmod>2024-02-11</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lilatomic.ca/tags/off-topic/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/VB/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/dotnet/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/infra/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/openstack/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/howto/</loc>
+    <lastmod>2024-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lilatomic.ca/tags/off-topic/</loc>
+    <lastmod>2024-10-12</lastmod>
   </url>
   
   <url>
     <loc>https://lilatomic.ca/tags/seriesList/</loc>
-    <lastmod>2024-02-11</lastmod>
+    <lastmod>2024-10-12</lastmod>
   </url>
 </urlset>

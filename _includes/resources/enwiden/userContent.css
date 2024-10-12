@@ -1,0 +1,55 @@
+.document {
+	max-width: none !important;
+	width: auto !important;
+}
+.body,
+html body.page {
+	max-width: none !important;
+	width: auto !important;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+main {
+	max-width: 100% !important;
+	padding-left: 1%;
+	padding-right: 1%;
+	/* width: auto !important; */
+}
+/* stack overflow */
+body.question-page.unified-theme div.container {
+	max-width: 100% !important;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+html.html__responsive body.question-page.unified-theme div.container div#content {
+	max-width: 100% !important;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+/* discourse */
+#main-outlet-wrapper {
+	max-width: 100% !important;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+:root {
+	--topic-body-width: 100%;
+}
+
+/* ember? */
+.topic-body {
+	max-width: 100% !important;
+	width: auto !important  /* override calc on class*/
+}
+
+/* misc */
+.row {
+	max-width: 100% !important;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+.text-token-text-primary div {
+	max-width: none !important;
+}

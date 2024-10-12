@@ -316,14 +316,15 @@ a[href].post-tag:visited {
 	font-style: normal;
 	margin-left: 0.1em;
 }
-a[href].direct-link,
-a[href].direct-link:visited {
+a[href].direct-link::after,
+a[href].direct-link:visited::after {
+	content: " #";
 	color: transparent;
 }
-a[href].direct-link:focus,
-a[href].direct-link:focus:visited,
-:hover > a[href].direct-link,
-:hover > a[href].direct-link:visited {
+a[href].direct-link:focus::after,
+a[href].direct-link:focus:visited::after,
+:hover > a[href].direct-link::after,
+:hover > a[href].direct-link:visited::after {
 	color: #aaa;
 }
 

@@ -42,9 +42,9 @@
 </aside>
 
 <div class="content">
-<h1 id="common-dhall-tasks-for-config-files" tabindex="-1">Common Dhall Tasks for Config Files <a class="direct-link" href="#common-dhall-tasks-for-config-files">#</a></h1>
+<h1 id="common-dhall-tasks-for-config-files" tabindex="-1"><a class="direct-link" href="#common-dhall-tasks-for-config-files">Common Dhall Tasks for Config Files</a></h1>
 <p>This page describes common tasks in using Dhall for generating config files. It provides the step-by-step for implementing these common features.</p>
-<h2 id="enums-(sum-types)" tabindex="-1">Enums (Sum Types) <a class="direct-link" href="#enums-(sum-types)">#</a></h2>
+<h2 id="enums-(sum-types)" tabindex="-1"><a class="direct-link" href="#enums-(sum-types)">Enums (Sum Types)</a></h2>
 <ol>
 <li>
 <p>Define the type. Angle brackets around all the options, pipelines between the options. These are the names which appear in code, so it's alright if they follow your code convention rather than how they appear in the config file. So if you write enums in all capital letters because they're basically constants, you do you.</p>
@@ -100,7 +100,7 @@
 	''</span></code></pre>
 </li>
 </ol>
-<h2 id="unions-%7C-complex-sum-types" tabindex="-1">Unions | Complex Sum Types <a class="direct-link" href="#unions-%7C-complex-sum-types">#</a></h2>
+<h2 id="unions-%7C-complex-sum-types" tabindex="-1"><a class="direct-link" href="#unions-%7C-complex-sum-types">Unions | Complex Sum Types</a></h2>
 <p>Sometimes you've got a field which is a value of Type a <em>or</em> Type b. A sum type represents that. This example combines an enum and Text, but the same principle holds for any types. Here's a <a href="https://hackage.haskell.org/package/dhall-1.16.1/docs/Dhall-Tutorial.html#g:12">link</a> for the official tutorial</p>
 <ol>
 <li>
@@ -137,7 +137,7 @@
 	''</span></code></pre>
 </li>
 </ol>
-<h2 id="optional-fields-(autoexclusion)" tabindex="-1">Optional fields (autoexclusion) <a class="direct-link" href="#optional-fields-(autoexclusion)">#</a></h2>
+<h2 id="optional-fields-(autoexclusion)" tabindex="-1"><a class="direct-link" href="#optional-fields-(autoexclusion)">Optional fields (autoexclusion)</a></h2>
 <p>Sometimes you want a field to not appear if there is no value defined.</p>
 <p>We'll define a helper function to render optionals. I use it frequently so I gave it a short name. Mine adds a newline automatically, so they don't appear if the option doesn't render.</p>
 <p>:/render/ro.dhall</p>
@@ -176,7 +176,7 @@
           ''</span>
 <span class="highlight-line">      <span class="token operator">++</span>  ron types<span class="token punctuation">.</span><span class="token class-name">Dependency</span> <span class="token string">"WantedBy"</span> <span class="token punctuation">.</span><span class="token punctuation">/</span><span class="token class-name">Dependency</span><span class="token punctuation">.</span>dhall i<span class="token punctuation">.</span><span class="token class-name">WantedBy</span></span></code></pre>
 <p>If you find yourself frequently using the same type (for example, bools), you can make another wrapper for that. The dhall-nethack repo makes significant use of those, see the <a href="https://github.com/dhall-lang/dhall-nethack/blob/2b7ea599ae09c077bd8bda82cfb3c2601925e300/render/Config.dhall">config class</a></p>
-<h2 id="multiple-exports-per-file" tabindex="-1">Multiple exports per file <a class="direct-link" href="#multiple-exports-per-file">#</a></h2>
+<h2 id="multiple-exports-per-file" tabindex="-1"><a class="direct-link" href="#multiple-exports-per-file">Multiple exports per file</a></h2>
 <p>Dhall likes you to have a single type per file. But sometimes you have a group of types which don't make sense separately. Or you have a lot of types which are basically just type aliases for primitive types. You can export them in a file like so</p>
 <p>:/ex.dhall</p>
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token punctuation">{</span> <span class="token class-name">Thing0</span> <span class="token operator">=</span> <span class="token class-name">Text</span><span class="token punctuation">,</span> <span class="token class-name">Thing1</span> <span class="token operator">=</span> <span class="token class-name">Integer</span> <span class="token punctuation">}</span></span></code></pre>

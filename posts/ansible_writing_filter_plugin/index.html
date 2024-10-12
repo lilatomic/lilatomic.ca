@@ -49,7 +49,7 @@
 </aside>
 
 <div class="content">
-<h1 id="writing-a-filter-plugin-in-ansible" tabindex="-1">Writing a Filter Plugin in Ansible <a class="direct-link" href="#writing-a-filter-plugin-in-ansible">#</a></h1>
+<h1 id="writing-a-filter-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-filter-plugin-in-ansible">Writing a Filter Plugin in Ansible</a></h1>
 <p>You might find that you're doing the same kind of data-munging in multiple places. There are many cases where you'd want to pull this into a little named package:</p>
 <ul>
 <li>It requires logic which can't be expressed simply in basic jinja filters</li>
@@ -58,7 +58,7 @@
 <li>It's actually complicated</li>
 <li>You just want to name what these 3 filters do together</li>
 </ul>
-<h2 id="basic-outline" tabindex="-1">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
+<h2 id="basic-outline" tabindex="-1"><a class="direct-link" href="#basic-outline">Basic outline</a></h2>
 <p>The basic outline of a plugin is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">import</span> re</span>
 <span class="highlight-line"></span>
@@ -77,7 +77,7 @@
 <li>Define your function</li>
 <li>Return a dict with k-vs of <code>filter_name:function_reference</code></li>
 </ol>
-<h2 id="documenting-your-plugin" tabindex="-1">Documenting your plugin <a class="direct-link" href="#documenting-your-plugin">#</a></h2>
+<h2 id="documenting-your-plugin" tabindex="-1"><a class="direct-link" href="#documenting-your-plugin">Documenting your plugin</a></h2>
 <p>If you want your documentation to work with the Ansible tooling (showing up nicely in the docs, working with <code>ansible-doc</code>), you can't use the standard ansible documentation, since Filter plugins don't show up as an option you can select documentation for. Go figure. You can still try to use the standard documentation features, though.</p>
 <p>You can include only the sections of the documentation that you want to appear. Here's the <a href="https://docs.ansible.com/ansible/2.10/dev_guide/developing_modules_documenting.html">full referece</a> for the version this article was written to. For convenience, here they are:</p>
 <ul>
@@ -114,11 +114,11 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <span class="highlight-line">  sample:</span>
 """</span></code></pre>
 <p>{% endraw %}</p>
-<h2 id="common-things-you'd-want-to-do" tabindex="-1">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
-<h3 id="using-an-existing-filter" tabindex="-1">Using an existing filter <a class="direct-link" href="#using-an-existing-filter">#</a></h3>
+<h2 id="common-things-you'd-want-to-do" tabindex="-1"><a class="direct-link" href="#common-things-you'd-want-to-do">Common things you'd want to do</a></h2>
+<h3 id="using-an-existing-filter" tabindex="-1"><a class="direct-link" href="#using-an-existing-filter">Using an existing filter</a></h3>
 <p>If you want to use an existing filter plugin (perhaps to format your output), you can just import them from the Ansible package:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">.</span>core <span class="token keyword">import</span> to_json<span class="token punctuation">,</span> quote</span></code></pre>
-<h3 id="including-other-parameters-in-your-filter" tabindex="-1">Including other parameters in your filter <a class="direct-link" href="#including-other-parameters-in-your-filter">#</a></h3>
+<h3 id="including-other-parameters-in-your-filter" tabindex="-1"><a class="direct-link" href="#including-other-parameters-in-your-filter">Including other parameters in your filter</a></h3>
 <p>If you want to have other parameters in your filter, you can just do that</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ipaddress <span class="token keyword">import</span> ip_network</span>
 <span class="highlight-line"></span>
@@ -134,7 +134,7 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"ip_in_snet"</span><span class="token punctuation">:</span> ip_in_snet<span class="token punctuation">}</span></span></code></pre>
 <p>and then use that like you'd expect, more or less</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"> <span class="token string">"{{ '10.0.1.0/24' | ip_in_snet(10) }}"</span> </span></code></pre>
-<h3 id="building-an-extractor" tabindex="-1">Building an extractor <a class="direct-link" href="#building-an-extractor">#</a></h3>
+<h3 id="building-an-extractor" tabindex="-1"><a class="direct-link" href="#building-an-extractor">Building an extractor</a></h3>
 <p>Sometimes you can't remember the sequence of keys you need to extract that thing you want from the huge JSON blob. You can write a simple extractor:</p>
 <pre class="language-python"><code class="language-python">DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
 <span class="highlight-line">name: extract_connectionstring</span>
@@ -193,7 +193,7 @@ EXAMPLES <span class="token operator">=</span> <span class="token triple-quoted-
 <span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">filters</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span></span>
 <span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"extract_connectionstring"</span><span class="token punctuation">:</span> extract_connectionstring<span class="token punctuation">}</span></span>
 <span class="highlight-line"></span></code></pre>
-<h2 id="abusing-filters-as-functions" tabindex="-1">Abusing filters as functions <a class="direct-link" href="#abusing-filters-as-functions">#</a></h2>
+<h2 id="abusing-filters-as-functions" tabindex="-1"><a class="direct-link" href="#abusing-filters-as-functions">Abusing filters as functions</a></h2>
 <p>Let's say that you want to have some functions assemble things, like you would with some proper typed data modelling. I'm not saying this is a <em>good</em> idea, but you can use functions as the closest thing to that (it's not really close). For an example, I always forget the little fiddly bits of assembling an Azure Storageaccount Lifecycle Policy. I could do the following:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> _includes<span class="token punctuation">.</span>resources<span class="token punctuation">.</span>ansible_plugins<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">.</span>extractor <span class="token keyword">import</span> EXAMPLES</span>
 <span class="highlight-line"></span>

@@ -49,7 +49,7 @@
 </aside>
 
 <div class="content">
-<h1 id="writing-an-action-plugin-in-ansible" tabindex="-1">Writing an Action Plugin in Ansible <a class="direct-link" href="#writing-an-action-plugin-in-ansible">#</a></h1>
+<h1 id="writing-an-action-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-an-action-plugin-in-ansible">Writing an Action Plugin in Ansible</a></h1>
 <p>It's common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.</p>
 <ol>
 <li>Including a task list</li>
@@ -60,7 +60,7 @@
 <p>Ansible Module plugins might sound like the right thing, especially since the Ansible documentation says that if you use the <code>command</code> module a lot you might want to write one of these. When you look into the documentation, the difference between these and an Action plugin becomes murky. The capabilities of each aren't clearly outlined, despite them being practically welded to each other. You may also find documentation which says that when resolving what action to take from a task in a playbook, Ansible will first look for a match for the task action in the Action plugins and, if one isn't found, in the Modules.</p>
 <p>The short distinction is that Modules are the code which will get uploaded to the target machine and then launched, and Action modules run on the controller. Action plugins have access to useful Ansible function, like <code>_execute_module</code>, which allows you to wrap an existing directive (or launch a specially-built <code>command</code>). Note that these executed modules function like you'd expect: on the remote machine.</p>
 <p>So, most likely, you'll want to use an Action plugin.</p>
-<h2 id="basic-outline" tabindex="-1">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
+<h2 id="basic-outline" tabindex="-1"><a class="direct-link" href="#basic-outline">Basic outline</a></h2>
 <p>The basic outline of a plugin is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>action <span class="token keyword">import</span> ActionBase  <span class="token comment"># 1</span></span>
 <span class="highlight-line"></span>
@@ -77,7 +77,7 @@
 <li>Invoke the <code>super().run</code> method</li>
 <li>Return results as a dict</li>
 </ol>
-<h2 id="documenting-your-plugin" tabindex="-1">Documenting your plugin <a class="direct-link" href="#documenting-your-plugin">#</a></h2>
+<h2 id="documenting-your-plugin" tabindex="-1"><a class="direct-link" href="#documenting-your-plugin">Documenting your plugin</a></h2>
 <p>If you want your documentation to work with the Ansible tooling (showing up nicely in the docs, working with <code>ansible-doc</code>), you have to create an Ansible Module for that as well. The module can contain only documentation.</p>
 <p>You can include only the sections of the documentation that you want to appear. Here's the <a href="https://docs.ansible.com/ansible/2.10/dev_guide/developing_modules_documenting.html">full referece</a> for the version this article was written to. For convenience, here they are:</p>
 <ul>
@@ -112,8 +112,8 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <span class="highlight-line">  type:</span>
 <span class="highlight-line">  sample:</span>
 """</span></code></pre>
-<h2 id="common-things-you'd-want-to-do" tabindex="-1">Common things you'd want to do <a class="direct-link" href="#common-things-you'd-want-to-do">#</a></h2>
-<h3 id="run-another-module%2Faction-plugin" tabindex="-1">Run another module/action plugin <a class="direct-link" href="#run-another-module%2Faction-plugin">#</a></h3>
+<h2 id="common-things-you'd-want-to-do" tabindex="-1"><a class="direct-link" href="#common-things-you'd-want-to-do">Common things you'd want to do</a></h2>
+<h3 id="run-another-module%2Faction-plugin" tabindex="-1"><a class="direct-link" href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></h3>
 <p>Inside of your <code>run</code> method:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">module_name <span class="token operator">=</span> <span class="token string">"???"</span></span>
 <span class="highlight-line">module_args<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"???"</span><span class="token punctuation">:</span><span class="token string">"???"</span><span class="token punctuation">}</span></span>
@@ -129,7 +129,7 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <li>generally pass these forward, don't forget to provide them</li>
 <li>tmp no longer has any effect, if the comments are to be believed, so we don't need to forward it.</li>
 </ol>
-<h3 id="run-a-freeform-command" tabindex="-1">Run a freeform command <a class="direct-link" href="#run-a-freeform-command">#</a></h3>
+<h3 id="run-a-freeform-command" tabindex="-1"><a class="direct-link" href="#run-a-freeform-command">Run a freeform command</a></h3>
 <p>If you just want to wrap a task like</p>
 <pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Run thing</span>
 <span class="highlight-line">  <span class="token key atrule">command</span><span class="token punctuation">:</span></span>
@@ -143,10 +143,10 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <span class="highlight-line">	task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">,</span></span>
 <span class="highlight-line">	tmp<span class="token operator">=</span>tmp</span>
 <span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
-<h3 id="adding-a-fact" tabindex="-1">Adding a fact <a class="direct-link" href="#adding-a-fact">#</a></h3>
+<h3 id="adding-a-fact" tabindex="-1"><a class="direct-link" href="#adding-a-fact">Adding a fact</a></h3>
 <p>Ansible wants you to use a Fact plugin for these, but sometimes a fact only makes sense mid-playbook. Simply set the &quot;ansible_facts&quot; key with a dictionary of the facts you want to add:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"ansible_facts"</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">"FACT"</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">}</span></span></code></pre>
-<h3 id="using-an-existing-filter" tabindex="-1">Using an existing filter <a class="direct-link" href="#using-an-existing-filter">#</a></h3>
+<h3 id="using-an-existing-filter" tabindex="-1"><a class="direct-link" href="#using-an-existing-filter">Using an existing filter</a></h3>
 <p>If you want to use an existing filter plugin (perhaps to format your output), you can just import them from the Ansible package:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">.</span>core <span class="token keyword">import</span> to_json<span class="token punctuation">,</span> quote</span></code></pre>
 

@@ -43,16 +43,16 @@
 </aside>
 
 <div class="content">
-<h1 id="ssl-with-microstack" tabindex="-1">SSL with Microstack <a class="direct-link" href="#ssl-with-microstack">#</a></h1>
-<h2 id="setting-up-https-on-horizon-(the-dashboard)" tabindex="-1">Setting up HTTPS on Horizon (the dashboard) <a class="direct-link" href="#setting-up-https-on-horizon-(the-dashboard)">#</a></h2>
+<h1 id="ssl-with-microstack" tabindex="-1"><a class="direct-link" href="#ssl-with-microstack">SSL with Microstack</a></h1>
+<h2 id="setting-up-https-on-horizon-(the-dashboard)" tabindex="-1"><a class="direct-link" href="#setting-up-https-on-horizon-(the-dashboard)">Setting up HTTPS on Horizon (the dashboard)</a></h2>
 <p>Let's follow the docs <a href="https://docs.openstack.org/horizon/latest/admin/customize-configure.html#configure-dashboard">here</a></p>
 <p>The config files for microstack are all in the snap directory, so look in <code>/var/snap/microstack/common/etc</code>. We want to change the hostname by replacing the relevant lines:</p>
 <p>:/common/etc/local_settings.d/_05_snap_tweaks.py</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">OPENSTACK_HOST <span class="token operator">=</span> <span class="token string">""</span></span>
 <span class="highlight-line">ALLOWED_HOSTS <span class="token operator">=</span> <span class="token string">""</span></span></code></pre>
-<h2 id="ssl-cert" tabindex="-1">SSL Cert <a class="direct-link" href="#ssl-cert">#</a></h2>
+<h2 id="ssl-cert" tabindex="-1"><a class="direct-link" href="#ssl-cert">SSL Cert</a></h2>
 <p>I tossed my cert and key into :/common/etc/ssl/private . Make sure to give it appropriate permissions</p>
-<h2 id="nginx" tabindex="-1">Nginx <a class="direct-link" href="#nginx">#</a></h2>
+<h2 id="nginx" tabindex="-1"><a class="direct-link" href="#nginx">Nginx</a></h2>
 <p>The config for horizon lives in :/common/etc/nginx/snap/sites-enabled/horizon.conf . I replaced the <code>listen</code> directive, gave it a <code>server_name</code>, and added the <code>ssl_certificate</code> and <code>ssl_certificate_key</code>. I found that giving the absolute path to the SSL folder worked. That gives us:</p>
 <pre class="language-nginx"><code class="language-nginx"><span class="highlight-line"><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">{</span></span>
 <span class="highlight-line">	<span class="token directive"><span class="token keyword">listen</span> <span class="token number">443</span> ssl</span><span class="token punctuation">;</span></span>

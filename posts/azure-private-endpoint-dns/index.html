@@ -44,12 +44,12 @@
 <div class="content">
 <!-- prettier-ignore-start -->
 <!-- prettier-ignore-end -->
-<h1 id="the-dns-shenanigans-that-make-azure-private-endpoints-work" tabindex="-1">The <abbr title="Domain Name System">DNS</abbr> Shenanigans that make Azure Private Endpoints Work <a class="direct-link" href="#the-dns-shenanigans-that-make-azure-private-endpoints-work">#</a></h1>
+<h1 id="the-dns-shenanigans-that-make-azure-private-endpoints-work" tabindex="-1"><a class="direct-link" href="#the-dns-shenanigans-that-make-azure-private-endpoints-work">The <abbr title="Domain Name System">DNS</abbr> Shenanigans that make Azure Private Endpoints Work</a></h1>
 <p>In Azure, you can create a <abbr title="Private Endpoint">PE</abbr> to an IaaS service, like blobstores. These allow you to have a &quot;local&quot; IP in a <abbr title="Virtual network">VNet</abbr> to the &quot;internet&quot; resource. Convenient. Just as convenient is that you can access them via their public <abbr title="Domain Name System">DNS</abbr> name: &quot;<a href="http://myblobs.blob.core.windows.net">myblobs.blob.core.windows.net</a>&quot; will work whether you're on the public Internet or your <abbr title="Virtual network">VNet</abbr>.<br>
 How this works is interesting. The <abbr title="Domain Name System">DNS</abbr> name needs to resolve to a public IP on the Internet, but your custom local IP on your <abbr title="Virtual network">VNet</abbr>. Not only are these 2 different, but one is in Public IP space and the other is (probably) in <a href="https://en.wikipedia.org/wiki/Private_network">RFC1918</a> IP space.</p>
-<h2 id="how-it-works" tabindex="-1">How it works <a class="direct-link" href="#how-it-works">#</a></h2>
+<h2 id="how-it-works" tabindex="-1"><a class="direct-link" href="#how-it-works">How it works</a></h2>
 <p>Let's examine the shenanigans that make this work by stepping through all the <abbr title="Domain Name System">DNS</abbr> configurations.</p>
-<h3 id="a-resource-with-no-pes" tabindex="-1">A resource with no PEs <a class="direct-link" href="#a-resource-with-no-pes">#</a></h3>
+<h3 id="a-resource-with-no-pes" tabindex="-1"><a class="direct-link" href="#a-resource-with-no-pes">A resource with no PEs</a></h3>
 <p>You'd expect this <abbr title="Domain Name System">DNS</abbr> to function normally: Just a pointer to an IP. It's more complicated, as Azure adds some redirect elements to make redundancy scenarios easier. For an <abbr title="Locally Redundant Storage, a redundancy level in Azure that stores data in 1 zone">LRS</abbr> storage account, it's simply a <abbr title="Canonical name, a pointer to another domain name">CNAME</abbr> to (presumably) a datacentre's name and then an A to the IP:</p>
 <pre class="language-command-line"><code class="language-command-line"><span class="highlight-line">dig +noall +answer myblobstorenopelrs.blob.core.windows.net</span>
 <span class="highlight-line">myblobstorenopelrs.blob.core.windows.net. 60 IN CNAME	blob.yto22prdstr05a.store.core.windows.net.</span>
@@ -61,7 +61,7 @@ How this works is interesting. The <abbr title="Domain Name System">DNS</abbr> n
 <span class="highlight-line">blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	20.150.16.196</span>
 <span class="highlight-line">blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	52.239.189.228</span>
 <span class="highlight-line">blob.YTO21PrdStrz05A.trafficmanager.net. 7 IN A	20.150.31.4</span></code></pre>
-<h3 id="a-resource-with-a-pe" tabindex="-1">A resource with a <abbr title="Private Endpoint">PE</abbr> <a class="direct-link" href="#a-resource-with-a-pe">#</a></h3>
+<h3 id="a-resource-with-a-pe" tabindex="-1"><a class="direct-link" href="#a-resource-with-a-pe">A resource with a <abbr title="Private Endpoint">PE</abbr></a></h3>
 <p>Adding a <abbr title="Private Endpoint">PE</abbr> to a resource engages the <abbr title="Private Link">PL</abbr> <abbr title="Domain Name System">DNS</abbr> machinery. This adds a redirection to a <a href="http://privatelink.blob.core.windows.net">privatelink.blob.core.windows.net</a>. It's this privatelink name that adds the decoupling that can redirect to the correct endpoint.</p>
 <p>On the public Internet, this just forwards to the same datacentre or trafficmanager name as before:</p>
 <pre class="language-command-line"><code class="language-command-line"><span class="highlight-line">dig +noall +answer myblobstorepe.blob.core.windows.net</span>
@@ -72,7 +72,7 @@ How this works is interesting. The <abbr title="Domain Name System">DNS</abbr> n
 <pre class="language-command-line"><code class="language-command-line"><span class="highlight-line">dig +noall +answer myblobstorepe.blob.core.windows.net</span>
 <span class="highlight-line">myblobstorepe.blob.core.windows.net. 60 IN	CNAME	myblobstorepe.privatelink.blob.core.windows.net.</span>
 <span class="highlight-line">myblobstorepe.privatelink.blob.core.windows.net. 10 IN A 10.0.0.10</span></code></pre>
-<h2 id="shenanigans!" tabindex="-1">Shenanigans! <a class="direct-link" href="#shenanigans!">#</a></h2>
+<h2 id="shenanigans!" tabindex="-1"><a class="direct-link" href="#shenanigans!">Shenanigans!</a></h2>
 <p>This leads to some complications. There's <a href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns">a doc</a> on Azure that has some big red boxes about this. Let's go over them and include implementations of the workaround.</p>
 <p>The privatelink <abbr title="Domain Name System">DNS</abbr> zone is needed for the <abbr title="Private Endpoint">PE</abbr> to work. This <abbr title="Domain Name System">DNS</abbr> zone will only contain entries of PEs linked to it. But, every resource that has a <abbr title="Private Endpoint">PE</abbr> anywhere has the <abbr title="Canonical name, a pointer to another domain name">CNAME</abbr> redirect to a private endpoint. This means that if you try to use the public endpoint to access a resource that has a private endpoint, you will receive an NX for the privatelink domain and won't be able to. For example, our Private <abbr title="Domain Name System">DNS</abbr> zone from above only contains a record for <a href="http://myblobstorepe.privatelink.blob.core.windows.net">myblobstorepe.privatelink.blob.core.windows.net</a>, and it doesn't have a record for <a href="http://publicblob.privatelink.core.windows.net">publicblob.privatelink.core.windows.net</a>; therefore, we get NXDOMAIN and can't access a publicly accessible resource.</p>
 <p>This requirement for a private <abbr title="Domain Name System">DNS</abbr> zone that will NX other records also prevents you from using service endpoints and private endpoints together in similar circumstances. You'll have to complete the <abbr title="Domain Name System">DNS</abbr> chain yourself.</p>

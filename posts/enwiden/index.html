@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Enwiden the Internet</title>
+	<meta name="description" content="Make the Internet full-width">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>Enwiden the Internet</h1>
+
+<aside id="tagbox">
+<p>Tags</p>
+
+  <a href="/tags/off-topic/" class="post-tag">off-topic</a>
+</aside>
+
+
+
+
+
+<aside id="toc">
+	<nav class="toc" >
+        <ol><li><a href="#general-solution">General solution</a></li><li><a href="#stackoverflow">Stackoverflow</a></li><li><a href="#everything-else">Everything else</a></li></ol>
+      </nav>
+</aside>
+
+<div class="content">
+<h1 id="enwiden-the-internet" tabindex="-1"><a class="direct-link" href="#enwiden-the-internet">Enwiden the Internet</a></h1>
+<p>It's very frustrating when sites have a constrained width and then insist on putting content that doesn't fit inside that width. This is most common with code listings, as these aren't wrapped. You have to scroll back and forth for each line.</p>
+<p>But this is your browser, and you can override their stylesheets with a User Stylesheet. For example, <a href="https://davidwalsh.name/firefox-user-stylesheet">here's how to add user stylesheet in Firefox</a>. You then just need to jam <code>max-width: none !important;</code> and <code>width: auto !important;</code> on anything that looks like the main content.</p>
+<h2 id="general-solution" tabindex="-1"><a class="direct-link" href="#general-solution">General solution</a></h2>
+<p>Here's a fragment which does this for most things:</p>
+<pre class="language-css"><code class="language-css"><span class="highlight-line"><span class="token selector">.document</span> <span class="token punctuation">{</span></span>
+<span class="highlight-line">	<span class="token property">max-width</span><span class="token punctuation">:</span> none <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">width</span><span class="token punctuation">:</span> auto <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line"><span class="token punctuation">}</span></span>
+<span class="token selector">.body,
+html body.page</span> <span class="token punctuation">{</span>
+<span class="highlight-line">	<span class="token property">max-width</span><span class="token punctuation">:</span> none <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">width</span><span class="token punctuation">:</span> auto <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-left</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-right</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line"><span class="token punctuation">}</span></span>
+<span class="highlight-line"></span>
+<span class="highlight-line"><span class="token selector">main</span> <span class="token punctuation">{</span></span>
+<span class="highlight-line">	<span class="token property">max-width</span><span class="token punctuation">:</span> 100% <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-left</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-right</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token comment">/* width: auto !important; */</span></span>
+<span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<h2 id="stackoverflow" tabindex="-1"><a class="direct-link" href="#stackoverflow">Stackoverflow</a></h2>
+<p>Stack overflow has some internal objects that we want to hit:</p>
+<pre class="language-css"><code class="language-css"><span class="highlight-line"><span class="token selector">body.question-page.unified-theme div.container</span> <span class="token punctuation">{</span></span>
+<span class="highlight-line">	<span class="token property">max-width</span><span class="token punctuation">:</span> 100% <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-left</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-right</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line"><span class="token punctuation">}</span></span>
+<span class="highlight-line"><span class="token selector">html.html__responsive body.question-page.unified-theme div.container div#content</span> <span class="token punctuation">{</span></span>
+<span class="highlight-line">	<span class="token property">max-width</span><span class="token punctuation">:</span> 100% <span class="token important">!important</span><span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-left</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line">	<span class="token property">padding-right</span><span class="token punctuation">:</span> 1%<span class="token punctuation">;</span></span>
+<span class="highlight-line"><span class="token punctuation">}</span></span></code></pre>
+<h2 id="everything-else" tabindex="-1"><a class="direct-link" href="#everything-else">Everything else</a></h2>
+<p>See the <a href="https://raw.githubusercontent.com/lilatomic/lilatomic.ca/refs/heads/prod/_includes/resources/enwiden/userContent.css">whole sheet</a> as I add more things</p>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Previous: <a href="/posts/migrating-tox-to-pants/">Migrating a project from tox to Pants</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/series/">Series</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+				<li class="nav-item"><a
+						href="/feedlist/">Feeds</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/enwiden/ -->
+</body>
+</html>

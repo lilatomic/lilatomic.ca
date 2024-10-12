@@ -49,11 +49,11 @@
 </aside>
 
 <div class="content">
-<h1 id="faking-a-better-httpapi-plugin" tabindex="-1">Faking a better HttpApi plugin <a class="direct-link" href="#faking-a-better-httpapi-plugin">#</a></h1>
+<h1 id="faking-a-better-httpapi-plugin" tabindex="-1"><a class="direct-link" href="#faking-a-better-httpapi-plugin">Faking a better HttpApi plugin</a></h1>
 <p>The builtin HttpApi plugins are not great, as <a href="/posts/ansible_httpapi_plugins/">I wrote about before</a>. This makes interacting with HTTP APIs kind of a pain. It also means that all the collections which make heavy use of HTTP APIs write their frameworks on top of the bad one to make it less bad. Instead of that, we're just going to bypass the connection plugin stack, and the Ansible Plugin situation entirely.</p>
 <p><a href="#final-version">TLDR</a></p>
-<h2 id="development" tabindex="-1">Development <a class="direct-link" href="#development">#</a></h2>
-<h3 id="the-goal" tabindex="-1">The goal <a class="direct-link" href="#the-goal">#</a></h3>
+<h2 id="development" tabindex="-1"><a class="direct-link" href="#development">Development</a></h2>
+<h3 id="the-goal" tabindex="-1"><a class="direct-link" href="#the-goal">The goal</a></h3>
 <p>Let's start by sketching out what we want the API to look like. Remember that this is a low-level action plugin. We'll be able to wrap this later to build more specific APIs. Here's an example for upserting a dashboard to Grafana:</p>
 <pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> add grafana dashboard</span>
 <span class="highlight-line">  <span class="token key atrule">lilatomic.api.http</span><span class="token punctuation">:</span></span>
@@ -65,7 +65,7 @@
 <span class="highlight-line">      <span class="token key atrule">dashboard</span><span class="token punctuation">:</span> <span class="token string">"{{ lookup('file', dashboard_file) | from_json }}"</span></span>
 <span class="highlight-line">      <span class="token key atrule">message</span><span class="token punctuation">:</span> <span class="token string">"redeploy"</span></span>
 <span class="highlight-line">      <span class="token key atrule">overwrite</span><span class="token punctuation">:</span> <span class="token boolean important">true</span></span></code></pre>
-<h3 id="supplying-connection-information" tabindex="-1">Supplying connection information <a class="direct-link" href="#supplying-connection-information">#</a></h3>
+<h3 id="supplying-connection-information" tabindex="-1"><a class="direct-link" href="#supplying-connection-information">Supplying connection information</a></h3>
 <p>You can just use normal variables for this, but I'm going to use the Inventory file. To my mind, most HTTP APIs are like nodes and actions targeting them are configuring them, so they're just another type of thing you can run Ansible tasks against. I therefore think it's natural to have them fit into the Inventory file.</p>
 <p>We'd like for them to <em>not</em> show up in the conventional hosts list (for example, when targeting <em>all</em>). Fortunately the <code>yaml</code> inventory plugin lets us add vars which get passed to all hosts. This is just about what we want. Note also that you can template these. I'm going to namespace the connections, so they don't conflict with other variables. So my inventory will be structured like this:</p>
 <pre class="language-yaml"><code class="language-yaml"><span class="highlight-line"><span class="token key atrule">all</span><span class="token punctuation">:</span></span>
@@ -74,7 +74,7 @@
 <span class="highlight-line">  <span class="token key atrule">hosts</span><span class="token punctuation">:</span></span>
 <span class="highlight-line">  <span class="token key atrule">children</span><span class="token punctuation">:</span></span></code></pre>
 <p>You could also write a <a href="/posts/ansible_writing_facts_plugin/">Vars Plugin</a>. I didn't think it was necessary, and I wanted to keep these connections with the Hosts.</p>
-<h3 id="basic-requests" tabindex="-1">Basic requests <a class="direct-link" href="#basic-requests">#</a></h3>
+<h3 id="basic-requests" tabindex="-1"><a class="direct-link" href="#basic-requests">Basic requests</a></h3>
 <p>We're going to start with a basic <a href="/posts/ansible_writing_action_plugin/">Action Plugin</a>.</p>
 <p>The first thing we'll want to do is retrieve the connection information for the specified connection. That's easily done by just accessing the vars. The vars above actually are injected as hostvars common to all hosts, so accessing them is pretty easy. <code>task_vars[&quot;lilatomic_api_http&quot;][connection_name]</code></p>
 <p>This first pass at the plugin is already much nicer for making GET requests.</p>
@@ -107,7 +107,7 @@
 <span class="highlight-line">  <span class="token key atrule">lilatomic.api.http</span><span class="token punctuation">:</span></span>
 <span class="highlight-line">    <span class="token key atrule">connection</span><span class="token punctuation">:</span> grafana</span>
 <span class="highlight-line">    <span class="token key atrule">path</span><span class="token punctuation">:</span> /alerts</span></code></pre>
-<h3 id="more-methods" tabindex="-1">More methods <a class="direct-link" href="#more-methods">#</a></h3>
+<h3 id="more-methods" tabindex="-1"><a class="direct-link" href="#more-methods">More methods</a></h3>
 <p>One way of supporting more methods would be to make a plugin for each method type. I intend to do this, for convenience. But it would also be convenient to reduce duplication with a single low-level module. This would also more easily allow parametrising the method (which could be useful for things where using PUT vs PATCH is something known at runtime only). Implementing this is as simple as using the requests library, which is pretty nice.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> urljoin</span>
 <span class="highlight-line"></span>
@@ -144,7 +144,7 @@
 <span class="highlight-line">	<span class="token keyword">def</span> <span class="token function">arg_or</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> arg<span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span></span>
 <span class="highlight-line">		<span class="token keyword">return</span> self<span class="token punctuation">.</span>_task<span class="token punctuation">.</span>args<span class="token punctuation">.</span>get<span class="token punctuation">(</span>arg<span class="token punctuation">,</span> default<span class="token punctuation">)</span></span>
 <span class="highlight-line"></span></code></pre>
-<h3 id="more-parameters" tabindex="-1">More parameters <a class="direct-link" href="#more-parameters">#</a></h3>
+<h3 id="more-parameters" tabindex="-1"><a class="direct-link" href="#more-parameters">More parameters</a></h3>
 <p>HTTP APIs are full of other things that you need to specify, like proxy settings or headers or cookies or mTLS or all that. We could set all of those up as different parameters, but at some point we're just repeating the <code>requests</code> API. So instead, we'll offer an access hatch: a dedicated way of passing advanced parameters to the actual call to requests. I've simply labelled these fields as <code>kwargs</code>, which will hopefully indicate that these args are unvalidated. We also add a way of recursively merging the kwargs, which allows us to specify headers for all requests made with the connection and just for specific tasks and have them merged; as an example.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Dict</span>
 <span class="highlight-line"><span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> urljoin</span>
@@ -202,7 +202,7 @@
 <span class="highlight-line">			out<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> b<span class="token punctuation">[</span>k<span class="token punctuation">]</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> out</span>
 <span class="highlight-line"></span></code></pre>
-<h3 id="simple-auths" tabindex="-1">Simple Auths <a class="direct-link" href="#simple-auths">#</a></h3>
+<h3 id="simple-auths" tabindex="-1"><a class="direct-link" href="#simple-auths">Simple Auths</a></h3>
 <p>Let's add some basic auths. One goal for the auths is that it should be possible to pass around the whole block as a unit. This allows us to easily use different endpoints which share the same underlying authentication system. We want to be able to support a variety of auths. I'm going to use a tagged union, with the <code>method</code> field as the tag. We leverage <code>requests</code> for the Basic auth, and write out own class for Bearer. This class has a few customisation points for APIs which are special and want you to put <code>api_key</code> or <code>GenieKey</code> or something...</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Dict<span class="token punctuation">,</span> Optional</span>
 <span class="highlight-line"><span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> urljoin</span>
@@ -285,7 +285,7 @@
 <span class="highlight-line">			out<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> b<span class="token punctuation">[</span>k<span class="token punctuation">]</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> out</span>
 <span class="highlight-line"></span></code></pre>
-<h3 id="better-returns" tabindex="-1">Better returns <a class="direct-link" href="#better-returns">#</a></h3>
+<h3 id="better-returns" tabindex="-1"><a class="direct-link" href="#better-returns">Better returns</a></h3>
 <p>Currently we always return the JSON, even if it's not there. This is multiple problems:</p>
 <ol>
 <li>we can't load anything which doesn't return JSON</li>
@@ -444,7 +444,7 @@
 <span class="highlight-line">			out<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> b<span class="token punctuation">[</span>k<span class="token punctuation">]</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> out</span>
 <span class="highlight-line"></span></code></pre>
-<h3 id="friendlier-api" tabindex="-1">Friendlier API <a class="direct-link" href="#friendlier-api">#</a></h3>
+<h3 id="friendlier-api" tabindex="-1"><a class="direct-link" href="#friendlier-api">Friendlier API</a></h3>
 <p>The current API requires people to add Headers in the kwargs, which sucks a bit. Adding another parameter is easy enough.</p>
 <p>While we're at it, it's pretty easy to make shortcuts for specific methods:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> <span class="token punctuation">.</span>http <span class="token keyword">import</span> ActionModule <span class="token keyword">as</span> Http</span>
@@ -455,9 +455,9 @@
 <span class="highlight-line">		self<span class="token punctuation">.</span>_task<span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token string">"method"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"POST"</span></span>
 <span class="highlight-line"></span>
 <span class="highlight-line">		<span class="token keyword">return</span> <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>run<span class="token punctuation">(</span>tmp<span class="token operator">=</span>tmp<span class="token punctuation">,</span> task_vars<span class="token operator">=</span>task_vars<span class="token punctuation">)</span></span></code></pre>
-<h3 id="documentation" tabindex="-1">Documentation <a class="direct-link" href="#documentation">#</a></h3>
+<h3 id="documentation" tabindex="-1"><a class="direct-link" href="#documentation">Documentation</a></h3>
 <p>Didn't think I'd let us off the hook for this, did you? It's easy if tedious, you just have to create a fake module and fill in the required docstrings. I've only done that for the main HTTP plugin. Ideally, I would pull out everything except for the &quot;method&quot; parameter into a document fragment, and then have them all reference that. something for a future improvement</p>
-<h2 id="final-version" tabindex="-1">Final Version <a class="direct-link" href="#final-version">#</a></h2>
+<h2 id="final-version" tabindex="-1"><a class="direct-link" href="#final-version">Final Version</a></h2>
 <p>With a few improvements along the way, we have:</p>
 <p>.../plugins/action/http.py</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Dict<span class="token punctuation">,</span> Optional<span class="token punctuation">,</span> List</span>

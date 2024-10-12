@@ -49,7 +49,7 @@
 </aside>
 
 <div class="content">
-<h1 id="understanding-ansible-httpapi-plugins" tabindex="-1">Understanding Ansible HttpApi plugins <a class="direct-link" href="#understanding-ansible-httpapi-plugins">#</a></h1>
+<h1 id="understanding-ansible-httpapi-plugins" tabindex="-1"><a class="direct-link" href="#understanding-ansible-httpapi-plugins">Understanding Ansible HttpApi plugins</a></h1>
 <blockquote>
 <p>TL;DR: I wouldn't recommend this method. It's not actually that good.</p>
 </blockquote>
@@ -59,7 +59,7 @@
 <p>HttpApi plugins tell Ansible how to interact with a remote device’s HTTP-based API and execute tasks on the device.</p>
 </blockquote>
 <p>This isn't <em>exactly</em> what we're after. It's really set up for devices like network switches where SSH isn't really the intended connection method.</p>
-<h2 id="adapting-the-httpapi-plugin" tabindex="-1">Adapting the HttpApi plugin <a class="direct-link" href="#adapting-the-httpapi-plugin">#</a></h2>
+<h2 id="adapting-the-httpapi-plugin" tabindex="-1"><a class="direct-link" href="#adapting-the-httpapi-plugin">Adapting the HttpApi plugin</a></h2>
 <p>But being able to submit HTTP requests is about 100% of what we need, so we might be able to just use it with a little adapting. There are several steps involved in creating an HttpApi plugin:</p>
 <ol>
 <li>Create HttpApi plugin</li>
@@ -70,7 +70,7 @@
 <li>Supply connection information</li>
 <li>Delegate tasks to that connection</li>
 </ol>
-<h2 id="understanding-the-httpapi-connection-structure%3A" tabindex="-1">Understanding the HttpApi connection structure: <a class="direct-link" href="#understanding-the-httpapi-connection-structure%3A">#</a></h2>
+<h2 id="understanding-the-httpapi-connection-structure%3A" tabindex="-1"><a class="direct-link" href="#understanding-the-httpapi-connection-structure%3A">Understanding the HttpApi connection structure:</a></h2>
 <p>The flow for how HttpApi plugins work is a bit involved with a few unexpected outcomes. The flow is as follows:</p>
 <ol>
 <li>an Ansible task requests the <code>httpapi</code> connection type, possibly with the <code>ansible_connection</code> parameter</li>
@@ -81,9 +81,9 @@
 <li>The httpapi plugin send the requests through to <em>its</em> connection, which is the <code>ansible.netcommon.httpapi</code> connection plugin. This connection plugin has a method for enriching an HTTP request</li>
 <li>the connection plugin shells out to the util <code>ansible.module_utils.urls.open_url</code>, which is a generic way of making web requests, and eventually shells out to <code>urllib.request.urlopen</code></li>
 </ol>
-<h2 id="implementing-the-httpapi-stack" tabindex="-1">Implementing the HttpApi stack <a class="direct-link" href="#implementing-the-httpapi-stack">#</a></h2>
+<h2 id="implementing-the-httpapi-stack" tabindex="-1"><a class="direct-link" href="#implementing-the-httpapi-stack">Implementing the HttpApi stack</a></h2>
 <p>So that's a bit complicated, but it's actually pretty easy to get a barebones version of this:</p>
-<h3 id="httpapi-plugin" tabindex="-1">HttpApi plugin <a class="direct-link" href="#httpapi-plugin">#</a></h3>
+<h3 id="httpapi-plugin" tabindex="-1"><a class="direct-link" href="#httpapi-plugin">HttpApi plugin</a></h3>
 <p>.../plugins/httpapi/http.py</p>
 <pre class="language-python"><code class="language-python">DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
 <span class="highlight-line">---</span>
@@ -132,7 +132,7 @@ This barebones version assumes that everything will be JSON in and JSON out, so 
 <p>Sending the data is done with a call to <code>self.connection.send</code>. As mentioned before, this resolves to the <code>ansible.netcommon.httpapi</code> connection plugin and will eventually make their way to <code>urllib</code>, but not before 2 more layers of munging.</p>
 <p>We then have to unload the body ourselves.</p>
 <p>For the return, note that we're rebuilding most of the response ourselves. This is because the response will need to be serialised over JSON for interprocess communication back to the main Ansible process. Remember when <code>ansible-connection</code> spun this connection off as a separate process? Well there's also a bespoke JSON-rpc remote-method-invocation framework which fails to serialise most of the things returned by the <code>ansible.netcommon.httpapi</code>. One of the things which fails to return is error messages, so I guess just hope you don't get those...</p>
-<h3 id="module" tabindex="-1">Module <a class="direct-link" href="#module">#</a></h3>
+<h3 id="module" tabindex="-1"><a class="direct-link" href="#module">Module</a></h3>
 <p>.../plugins/modules/http.py</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token comment">#!/usr/bin/env python</span></span>
 <span class="highlight-line"></span>
@@ -178,7 +178,7 @@ This barebones version assumes that everything will be JSON in and JSON out, so 
 <p>We then get a reference to the httpapi connection, which we defined just above. We use the connection to send the request, which requires us to forward all the parameters. It's a bit cumbersome.</p>
 <p>We then need to use the <code>AnsibleModule.exit_json</code> function. This method is the way to return from an Ansible module. These are executed in separate processes and their return values are gathered from stdout. It's certainly a way to do that. In the event of an error, we use the <code>AnsibleModule.fail_json</code> for the same type of thing, but for failure.</p>
 <p>Don't forget the shebang and the thing that launches the function is it's invoked.</p>
-<h3 id="supply-connection-information" tabindex="-1">Supply connection information <a class="direct-link" href="#supply-connection-information">#</a></h3>
+<h3 id="supply-connection-information" tabindex="-1"><a class="direct-link" href="#supply-connection-information">Supply connection information</a></h3>
 <p>One of the sneaky ways of adding these connections is to include them as a Host in the inventory file:</p>
 <pre class="language-yml"><code class="language-yml"><span class="highlight-line"><span class="token key atrule">all</span><span class="token punctuation">:</span></span>
 <span class="highlight-line">  <span class="token key atrule">hosts</span><span class="token punctuation">:</span></span>
@@ -195,7 +195,7 @@ This barebones version assumes that everything will be JSON in and JSON out, so 
 <p><strong>ansible_port</strong> the port</p>
 <p><strong>ansible_httpapi_use_ssl</strong> whether to use http or https</p>
 <p>I haven't found a way to combine the last 3 parameters. I also haven't found a way to add a start of the URL path component (for example, tomcat-hosted applications are by default hosted at <code>/</code>).</p>
-<h3 id="delegate-tasks-to-the-connection" tabindex="-1">Delegate tasks to the connection <a class="direct-link" href="#delegate-tasks-to-the-connection">#</a></h3>
+<h3 id="delegate-tasks-to-the-connection" tabindex="-1"><a class="direct-link" href="#delegate-tasks-to-the-connection">Delegate tasks to the connection</a></h3>
 <p>This is the easiest way of sending the requests to this connection, in my opinion. It's literally just the <code>delegate_to</code> line:</p>
 <pre class="language-yml"><code class="language-yml"><span class="highlight-line"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> test</span>
 <span class="highlight-line">  <span class="token key atrule">hosts</span><span class="token punctuation">:</span> localhost</span>
@@ -213,7 +213,7 @@ This barebones version assumes that everything will be JSON in and JSON out, so 
 <span class="highlight-line">        <span class="token key atrule">method</span><span class="token punctuation">:</span> <span class="token string">"POST"</span></span>
 <span class="highlight-line">        <span class="token key atrule">data</span><span class="token punctuation">:</span> <span class="token string">"HIHELLO"</span></span>
 <span class="highlight-line">      <span class="token key atrule">delegate_to</span><span class="token punctuation">:</span> <span class="token string">"httpbin"</span></span></code></pre>
-<h2 id="other-features-of-httpapi-plugins" tabindex="-1">Other features of HttpApi Plugins <a class="direct-link" href="#other-features-of-httpapi-plugins">#</a></h2>
+<h2 id="other-features-of-httpapi-plugins" tabindex="-1"><a class="direct-link" href="#other-features-of-httpapi-plugins">Other features of HttpApi Plugins</a></h2>
 <p>The <code>HttpApiBase</code> base class has several other methods:</p>
 <ul>
 <li>login</li>
@@ -223,7 +223,7 @@ This barebones version assumes that everything will be JSON in and JSON out, so 
 </ul>
 <p>The only method which isn't a virtual method is the handle_httperror. Its behaviour is to try to authenticate if a 401 is returned.</p>
 <p>These methods are also invoked appropriately during the <code>ansible.netcommon.httpapi</code> sessions.</p>
-<h2 id="tradeoffs" tabindex="-1">Tradeoffs <a class="direct-link" href="#tradeoffs">#</a></h2>
+<h2 id="tradeoffs" tabindex="-1"><a class="direct-link" href="#tradeoffs">Tradeoffs</a></h2>
 <p>So, there's a lot of implementation stuff. And there's a lot of boilerplate. And it's not even correct.<br>
 The interface for libraries like <code>requests</code> or <code>urllib3</code> are so much better than this, and don't require any of the machinery to get correct.</p>
 <p>There are many other downsides to this approach. The requests happen either in another process or in a module, which is another process. This makes it almost impossible to get trace logging or unexpected errors.<br>

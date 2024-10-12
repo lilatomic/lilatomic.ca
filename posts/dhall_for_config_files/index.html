@@ -42,8 +42,8 @@
 </aside>
 
 <div class="content">
-<h1 id="dhall-for-config-files" tabindex="-1">Dhall for Config Files <a class="direct-link" href="#dhall-for-config-files">#</a></h1>
-<h2 id="setting-up-a-dhall-project" tabindex="-1">Setting up a Dhall project <a class="direct-link" href="#setting-up-a-dhall-project">#</a></h2>
+<h1 id="dhall-for-config-files" tabindex="-1"><a class="direct-link" href="#dhall-for-config-files">Dhall for Config Files</a></h1>
+<h2 id="setting-up-a-dhall-project" tabindex="-1"><a class="direct-link" href="#setting-up-a-dhall-project">Setting up a Dhall project</a></h2>
 <p>Let's start with the standard directory used in the <a href="https://github.com/dhall-lang/dhall-nethack/blob/master/types.dhall">dhall-nethack repo</a></p>
 <ul>
 <li>types.dhall : this file is a convenient import of all the types</li>
@@ -52,7 +52,7 @@
 <li>render/ : this is where we put all of our render functions</li>
 </ul>
 <p>Neat!</p>
-<h2 id="adding-a-type" tabindex="-1">Adding a type <a class="direct-link" href="#adding-a-type">#</a></h2>
+<h2 id="adding-a-type" tabindex="-1"><a class="direct-link" href="#adding-a-type">Adding a type</a></h2>
 <ol>
 <li>
 <p>Add your type as a record in a file under the :/types/ directory.</p>
@@ -88,7 +88,7 @@
 <span class="highlight-line">    <span class="token punctuation">}</span></span></code></pre>
 </li>
 </ol>
-<h2 id="adding-a-renderer-for-a-type" tabindex="-1">Adding a renderer for a type <a class="direct-link" href="#adding-a-renderer-for-a-type">#</a></h2>
+<h2 id="adding-a-renderer-for-a-type" tabindex="-1"><a class="direct-link" href="#adding-a-renderer-for-a-type">Adding a renderer for a type</a></h2>
 <p>If you need to output to a format other than JSON or YAML, you'll need to write your renderers and pass it through <code>dhall text</code></p>
 <ol>
 <li>
@@ -143,7 +143,7 @@
 <p>If you have a standard format you're building to, you can create a helper for easier importing. The example builds systemd unit files, so we might create one like</p>
 <p>:/toSystemdUnit</p>
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token punctuation">.</span><span class="token punctuation">/</span>render<span class="token punctuation">/</span><span class="token class-name">SystemdUnit</span><span class="token punctuation">.</span>dhall</span></code></pre>
-<h2 id="adding-examples" tabindex="-1">Adding examples <a class="direct-link" href="#adding-examples">#</a></h2>
+<h2 id="adding-examples" tabindex="-1"><a class="direct-link" href="#adding-examples">Adding examples</a></h2>
 <p>Everyone loves seeing examples of how to use your stuff, so let's add those. They're just a file located in the expected directory :/examples</p>
 <p>:/examples/templated_unit.dhall</p>
 <pre class="language-dhall"><code class="language-dhall"><span class="highlight-line"><span class="token keyword">let</span> <span class="token class-name">Systemd</span> <span class="token operator">=</span> <span class="token punctuation">..</span><span class="token punctuation">/</span>types<span class="token punctuation">.</span>dhall</span>

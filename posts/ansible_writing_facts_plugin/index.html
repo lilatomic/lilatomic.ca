@@ -49,9 +49,9 @@
 </aside>
 
 <div class="content">
-<h1 id="writing-a-vars-plugin-in-ansible" tabindex="-1">Writing a Vars Plugin in Ansible <a class="direct-link" href="#writing-a-vars-plugin-in-ansible">#</a></h1>
+<h1 id="writing-a-vars-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-vars-plugin-in-ansible">Writing a Vars Plugin in Ansible</a></h1>
 <p>Often there are facts you wish were just ambiently available, especially if you are working with cloud infrastructure. For example, you might want to have your subscription id, tenant id, user object id, contents of a resource group, and many other things. You could have tasks which set these as facts, but that severely limits your ability to resume at a task.</p>
-<h2 id="basic-outline" tabindex="-1">Basic outline <a class="direct-link" href="#basic-outline">#</a></h2>
+<h2 id="basic-outline" tabindex="-1"><a class="direct-link" href="#basic-outline">Basic outline</a></h2>
 <p>The most basic version of a vars plugin is just a reflectable classname and method name.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token builtin">vars</span> <span class="token keyword">import</span> BaseVarsPlugin</span>
 <span class="highlight-line"></span>
@@ -162,7 +162,7 @@
 <span class="highlight-line">		universal_newlines<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span></span>
 <span class="highlight-line">	<span class="token punctuation">)</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> res<span class="token punctuation">.</span>stdout</span></code></pre>
-<h2 id="using-hosts-and-groups" tabindex="-1">Using hosts and groups <a class="direct-link" href="#using-hosts-and-groups">#</a></h2>
+<h2 id="using-hosts-and-groups" tabindex="-1"><a class="direct-link" href="#using-hosts-and-groups">Using hosts and groups</a></h2>
 <p>In the above example, we added a general var (one which isn't attached to a particular host). We may want to add other data associated with each host or group. There are a couple moving pieces detailed in the following:</p>
 <pre class="language-python"><code class="language-python">DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
 <span class="highlight-line">vars: knownhostentry</span>
@@ -263,7 +263,7 @@
 <span class="highlight-line">	hostlines <span class="token operator">=</span> <span class="token punctuation">[</span>x <span class="token keyword">for</span> x <span class="token keyword">in</span> lines <span class="token keyword">if</span> x <span class="token keyword">and</span> <span class="token keyword">not</span> x<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"#"</span><span class="token punctuation">)</span><span class="token punctuation">]</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> hostlines</span>
 <span class="highlight-line"></span></code></pre>
-<h2 id="loading-files" tabindex="-1">Loading files <a class="direct-link" href="#loading-files">#</a></h2>
+<h2 id="loading-files" tabindex="-1"><a class="direct-link" href="#loading-files">Loading files</a></h2>
 <p>You can probably figure out how to load files by cribbing from the host_group_vars plugin. I've included one here for completeness. The main difference is that <code>loader.load_from_file</code> only supports YAML/JSON, so we write our own little functionlet.</p>
 <pre class="language-python"><code class="language-python">DOCUMENTATION <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""
 <span class="highlight-line">vars: dhall_vars</span>
@@ -368,7 +368,7 @@
 <span class="highlight-line">		ctn <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span></span>
 <span class="highlight-line">		<span class="token builtin">vars</span> <span class="token operator">=</span> dhall<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>ctn<span class="token punctuation">)</span></span>
 <span class="highlight-line">	<span class="token keyword">return</span> <span class="token builtin">vars</span></span></code></pre>
-<h2 id="execution" tabindex="-1">Execution <a class="direct-link" href="#execution">#</a></h2>
+<h2 id="execution" tabindex="-1"><a class="direct-link" href="#execution">Execution</a></h2>
 <p>Vars plugins are invoked at 2 stages:</p>
 <ol>
 <li>Inventory : upon initial inventory parsing</li>

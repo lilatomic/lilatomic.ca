@@ -42,9 +42,9 @@
 </aside>
 
 <div class="content">
-<h1 id="migrating-a-project-from-tox-to-pants" tabindex="-1">Migrating a project from tox to Pants <a class="direct-link" href="#migrating-a-project-from-tox-to-pants">#</a></h1>
+<h1 id="migrating-a-project-from-tox-to-pants" tabindex="-1"><a class="direct-link" href="#migrating-a-project-from-tox-to-pants">Migrating a project from tox to Pants</a></h1>
 <p>Tox is a fine environment manager and test command runner. I think the Pants build system has advantages. I'm also a contributor. Let's port one of <a href="https://github.com/lilatomic/grafanarmadillo">my projects, grafanarmadillo</a>. TLDR: <a href="https://github.com/lilatomic/grafanarmadillo/pull/19">MR HERE</a></p>
-<h2 id="initialise-pants" tabindex="-1">Initialise Pants <a class="direct-link" href="#initialise-pants">#</a></h2>
+<h2 id="initialise-pants" tabindex="-1"><a class="direct-link" href="#initialise-pants">Initialise Pants</a></h2>
 <p>After <a href="https://www.pantsbuild.org/2.18/docs/getting-started/installing-pants">getting Pants</a>, run <code>pants --version</code> to initialise the repository. This gives us an empty Pants config file. We're going to bump the version up to at least 2.20, because we've done some great work making it easier to incorporate tools.</p>
 <pre class="language-toml"><code class="language-toml"><span class="highlight-line"><span class="token punctuation">[</span><span class="token table class-name">GLOBAL</span><span class="token punctuation">]</span></span>
 <span class="highlight-line"><span class="token key property">pants_version</span> <span class="token punctuation">=</span> <span class="token string">"2.20.0"</span></span>
@@ -71,19 +71,19 @@
 <span class="highlight-line">	<span class="token string">"/"</span><span class="token punctuation">,</span></span>
 <span class="highlight-line">	<span class="token string">"src/"</span><span class="token punctuation">,</span></span>
 <span class="highlight-line"><span class="token punctuation">]</span></span></code></pre>
-<h3 id="telling-pants-about-our-files" tabindex="-1">Telling Pants about our files <a class="direct-link" href="#telling-pants-about-our-files">#</a></h3>
+<h3 id="telling-pants-about-our-files" tabindex="-1"><a class="direct-link" href="#telling-pants-about-our-files">Telling Pants about our files</a></h3>
 <p>Now we have Pants run <code>tailor</code> generate BUILD files which find all of our Python sources and tests <code>pants tailor ::</code>. This will get most of our source files into Pants, but it won't get our other files, such as test resources. We need to add <code>files</code> or <code>resources</code> targets. You can just use a large target at the start. If you need more granularity, you can break it up later.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">files<span class="token punctuation">(</span></span>
 <span class="highlight-line">    name<span class="token operator">=</span><span class="token string">"test_resources"</span><span class="token punctuation">,</span></span>
 <span class="highlight-line">    sources<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"*.json"</span><span class="token punctuation">,</span> <span class="token string">"**/*.json"</span><span class="token punctuation">,</span> <span class="token string">"**/*.bash"</span><span class="token punctuation">]</span><span class="token punctuation">,</span></span>
 <span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
-<h3 id="telling-pants-about-our-package" tabindex="-1">Telling Pants about our package <a class="direct-link" href="#telling-pants-about-our-package">#</a></h3>
+<h3 id="telling-pants-about-our-package" tabindex="-1"><a class="direct-link" href="#telling-pants-about-our-package">Telling Pants about our package</a></h3>
 <p>Pants doesn't automatically generate <code>python_distribution</code> targets for many ways of setting up a Python package. I've got a <a href="http://setup.py">setup.py</a> file, and while someday I might port it to a pyproject.toml, I can put that off for now. We create a <code>python_distribution</code>. You might also have to add dependency links to files like your docs.</p>
-<h2 id="porting-linters-included-in-pants" tabindex="-1">Porting linters included in Pants <a class="direct-link" href="#porting-linters-included-in-pants">#</a></h2>
+<h2 id="porting-linters-included-in-pants" tabindex="-1"><a class="direct-link" href="#porting-linters-included-in-pants">Porting linters included in Pants</a></h2>
 <p>Pants comes with many builtin linters. Switching to them is easy.</p>
-<h3 id="isort" tabindex="-1">isort <a class="direct-link" href="#isort">#</a></h3>
+<h3 id="isort" tabindex="-1"><a class="direct-link" href="#isort">isort</a></h3>
 <p>Enable the <code>&quot;pants.backend.python.lint.isort&quot;</code> backend. I had settings in my <code>tox.ini</code>, and I moved them over to a <code>pyproject.toml</code>. Pants can automatically pick up config files from a variety of places. A cool tip is to add your first-party packages as known first-party packages in the config. This can help isort know which packages are yours in cases where Pants is only looking at some of your files, such as with <code>--changed-since=main</code>.</p>
-<h3 id="flake8" tabindex="-1">flake8 <a class="direct-link" href="#flake8">#</a></h3>
+<h3 id="flake8" tabindex="-1"><a class="direct-link" href="#flake8">flake8</a></h3>
 <p>Enable the <code>&quot;pants.backend.python.lint.flake8&quot;</code> backend. If you don't use plugins, you're done! If you use plugins, we're going to set up a resolve for them. Resolves are how Pants handles requirements. They're essentially a universe of dependencies Pants can install. This is also pretty simple, and Pants has a <a href="https://www.pantsbuild.org/2.18/docs/python/overview/lockfiles">page on Python lockfiles</a>. It's simply:</p>
 <ol>
 <li>
@@ -114,10 +114,10 @@
 </ol>
 <p>Pants will automatically pull flake8 config from a variety of places, including &quot;tox.ini&quot;, but I moved my config over to &quot;setup.cfg&quot;.</p>
 <p>While we're here, you can enable autoflake by just adding it as a backend <code>&quot;pants.backend.python.lint.autoflake</code></p>
-<h2 id="adding-custom-tools" tabindex="-1">Adding custom tools <a class="direct-link" href="#adding-custom-tools">#</a></h2>
+<h2 id="adding-custom-tools" tabindex="-1"><a class="direct-link" href="#adding-custom-tools">Adding custom tools</a></h2>
 <p>Pants doesn't have plugins for every linter. If the tool is simple enough, though, a few lines in a BUILD file is all you need to add it. We're going to follow along with <a href="https://www.pantsbuild.org/2.18/docs/ad-hoc-tools/integrating-new-tools-without-plugins">the article on adding tools from the docs</a>.</p>
 <p>We need to set our <code>[GLOBAL].pythonpath</code> to include the directory where our in-repo plugins will live. In my case, that's done with <code>pythonpath = [&quot;%(buildroot)s/devtools&quot;]</code>. Then, we enable the <code>&quot;pants.backend.experimental.adhoc&quot;</code> backend, which includes helpers to generate the rules for us.</p>
-<h3 id="a-tool-from-pypi" tabindex="-1">A tool from PyPI <a class="direct-link" href="#a-tool-from-pypi">#</a></h3>
+<h3 id="a-tool-from-pypi" tabindex="-1"><a class="direct-link" href="#a-tool-from-pypi">A tool from PyPI</a></h3>
 <p>Adding a tool with the adhoc backend is really easy.</p>
 <ol>
 <li>
@@ -160,7 +160,7 @@
 </li>
 </ol>
 <p>I then repeated steps 3 through 5 for the <code>radon mi</code> subcommand</p>
-<h3 id="a-tool-from-your-repo" tabindex="-1">A tool from your repo <a class="direct-link" href="#a-tool-from-your-repo">#</a></h3>
+<h3 id="a-tool-from-your-repo" tabindex="-1"><a class="direct-link" href="#a-tool-from-your-repo">A tool from your repo</a></h3>
 <p>Why not also wrap my in-repo plugin with the <code>code_quality_tool</code>? It's so convenient! It's just some things in the build file and another little plugin stub. Note how I use a <code>pex_binary</code> target to specify the entrypoint and provide a runnable target.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">python_sources<span class="token punctuation">(</span><span class="token punctuation">)</span></span>
 <span class="highlight-line"></span>
@@ -174,7 +174,7 @@
 <span class="highlight-line">    runnable<span class="token operator">=</span><span class="token string">":prreqs_tool"</span><span class="token punctuation">,</span></span>
 <span class="highlight-line">    file_glob_include<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"docs/**/*.rst"</span><span class="token punctuation">]</span><span class="token punctuation">,</span></span>
 <span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
-<h3 id="a-tool-that-generates-files" tabindex="-1">A tool that generates files <a class="direct-link" href="#a-tool-that-generates-files">#</a></h3>
+<h3 id="a-tool-that-generates-files" tabindex="-1"><a class="direct-link" href="#a-tool-that-generates-files">A tool that generates files</a></h3>
 <p>I build my docs with sphinx. Pants doesn't yet have a dedicated plugin for sphinx, but we can hack something together with <code>adhoc_tool</code>. We start with a <code>pex_binary</code> target containing our requirements and our package (installing our package is necessary for automodule to work). We set the <code>entry_point</code> to &quot;sphinx&quot; so the pex will run that. We then create an <code>adhoc_tool</code> to run our command. We include all the resources and supporting files we'll need, such as code samples. We then create an <code>archive</code> task to collect the files at the end. We can now build our docs with <code>pants package devtools:docs</code>.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">python_requirements<span class="token punctuation">(</span></span>
 <span class="highlight-line">		name<span class="token operator">=</span><span class="token string">"docs_requirements"</span><span class="token punctuation">,</span></span>
@@ -214,9 +214,9 @@
 <span class="highlight-line"><span class="token punctuation">)</span></span>
 <span class="highlight-line"></span></code></pre>
 <p>A downside of this approach is having to pass all the files into <code>adhoc_tool.execution_dependencies</code>. This is necessary because Pants is trying to model dependency relations with <code>adhoc_tool</code>. This can be inconvenient as the number of these targets grows. Instead of using <code>adhoc_tool</code>, you could use a runnable target (such as a <code>pex_binary</code>), since runnable targets work in the build root and have access to all files.</p>
-<h2 id="tests" tabindex="-1">Tests <a class="direct-link" href="#tests">#</a></h2>
+<h2 id="tests" tabindex="-1"><a class="direct-link" href="#tests">Tests</a></h2>
 <p>Your tests might just work. For dependencies, you can add them to the same resolve as the rest of your code. Pants treats the resolve as a universe of possible dependencies, so it's more like a local PyPI than a requirements.txt file. Pants won't add these as requirements of your packages unless you import them in your source code. If you use test resources (like snapshots of test data), make sure you've added them as <code>files</code> or <code>archives</code> targets and put a dependency link.</p>
-<h3 id="testing-scripts-and-commands-defined-in-setup" tabindex="-1">Testing scripts and commands defined in setup <a class="direct-link" href="#testing-scripts-and-commands-defined-in-setup">#</a></h3>
+<h3 id="testing-scripts-and-commands-defined-in-setup" tabindex="-1"><a class="direct-link" href="#testing-scripts-and-commands-defined-in-setup">Testing scripts and commands defined in setup</a></h3>
 <p>One of tox's features is that it installs your package. This makes any CLI entrypoints available for integration testing. I have a few of these types of test for the usage examples. Unfortunately, this isn't well-supported by Pants.<br>
 You can wrap the <code>python_distribution</code> target in a <code>pex_binary</code> target and then reference that as a <code>runtime_dependency</code> of the test. You have to wrangle to get the PEX to appear on the path and without an extension.</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line">pex_binary<span class="token punctuation">(</span></span>
@@ -239,9 +239,9 @@ You can wrap the <code>python_distribution</code> target in a <code>pex_binary</
 <span class="highlight-line">        <span class="token string">"//tests/flow:flow"</span><span class="token punctuation">,</span></span>
 <span class="highlight-line">    <span class="token punctuation">]</span><span class="token punctuation">,</span></span>
 <span class="highlight-line"><span class="token punctuation">)</span></span></code></pre>
-<h3 id="code-coverage" tabindex="-1">Code coverage <a class="direct-link" href="#code-coverage">#</a></h3>
+<h3 id="code-coverage" tabindex="-1"><a class="direct-link" href="#code-coverage">Code coverage</a></h3>
 <p>Pants supports test coverage reports. Just enable it with <code>[test].use_coverage = true</code>. You might also want to enable machine-readable reports for tools with <code>[coverage-py].report = [&quot;xml&quot;, &quot;html&quot;, &quot;raw&quot;]</code></p>
-<h2 id="assessment-and-conclusion" tabindex="-1">Assessment and Conclusion <a class="direct-link" href="#assessment-and-conclusion">#</a></h2>
+<h2 id="assessment-and-conclusion" tabindex="-1"><a class="direct-link" href="#assessment-and-conclusion">Assessment and Conclusion</a></h2>
 <p>Obviously, my conclusion is that it's worth migrating to Pants, and it isn't that hard. I'm a maintainer of Pants and I use Pants for other projects; I've already paid for the added complexity of understanding how to model the repository and plugins for Pants.</p>
 <p>I think that's one of the biggest strengths of tox: it's very close to simply running things yourself. Converting a command-line invocation into a tox invocation isn't much more than giving it a name. In contrast, Pants has more machinery to tell it about the command and then connect that command to a goal. Tox will automatically include everything in the filetree, while Pants requires you to model <code>resources</code> and <code>files</code>. This need for modelling is the most common problem my colleagues have with Pants.</p>
 <p>The other major advantage tox has over Pants is the ability to test the built package. This is essential for a repository that produces libraries or cli applications. Pants can include files in tests that wouldn't be included in the built package, and Pants can't test cli commands provided by the package. There's some fiddling needed to get the built package listed as a dependency for tests.</p>
@@ -255,7 +255,7 @@ You can wrap the <code>python_distribution</code> target in a <code>pex_binary</
 
 
 <hr>
-<ul><li>Previous: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li>
+<ul><li>Next: <a href="/posts/enwiden/">Enwiden the Internet</a></li><li>Previous: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li>
 </ul>
 
 		</main>

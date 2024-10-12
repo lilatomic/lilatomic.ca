@@ -199,3 +199,17 @@ python_tests(
 ### Code coverage
 
 Pants supports test coverage reports. Just enable it with `[test].use_coverage = true`. You might also want to enable machine-readable reports for tools with `[coverage-py].report = ["xml", "html", "raw"]`
+
+## Assessment and Conclusion
+
+Obviously, my conclusion is that it's worth migrating to Pants, and it isn't that hard. I'm a maintainer of Pants and I use Pants for other projects; I've already paid for the added complexity of understanding how to model the repository and plugins for Pants.
+
+I think that's one of the biggest strengths of tox: it's very close to simply running things yourself. Converting a command-line invocation into a tox invocation isn't much more than giving it a name. In contrast, Pants has more machinery to tell it about the command and then connect that command to a goal. Tox will automatically include everything in the filetree, while Pants requires you to model `resources` and `files`. This need for modelling is the most common problem my colleagues have with Pants.
+
+The other major advantage tox has over Pants is the ability to test the built package. This is essential for a repository that produces libraries or cli applications. Pants can include files in tests that wouldn't be included in the built package, and Pants can't test cli commands provided by the package. There's some fiddling needed to get the built package listed as a dependency for tests.
+
+Pants has an advantage with standardisation, both in its cli interface and with the plugins already written for it. `pants lint` will run all the linters in all Pants repositories; I don't have to remember to run `tox -e lint,radon,prreqs` for this repository, and a different set for a different repository. The existing plugins also make it easy to run add other tools, such a ruff, by just adding that as a plugin.
+
+Pants also has an advantage with multilingual repositories. We have repositories with Python, shell scripts, Terraform, and Helm charts; Pants can lint them all, and again always with `pants lint`.
+
+With a repository as small as this one, Pants's ability to detect changes isn't visible. But it can make a serious difference with a repository like [llamazure](https://github.com/lilatomic/llamazure) which creates several integration-heavy libraries. Only running relevant integration tests significantly reduces iteration time. Pants does that automatically.

@@ -367,3 +367,10 @@ a[href].direct-link:focus:visited::after,
 code.language-command-line :first-child {
 	font-weight: bold;
 }
+
+/* Recipes */
+
+table, td, th {
+	border-collapse: collapse;
+	border: 1px solid var(--accent);
+}

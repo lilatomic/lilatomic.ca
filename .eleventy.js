@@ -9,6 +9,8 @@ const anchor = require("markdown-it-anchor");
 
 const pluginTOC = require('eleventy-plugin-toc')
 
+const pluginRecipes = require("recipes/recipes_plugin")
+
 const groupBy = function (xs, extractor) {
 	return xs.reduce(function (rv, x) {
 		(rv[extractor(x)] = rv[extractor(x)] || []).push(x);
@@ -27,6 +29,8 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginTOC)
 
 	eleventyConfig.addPlugin(pluginLinkTo);
+
+	eleventyConfig.addPlugin(pluginRecipes)
 
 	eleventyConfig.setDataDeepMerge(true);
 
@@ -80,14 +84,11 @@ module.exports = function (eleventyConfig) {
 	});
 
 	eleventyConfig.addCollection("seriesList", function (collection) {
-		let seriesSet = new Set();
-
 		var items = groupBy(collection.getAll().filter(
 			x => "series" in x.data
 		), x => x.data.series)
 
-		var out = Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
-		return out
+		return Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
 	})
 
 

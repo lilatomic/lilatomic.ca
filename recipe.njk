@@ -1,0 +1,14 @@
+---
+pagination:
+  data: recipesdb
+  size: 1
+  alias: recipe
+permalink: "recipes/{{ recipe.name | slugify }}.html"
+layout: layouts/base.njk
+---
+<article>
+<h1>{{ recipe.name }}</h1>
+<div class="content">
+{% recipeTable recipe %}
+</div>
+</article>

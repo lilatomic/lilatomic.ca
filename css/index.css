@@ -33,7 +33,7 @@ p,
 .tmpl-post li,
 img,
 .content {
-	max-width: 65vw; /* 600px /16 */
+	max-width: 65vw;
 }
 p,
 .tmpl-post li {
@@ -108,7 +108,6 @@ pre {
 	word-spacing: normal;
 	word-break: normal;
 	-moz-tab-size: 4;
-	-o-tab-size: 4;
 	tab-size: 4;
 	-webkit-hyphens: none;
 	-moz-hyphens: none;
@@ -177,7 +176,7 @@ code .highlight-line:before {
 	border-left: 1px dashed var(--accent);
 	position: fixed;
 	float: right;
-	right: 0px;
+	right: 0;
 }
 
 .nav ul {
@@ -372,5 +371,11 @@ code.language-command-line :first-child {
 
 table, td, th {
 	border-collapse: collapse;
-	border: 1px solid var(--accent);
+	border: 0.1em solid var(--accent);
+}
+
+.recipe_ingredient {
+	border-left: 0.4em solid var(--accent);
+	border-right: 0.4em solid var(--accent);
+	min-width: 10vw;
 }

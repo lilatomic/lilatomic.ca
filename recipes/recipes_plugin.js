@@ -21,17 +21,38 @@ function getMaxDepth(item) {
 	}
 }
 
-let ingredient_ypos = 0
+class IngredientIterator {
+	constructor() {
+		this.value = 0
+	}
 
-function createCellRepresentation(item, parent_xpos) {
+	increment() {
+		return this.value++
+	}
+}
+
+function getContent(item) {
+	if (item instanceof Ingredient) {
+		return `${item.quantity} ${item.unit} - ${item.name}`;
+	} else if (item instanceof Operation) {
+		if (item.instructions) {
+			return `${item.name} : ${item.instructions}`;
+		} else {
+			return item.name
+		}
+	}
+}
+
+
+function createCellRepresentation(it, item, parent_xpos) {
 	const xPosition = getMaxDepth(item);
 	if (item instanceof Ingredient) {
-		return new Cell(item.getContent(), xPosition, ingredient_ypos++, parent_xpos - xPosition, 1);
+		return new Cell(getContent(item), xPosition, it.increment(), parent_xpos - xPosition, 1);
 	} else if (item instanceof Operation) {
-		const children = item.dependencies.map(e => createCellRepresentation(e, xPosition));
+		const children = item.dependencies.map(e => createCellRepresentation(it, e, xPosition));
 		const yPosition = Math.min(...children.map(e => e.y));
 		const height = children.reduce((sum, child) => sum + child.height, 0);
-		return new Cell(item.getContent(), xPosition, yPosition, parent_xpos - xPosition, height, children);
+		return new Cell(getContent(item), xPosition, yPosition, parent_xpos - xPosition, height, children);
 	}
 }
 
@@ -68,7 +89,7 @@ function generateTable(root) {
 
 function renderRecipe(recipe) {
 	root_instruction = recipe.instructions
-	cells = createCellRepresentation(root_instruction, getMaxDepth(root_instruction) + 1)
+	cells = createCellRepresentation(new IngredientIterator(), root_instruction, getMaxDepth(root_instruction) + 1)
 	table = generateTable(cells)
 	return table
 }

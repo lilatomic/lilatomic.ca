@@ -4,10 +4,6 @@ class Ingredient {
 		this.quantity = quantity;
 		this.unit = unit;
 	}
-
-	getContent() {
-		return `${this.quantity} ${this.unit} - ${this.name}`;
-	}
 }
 
 class Operation {
@@ -15,10 +11,6 @@ class Operation {
 		this.name = name;
 		this.instructions = instructions;
 		this.dependencies = dependencies; // List of Ingredients or other Operations
-	}
-
-	getContent() {
-		return `${this.name} : ${this.instructions}`;
 	}
 }
 

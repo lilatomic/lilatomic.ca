@@ -1,0 +1,16 @@
+---
+permalink: /recipes/
+layout: layouts/home.njk
+
+eleventyNavigation:
+  key: Recipes
+  order: 3
+---
+<h1>Recipes</h1>
+
+<ul>
+  {% for s in recipesdb | sort %}
+    {% set seriesUrl %}/recipes/{{ s.name | slugify }}.html{% endset %}
+    <a href="{{ seriesUrl | url }}">{{ s.name }}</a>
+  {% endfor %}
+</ul>

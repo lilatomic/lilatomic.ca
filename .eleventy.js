@@ -91,6 +91,9 @@ module.exports = function (eleventyConfig) {
 		return Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
 	})
 
+	// eleventyConfig.addCollection("recipesList", function (collection) {
+	// 	var items
+	// })
 
 	eleventyConfig.addPassthroughCopy("img");
 	eleventyConfig.addPassthroughCopy("css");

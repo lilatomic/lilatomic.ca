@@ -1,13 +1,28 @@
 import {Recipe, Ingredient, Operation} from "recipes/models.js"
 
+function format_temperature(temperature, unit="f") {
+	let t_f, t_c
+	if (unit === "f") {
+		t_f = temperature;
+		t_c = (temperature - 32) * 5 / 9;
+	} else {
+		t_f = temperature * 9/5 + 32;
+		t_c = temperature
+	}
+
+	const round = (x) => Math.ceil(x/5) * 5
+
+	return `${round(t_f).toFixed(0)}°F / ${round(t_c).toFixed(0)}°C`;
+}
+
 function bake(children, temperature, time) {
 	return new Operation(
-		"Bake", `Bake at ${temperature} for ${time}`, children
+		"🔥Bake", `at ${format_temperature(temperature)} for ${time}`, children
 	);
 }
 
 function mix(children, how) {
-	return new Operation("Mix", how, children)
+	return new Operation("🔀Mix", how, children)
 }
 
 
@@ -47,7 +62,7 @@ const tarragon_and_lemon_olive_oil_cake = new Recipe(
 							),
 						], "dry into wet in 2 additions")
 					],
-					"350F",
+					350,
 					"30~40 minutes"
 				),
 				new Operation("Cool and strain", null, [

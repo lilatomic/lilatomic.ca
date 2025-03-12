@@ -80,7 +80,7 @@ function generateTable(root) {
 		tableRows[cell.y].push(`<td colspan="${cell.width}" rowspan="${cell.height}" class="${cell.style}">${cell.content}</td>`);
 	}
 
-	return `<table>
+	return `<table class="recipe">
 		${tableRows.map(row => `<tr>${row.join('')}</tr>`).join('\n')}
 	</table>`;
 }

@@ -8,5 +8,9 @@ layout: layouts/base.njk
 ---
 <article>
 <h1>{{ recipe.name }}</h1>
+{% if recipe.original_url %}
+<a href="{{ recipe.original_url }}"> recipe source </a>
+{% endif %}
+
 {% recipeTable recipe %}
 </article>

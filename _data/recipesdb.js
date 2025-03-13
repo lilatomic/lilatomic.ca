@@ -83,7 +83,8 @@ const tarragon_and_lemon_olive_oil_cake = new Recipe(
 			new Ingredient("icing sugar", 100, "g"),
 			new Ingredient("heavy cream", "3~5", "b")
 		])
-	])
+	]),
+	"https://madeincookware.com/blogs/how-to-make-tarragon-olive-oil-cake"
 )
 
 const lavender_tea_bread = (() => {

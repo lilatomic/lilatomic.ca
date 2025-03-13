@@ -12,6 +12,10 @@ class Operation {
 		this.instructions = instructions;
 		this.dependencies = dependencies; // List of Ingredients or other Operations
 	}
+
+	andThen(f) {
+		return f(this)
+	}
 }
 
 class Recipe {

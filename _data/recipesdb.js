@@ -107,7 +107,37 @@ const lavender_tea_bread = (() => {
 	return new Recipe("Lavender Tea Bread", baked)
 })();
 
+const cranberry_lemon_biscotti = (() => {
+	const dry = mix([
+		new Ingredient("flour", 2, "c"),
+		new Ingredient("baking powder", 1.25, "t"),
+		new Ingredient("cinnamon", 1, "t"),
+		new Ingredient("salt", 0.25, "t"),
+	])
+	const biscotti = mix([
+		new Ingredient("egg", 2, "u"),
+		new Ingredient("cranberries (dried)", 0.75, "c"),
+		new Ingredient("sugar", 0.75, "c"),
+		new Ingredient("oil", "1/3", "c"),
+		new Ingredient("lemon zest", 1, "u"),
+		new Ingredient("lemon juice", 1, "u"),
+		new Ingredient("vanilla extract", 1, "t"),
+		new Ingredient("lemon extract", 1, "t"),
+	])
+		.andThen((o) => mix([dry, o], "until slightly stiff but still soft"))
+		.thenDo("Turn out", "divide into 2 loaves")
+		.andThen((o) => bake([o], 350, "20m"))
+		.thenDo("Cool", "for 5m")
+		.thenDo("Slice and turn", "roughly 3/8\" or 1cm")
+		.andThen((o) => bake([o], 300, "15m~20m"))
+
+	return new Recipe(
+		"Cranberry-Lemon Biscotti", biscotti
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
+	cranberry_lemon_biscotti
 ]

@@ -16,6 +16,10 @@ class Operation {
 	andThen(f) {
 		return f(this)
 	}
+
+	thenDo(name, instructions) {
+		return new Operation(name, instructions, [this]);
+	}
 }
 
 class Recipe {

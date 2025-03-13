@@ -10,7 +10,9 @@ eleventyNavigation:
 
 <ul>
   {% for s in recipesdb | sort %}
-    {% set seriesUrl %}/recipes/{{ s.name | slugify }}.html{% endset %}
-    <a href="{{ seriesUrl | url }}">{{ s.name }}</a>
+    <li>
+			{% set seriesUrl %}/recipes/{{ s.name | slugify }}.html{% endset %}
+			<a href="{{ seriesUrl | url }}">{{ s.name }}</a>
+    </li>
   {% endfor %}
 </ul>

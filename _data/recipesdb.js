@@ -1,16 +1,16 @@
-import {Recipe, Ingredient, Operation} from "recipes/models.js"
+import {Ingredient, Operation, Recipe} from "recipes/models.js"
 
-function format_temperature(temperature, unit="f") {
+function format_temperature(temperature, unit = "f") {
 	let t_f, t_c
 	if (unit === "f") {
 		t_f = temperature;
 		t_c = (temperature - 32) * 5 / 9;
 	} else {
-		t_f = temperature * 9/5 + 32;
+		t_f = temperature * 9 / 5 + 32;
 		t_c = temperature
 	}
 
-	const round = (x) => Math.ceil(x/5) * 5
+	const round = (x) => Math.ceil(x / 5) * 5
 
 	return `${round(t_f).toFixed(0)}°F / ${round(t_c).toFixed(0)}°C`;
 }
@@ -25,6 +25,9 @@ function mix(children, how) {
 	return new Operation("🔀Mix", how, children)
 }
 
+function simmer(children, heat = "low") {
+	return new Operation("Simmer", `on ${heat} heat`, children)
+}
 
 const tarragon_and_lemon_olive_oil_cake = new Recipe(
 	"Lemon & Tarragon Olive Oil Cake",
@@ -83,6 +86,28 @@ const tarragon_and_lemon_olive_oil_cake = new Recipe(
 	])
 )
 
+const lavender_tea_bread = (() => {
+	const milk = simmer([
+		new Ingredient("milk", 0.75, "c"),
+		new Ingredient("lavender (finely chopped)", 3, "b"),
+	])
+	const wet = mix([
+		new Ingredient("butter", 6, "b"),
+		new Ingredient("sugar", 1, "c"),
+		new Ingredient("egg", 2, "u"),
+	])
+		.andThen((o) => new Operation("Beat", "add eggs 1 at a time", [o]))
+	const dry = mix([
+		new Ingredient("flour", 2, "c"),
+		new Ingredient("baking powder", 1.5, "t"),
+		new Ingredient("salt", 0.25, "t"),
+	])
+	const baked = mix([milk, wet, dry], "alternating wet and dry into creamed butter, sugar, and eggs")
+		.andThen((o) => bake([o], 350, "50m"))
+	return new Recipe("Lavender Tea Bread", baked)
+})();
+
 export default [
-	tarragon_and_lemon_olive_oil_cake
+	tarragon_and_lemon_olive_oil_cake,
+	lavender_tea_bread,
 ]

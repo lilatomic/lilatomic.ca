@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>A Git Workflow for Debug builds</title>
+	<meta name="description" content="A git workflow for debugging projects where you need to push a commit for a system to run that code.">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>A Git Workflow for Debug builds</h1>
+
+<aside id="tagbox">
+<p>Tags</p>
+
+  <a href="/tags/using/" class="post-tag">using</a>
+  <a href="/tags/git/" class="post-tag">git</a>
+</aside>
+
+
+
+
+
+<aside id="toc">
+	<nav class="toc" >
+        <ol><li><a href="#the-workflow">The Workflow</a></li><li><a href="#background">Background</a><ol><li><a href="#git-squash-and-fixup">Git squash and fixup</a></li><li><a href="#git-autosquash">Git autosquash</a></li><li><a href="#making-autosquash-commits">Making autosquash commits</a></li></ol></li></ol>
+      </nav>
+</aside>
+
+<div class="content">
+<h1 id="a-git-workflow-for-debug-builds" tabindex="-1"><a class="direct-link" href="#a-git-workflow-for-debug-builds">A Git Workflow for Debug builds</a></h1>
+<p>We all deal with systems where the only way to run code is to push a git commit. Most CI systems have no local executor, and many don't even have basic validation. This leads to <em>hilarious</em> commit trails as you just try to figure out what magic incantation will satisfy the CI spirits. But you don't have to have this mess forever, and it doesn't even need to take more of your time.</p>
+<img src="/img/git_history.png" alt="A snippet of a git commit log. The commit messages are nonsensical but humourous, such as 'oopsie', 'dont push', 'lol', 'ok thats it', and 'heyya'">
+<h2 id="the-workflow" tabindex="-1"><a class="direct-link" href="#the-workflow">The Workflow</a></h2>
+<p>While developing:</p>
+<ol>
+<li>Make your changes</li>
+<li>Commit your changes with a commit message that begins with <code>fixup!</code> and then the text of the commit you want to fix up. For example, have the first commit be &quot;fix CI&quot;, and following commits be &quot;fixup! fix CI&quot;. In the VSCode IDE, you can get previous commit messages by using the arrow keys within the commit message box. Within the JetBrains suite, you can also type <code>fixup!</code> and it will autosuggest commit messages.</li>
+<li>Push</li>
+</ol>
+<p>Before showing your history to others:</p>
+<ol start="0">
+<li>(optionally) fetch the latest main branch for continuous integration. Do this without needing to change branches with <code>git fetch origin main:main</code></li>
+<li><code>git rebase -i --autosquash main</code></li>
+<li>Confirm that the plan looks sensible and run the rebase</li>
+<li>push. You will probably need to force push, using <code>git push --force-with-lease</code></li>
+</ol>
+<h2 id="background" tabindex="-1"><a class="direct-link" href="#background">Background</a></h2>
+<h3 id="git-squash-and-fixup" tabindex="-1"><a class="direct-link" href="#git-squash-and-fixup">Git squash and fixup</a></h3>
+<p>Git has several ways of combining commits:</p>
+<ul>
+<li>squash: merge two commits and combine their commit messages</li>
+<li>fixup: merge two commits and discard the second's commit message</li>
+</ul>
+<p>You can specify these during a rebase, for example with <code>git rebase -i main</code></p>
+<h3 id="git-autosquash" tabindex="-1"><a class="direct-link" href="#git-autosquash">Git autosquash</a></h3>
+<p>Git also has a feature to automatically specify these modifications during a rebase, called &quot;autosquash&quot;. A commit message starting with <code>fixup!</code> or <code>squash!</code> will trigger that action. Following the directive, you can include a hash or commit message to have git automatically target that commit. To trigger this, use the <code>--autosquash</code> flag when rebasing <code>git rebase -i --autosquash main</code></p>
+<h3 id="making-autosquash-commits" tabindex="-1"><a class="direct-link" href="#making-autosquash-commits">Making autosquash commits</a></h3>
+<p>You can manually type the directive and commit hash or message. You can also use the <code>--fixup</code> or <code>--squash</code> arguments to <code>git commit</code>. You can also use the <code>:/foo</code> syntax in the message to have git search for &quot;foo&quot; in the commit logs and target the first commit matching that.</p>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Previous: <a href="/posts/git_migrate_folder_between_repos/">Migrate Files Between Git Repositories</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/recipes/">Recipes</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/series/">Series</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+				<li class="nav-item"><a
+						href="/feedlist/">Feeds</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/git_workflow_for_debugging/ -->
+</body>
+</html>

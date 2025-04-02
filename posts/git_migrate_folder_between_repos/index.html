@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Migrate Files Between Git Repositories</title>
+	<meta name="description" content="How to move files from one git repository to another">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
+		  title="lilatomic">
+	<link rel="alternate" href="/feed/feed.json" type="application/json"
+		  title="lilatomic">
+</head>
+<body>
+<div class="ctn">
+	<header>
+		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
+	</header>
+	<div id="main">
+		<main  class="tmpl-post" >
+
+			
+<article>
+<h1>Migrate Files Between Git Repositories</h1>
+
+<aside id="tagbox">
+<p>Tags</p>
+
+  <a href="/tags/howto/" class="post-tag">howto</a>
+  <a href="/tags/using/" class="post-tag">using</a>
+  <a href="/tags/git/" class="post-tag">git</a>
+</aside>
+
+
+
+
+
+<aside id="toc">
+	<nav class="toc" >
+        <ol><li><a href="#howto">HowTo</a></li><li><a href="#result">Result</a></li><li><a href="#example">Example</a></li></ol>
+      </nav>
+</aside>
+
+<div class="content">
+<h1 id="migrate-files-between-git-repositories" tabindex="-1"><a class="direct-link" href="#migrate-files-between-git-repositories">Migrate Files Between Git Repositories</a></h1>
+<p>Sometimes you decide that some files belong in a different git repo. For me, I've needed to pull IAC scattered across many libraries into a common repo. I've also used this to move code from a specific repo into a common library repo. You can also move split a service or transfer one. Copying files is trivial; copying them with history takes a bit. We use git subtree to transfer all the history.</p>
+<h2 id="howto" tabindex="-1"><a class="direct-link" href="#howto">HowTo</a></h2>
+<p>The following assumes that you want to do the transfer locally. Clone both repositories.</p>
+<ol start="0">
+<li>
+<p>Set up common variables. The path to the src repo is the path to the <code>.git</code> folder of the source repo on your filesystem. (I'm sure it)</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token assign-left variable">swap_branch</span><span class="token operator">=</span><span class="token string">'split'</span></span>
+<span class="highlight-line"><span class="token assign-left variable">src_path</span><span class="token operator">=</span><span class="token string">'path/from/'</span></span>
+<span class="highlight-line"><span class="token assign-left variable">dst_path</span><span class="token operator">=</span><span class="token string">'path/to/'</span></span>
+<span class="highlight-line"><span class="token assign-left variable">path_to_src_repo</span><span class="token operator">=</span><span class="token string">'/home/me/gitstuff/src_repo/.git'</span></span></code></pre>
+</li>
+<li>
+<p>In the source repo, create a subtree branch</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> subtree <span class="token function">split</span> <span class="token parameter variable">-P</span> <span class="token string">"<span class="token variable">$src_path</span>"</span> <span class="token parameter variable">-b</span> <span class="token string">"<span class="token variable">$swap_branch</span>"</span></span></code></pre>
+</li>
+<li>
+<p>Optionally, filter files with filter-repo (on Ubuntu, you will need to install it with <code>sudo apt install git-filter-repo</code>). For example, the following will only include <code>.tf</code> files. There are many options to <code>git filter-repo</code>.</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> filter-repo --path-glob <span class="token string">'**.tf'</span> <span class="token parameter variable">--refs</span> <span class="token string">"<span class="token variable">$swap_branch</span>"</span> <span class="token parameter variable">--force</span></span></code></pre>
+</li>
+<li>
+<p>In the destination repo, we import the split-off branch</p>
+<pre class="language-shell"><code class="language-shell"><span class="highlight-line"><span class="token function">git</span> subtree <span class="token function">add</span> <span class="token parameter variable">-P</span> <span class="token string">"<span class="token variable">$dst_path</span>"</span> <span class="token string">"<span class="token variable">$path_to_src_repo</span>"</span> <span class="token string">"<span class="token variable">$swap_branch</span>"</span></span></code></pre>
+</li>
+</ol>
+<h2 id="result" tabindex="-1"><a class="direct-link" href="#result">Result</a></h2>
+<p>You will now have a git history that includes commits from the other repo. This will add a root to your git tree, which might be horrifying to you.</p>
+<h2 id="example" tabindex="-1"><a class="direct-link" href="#example">Example</a></h2>
+<figure>
+<figcaption>An example of two repositories, src and dst, where we want to move the "things" folder in src to the "other_things" folder in dst folder</figcaption>
+<pre><code>.
+├── dst
+│   ├── readme.md
+│   └── stuff
+│       └── other_file.md
+└── src
+    ├── readme.md
+    └── things
+        └── file.md
+</code></pre>
+</figure>
+<figure>
+<figcaption>An example resulting directory, showing the moved directory</figcaption>
+<pre><code>.
+├── other_things
+│   └── file.md
+├── readme.md
+└── stuff
+    └── other_file.md
+</code></pre>
+</figure>
+<figure>
+<figcaption>An example of a resulting git tree, with multiple roots</figcaption>
+<pre><code>*   3aa20bd (HEAD -&gt; main) Add 'other_things/' from commit '580634f1da305b9df559d36389efba0112f68b71'
+|\
+| * 580634f add some words
+| * 26a23b4 make a file
+* f4ca64b add another file
+* 1f5d476 init
+</code></pre>
+</figure>
+
+</div>
+</article>
+
+
+
+<hr>
+<ul><li>Previous: <a href="/posts/enwiden/">Enwiden the Internet</a></li>
+</ul>
+
+		</main>
+		<nav class="nav">
+			<ul>
+				<li class="nav-item"><a
+						href="/">Home</a></li>
+				<li class="nav-item"><a
+						href="/posts/">Archive</a></li>
+				<li class="nav-item"><a
+						href="/recipes/">Recipes</a></li>
+				<li class="nav-item"><a
+						href="/tags/">Tags</a></li>
+				<li class="nav-item"><a
+						href="/series/">Series</a></li>
+				<li class="nav-item"><a
+						href="/about/">About Me</a></li>
+				<li class="nav-item"><a
+						href="/colophon/">Colophon</a></li>
+				<li class="nav-item"><a
+						href="/feedlist/">Feeds</a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+<footer></footer>
+
+<!-- Current page: /posts/git_migrate_folder_between_repos/ -->
+</body>
+</html>

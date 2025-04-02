@@ -5,12 +5,81 @@
 	
 	<link href="https://lilatomic.ca/feed/feed.xml" rel="self"/>
 	<link href="https://lilatomic.ca/"/>
-	<updated>2024-10-12T00:00:00Z</updated>
+	<updated>2025-04-01T00:00:00Z</updated>
 	<id>https://lilatomic.ca/</id>
 	<author>
 		<name>lilatomic</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Migrate Files Between Git Repositories</title>
+		<link href="https://lilatomic.ca/posts/git_migrate_folder_between_repos/"/>
+		<updated>2025-04-01T00:00:00Z</updated>
+		<id>https://lilatomic.ca/posts/git_migrate_folder_between_repos/</id>
+		<content type="html">&lt;h1 id=&quot;migrate-files-between-git-repositories&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/git_migrate_folder_between_repos/#migrate-files-between-git-repositories&quot;&gt;Migrate Files Between Git Repositories&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Sometimes you decide that some files belong in a different git repo. For me, I&#39;ve needed to pull IAC scattered across many libraries into a common repo. I&#39;ve also used this to move code from a specific repo into a common library repo. You can also move split a service or transfer one. Copying files is trivial; copying them with history takes a bit. We use git subtree to transfer all the history.&lt;/p&gt;
+&lt;h2 id=&quot;howto&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/git_migrate_folder_between_repos/#howto&quot;&gt;HowTo&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The following assumes that you want to do the transfer locally. Clone both repositories.&lt;/p&gt;
+&lt;ol start=&quot;0&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;Set up common variables. The path to the src repo is the path to the &lt;code&gt;.git&lt;/code&gt; folder of the source repo on your filesystem. (I&#39;m sure it)&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;swap_branch&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;split&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;src_path&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;path/from/&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;dst_path&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;path/to/&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token assign-left variable&quot;&gt;path_to_src_repo&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;/home/me/gitstuff/src_repo/.git&#39;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the source repo, create a subtree branch&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; subtree &lt;span class=&quot;token function&quot;&gt;split&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-P&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$src_path&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-b&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$swap_branch&lt;/span&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Optionally, filter files with filter-repo (on Ubuntu, you will need to install it with &lt;code&gt;sudo apt install git-filter-repo&lt;/code&gt;). For example, the following will only include &lt;code&gt;.tf&lt;/code&gt; files. There are many options to &lt;code&gt;git filter-repo&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; filter-repo --path-glob &lt;span class=&quot;token string&quot;&gt;&#39;**.tf&#39;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--refs&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$swap_branch&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--force&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the destination repo, we import the split-off branch&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;highlight-line&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; subtree &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-P&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$dst_path&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$path_to_src_repo&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$swap_branch&lt;/span&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;result&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/git_migrate_folder_between_repos/#result&quot;&gt;Result&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You will now have a git history that includes commits from the other repo. This will add a root to your git tree, which might be horrifying to you.&lt;/p&gt;
+&lt;h2 id=&quot;example&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;direct-link&quot; href=&quot;https://lilatomic.ca/posts/git_migrate_folder_between_repos/#example&quot;&gt;Example&lt;/a&gt;&lt;/h2&gt;
+&lt;figure&gt;
+&lt;figcaption&gt;An example of two repositories, src and dst, where we want to move the &quot;things&quot; folder in src to the &quot;other_things&quot; folder in dst folder&lt;/figcaption&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── dst
+│   ├── readme.md
+│   └── stuff
+│       └── other_file.md
+└── src
+    ├── readme.md
+    └── things
+        └── file.md
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;figcaption&gt;An example resulting directory, showing the moved directory&lt;/figcaption&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── other_things
+│   └── file.md
+├── readme.md
+└── stuff
+    └── other_file.md
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;figcaption&gt;An example of a resulting git tree, with multiple roots&lt;/figcaption&gt;
+&lt;pre&gt;&lt;code&gt;*   3aa20bd (HEAD -&amp;gt; main) Add &#39;other_things/&#39; from commit &#39;580634f1da305b9df559d36389efba0112f68b71&#39;
+|&#92;
+| * 580634f add some words
+| * 26a23b4 make a file
+* f4ca64b add another file
+* 1f5d476 init
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/figure&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Enwiden the Internet</title>

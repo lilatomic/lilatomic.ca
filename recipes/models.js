@@ -23,10 +23,11 @@ class Operation {
 }
 
 class Recipe {
-	constructor(name, instructions, original_url=null) {
+	constructor(name, instructions, original_url=null, description=null) {
 		this.name = name;
 		this.instructions = instructions;
 		this.original_url = original_url;
+		this.description = description;
 	}
 }
 

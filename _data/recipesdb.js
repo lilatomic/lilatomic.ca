@@ -1,5 +1,11 @@
 import {Ingredient, Operation, Recipe} from "recipes/models.js"
 
+const c = "c"
+const t = "t"
+const b = "b"
+const u = "u"
+const g = "g"
+
 function format_temperature(temperature, unit = "f") {
 	let t_f, t_c
 	if (unit === "f") {
@@ -23,6 +29,14 @@ function bake(children, temperature, time) {
 
 function mix(children, how) {
 	return new Operation("🔀Mix", how, children)
+}
+
+function whisk(children, until = null) {
+	if (until) {
+		return new Operation("whisk", "Whisk " + until, children)
+	} else {
+		return new Operation("whisk", "Whisk", children)
+	}
 }
 
 function simmer(children, heat = "low") {
@@ -137,8 +151,58 @@ const cranberry_lemon_biscotti = (() => {
 	)
 })()
 
+const cornbread_0 = (() => {
+	const dry = mix([
+		new Ingredient("cornmeal", 1.25, c),
+		new Ingredient("flour", 0.25, c),
+		new Ingredient("cornflour", 0.5, c),
+		new Ingredient("brown sugar", 0.25, c),
+		new Ingredient("baking powder", 4, t),
+		new Ingredient("salt", 0.25, t),
+	])
+	const wet = mix([
+		whisk([new Ingredient("egg", 2, c)]),
+		new Ingredient("oil", "1/3", c),
+		new Ingredient("buttermilk", 1, c)
+	])
+	const instructions = dry
+		.andThen((o) => mix([o, wet], "wet into dry, until just incorporated"))
+		.andThen((o) => bake([o], 350, "20m"))
+
+	return new Recipe(
+		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="/recipes/cornbread-1">Cornbread 1</a>'
+	)
+})()
+
+const cornbread_1 = (() => {
+	const dry = mix([
+		new Ingredient("cornmeal", 120, g),
+		new Ingredient("flour", 50, g),
+		new Ingredient("cornflour", 75, g),
+		new Ingredient("baking soda", 0.5, t),
+		new Ingredient("baking powder", 1, t),
+		new Ingredient("salt", 0.25, t),
+	])
+
+	const wet = mix([
+		new Ingredient("oil", 113, g),
+		new Ingredient("brown sugar", 67, g),
+		new Ingredient("honey", 30, g),
+	])
+		.andThen((o) => mix([o, new Ingredient("egg", 1, u)]))
+		.andThen((o) => mix([o, new Ingredient("buttermilk", 240, g),]))
+		.andThen((o) => mix([o, dry], "wet into dry, avoid overmixing"))
+		.andThen((o) => bake([o], 350, "20m"))
+
+	return new Recipe(
+		"Cornbread 1", wet, "https://sallysbakingaddiction.com/my-favorite-cornbread/", 'This one is more crumbly and was universally preferred to <a href="/recipes/cornbread-0">Cornbread 0</a>'
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
-	cranberry_lemon_biscotti
+	cranberry_lemon_biscotti,
+	cornbread_0,
+	cornbread_1,
 ]

@@ -11,6 +11,11 @@ layout: layouts/base.njk
 {% if recipe.original_url %}
 <a href="{{ recipe.original_url }}"> recipe source </a>
 {% endif %}
+<p>
+{% if recipe.description %}
+{{ recipe.description | safe }}
+{% endif %}
+</p>
 
 {% recipeTable recipe %}
 </article>

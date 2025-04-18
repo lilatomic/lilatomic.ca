@@ -1,4 +1,4 @@
-class Ingredient {
+export class Ingredient {
 	constructor(name, quantity, unit) {
 		this.name = name;
 		this.quantity = quantity;
@@ -6,7 +6,7 @@ class Ingredient {
 	}
 }
 
-class Operation {
+export class Operation {
 	constructor(name, instructions, dependencies = []) {
 		this.name = name;
 		this.instructions = instructions;
@@ -22,17 +22,19 @@ class Operation {
 	}
 }
 
-class Recipe {
-	constructor(name, instructions, original_url=null, description=null) {
+const RecipeStatus = Object.freeze({
+	TESTED: 'tested',
+	DEVELOPMENT: 'development',
+	DEPRECATED: 'deprecated'
+});
+
+
+export class Recipe {
+	constructor(name, instructions, original_url=null, description=null, status=RecipeStatus.TESTED) {
 		this.name = name;
 		this.instructions = instructions;
 		this.original_url = original_url;
 		this.description = description;
+		this.status = status
 	}
-}
-
-module.exports = {
-	Ingredient,
-	Operation,
-	Recipe,
 }

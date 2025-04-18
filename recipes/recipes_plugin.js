@@ -1,5 +1,5 @@
-const util = require('util')
-const {Recipe, Operation, Ingredient} = require('./models')
+import 'util'
+import {Ingredient, Operation, Recipe} from './models';
 
 class Cell {
 	constructor(content, x, y, width, height, style, children = []) {
@@ -86,14 +86,13 @@ function generateTable(root) {
 }
 
 function renderRecipe(recipe) {
-	root_instruction = recipe.instructions
-	cells = createCellRepresentation(new IngredientIterator(), root_instruction, getMaxDepth(root_instruction) + 1)
-	table = generateTable(cells)
-	return table
+	const root_instruction = recipe.instructions
+	const cells = createCellRepresentation(new IngredientIterator(), root_instruction, getMaxDepth(root_instruction) + 1)
+	return generateTable(cells)
 }
 
-test_recipe = new Recipe(
-	name = "testRecipe",
+const test_recipe = new Recipe(
+	"testRecipe",
 	new Operation(
 		"J", "", [
 			new Operation("I", "", [
@@ -111,7 +110,7 @@ function d(a) {
 	console.log(util.inspect(a, {showHidden: false, depth: null, colors: true}))
 }
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
 	eleventyConfig.addShortcode("recipeTable", function (data) {
 		return renderRecipe(data);
 	});

@@ -99,6 +99,18 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("css");
 	eleventyConfig.addPassthroughCopy("CNAME");
 
+	/* tsx */
+	eleventyConfig.addExtension(["11ty.jsx", "11ty.ts", "11ty.tsx"], {
+		key: "11ty.js",
+		compile: function () {
+			return async (content: EleventyPage) => {
+				const result = await jsxToString(content.page.rawInput.render());
+				return `<!doctype html>\n${result}`;
+			}
+		}
+	})
+	// eleventyConfig.addTemplateFormats("11ty.jsx", "11ty.tsx",)
+
 	/* Markdown Overrides */
 	let markdownLibrary = MarkdownIt({
 		html: true,
@@ -155,7 +167,9 @@ module.exports = function (eleventyConfig) {
 			"md",
 			"njk",
 			"html",
-			"liquid"
+			"liquid",
+			"11ty.ts",
+			"11ty.tsx",
 		],
 
 		markdownTemplateEngine: "njk",

@@ -1,4 +1,4 @@
-import {Ingredient, Operation, Recipe} from "recipes/models.js"
+import {Ingredient, Operation, Recipe} from "../_includes/components/models"
 
 const c = "c"
 const t = "t"
@@ -27,11 +27,11 @@ function bake(children, temperature, time) {
 	);
 }
 
-function mix(children, how) {
+function mix(children, how: string | undefined = undefined) {
 	return new Operation("🔀Mix", how, children)
 }
 
-function whisk(children, until = null) {
+function whisk(children, until = undefined) {
 	if (until) {
 		return new Operation("whisk", "Whisk " + until, children)
 	} else {

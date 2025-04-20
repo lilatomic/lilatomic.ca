@@ -30,7 +30,7 @@ export class Operation {
 	}
 }
 
-enum RecipeStatus {
+export enum RecipeStatus {
 	TESTED = 'tested',
 	DEVELOPMENT = 'development',
 	DEPRECATED = 'deprecated',

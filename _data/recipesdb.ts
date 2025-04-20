@@ -1,4 +1,4 @@
-import {Ingredient, Operation, Recipe} from "../_includes/components/models"
+import {Ingredient, Operation, Recipe, RecipeStatus} from "../_includes/components/models"
 
 const c = "c"
 const t = "t"
@@ -170,7 +170,7 @@ const cornbread_0 = (() => {
 		.andThen((o) => bake([o], 350, "20m"))
 
 	return new Recipe(
-		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="/recipes/cornbread-1">Cornbread 1</a>'
+		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="/recipes/cornbread-1">Cornbread 1</a>', RecipeStatus.DEPRECATED
 	)
 })()
 

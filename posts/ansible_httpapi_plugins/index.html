@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Understanding Ansible HttpApi plugins</title>
-	<meta name="description" content="How to write an HttpApi plugin. These let you interact with HTTP APIs better.">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Understanding Ansible HttpApi plugins</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/ansible/" class="post-tag">ansible</a>
-</aside>
-
-
-
-<aside id="seriesbox">
-<p> Member of series: </p>
-
-  
-  <a href="/series/ansible plugins/" class="post-tag">ansible plugins</a>
-
-</aside>
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Understanding Ansible HttpApi plugins</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Understanding Ansible HttpApi plugins"/><meta property="og:type" content="article"/><meta property="og:description" content="How to write an HttpApi plugin. These let you interact with HTTP APIs better."/><meta property="og:url" content="/posts/ansible_httpapi_plugins/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Understanding Ansible HttpApi plugins</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/ansible/" class="post-tag">ansible</a></aside><aside id="seriesbox"><p>Member of series: </p><a href="/series/ansible-plugins/" class="post-tag">ansible plugins</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#adapting-the-httpapi-plugin">Adapting the HttpApi plugin</a></li><li><a href="#understanding-the-httpapi-connection-structure%3A">Understanding the HttpApi connection structure:</a></li><li><a href="#implementing-the-httpapi-stack">Implementing the HttpApi stack</a><ol><li><a href="#httpapi-plugin">HttpApi plugin</a></li><li><a href="#module">Module</a></li><li><a href="#supply-connection-information">Supply connection information</a></li><li><a href="#delegate-tasks-to-the-connection">Delegate tasks to the connection</a></li></ol></li><li><a href="#other-features-of-httpapi-plugins">Other features of HttpApi Plugins</a></li><li><a href="#tradeoffs">Tradeoffs</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="understanding-ansible-httpapi-plugins" tabindex="-1"><a class="direct-link" href="#understanding-ansible-httpapi-plugins">Understanding Ansible HttpApi plugins</a></h1>
+      </nav></aside><div class="content"><h1 id="understanding-ansible-httpapi-plugins" tabindex="-1"><a class="direct-link" href="#understanding-ansible-httpapi-plugins">Understanding Ansible HttpApi plugins</a></h1>
 <blockquote>
 <p>TL;DR: I wouldn't recommend this method. It's not actually that good.</p>
 </blockquote>
@@ -230,51 +181,4 @@ The interface for libraries like <code>requests</code> or <code>urllib3</code> a
 You might also write modules which wrap more complicated operations, like creating a user and granting them permissions. This either needs to happen in a module, so your tracebacks are terrible; or in an action plugin invoking the module multiple times, so now we need to either copypaste the invocations or make <em>another</em> layer as a helper method to invoke the method.<br>
 And there are at least 4 layers of munging, so if you're trying to figure out why a GET request is being given <code>&quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;</code> you might be in for a bad time.</p>
 <p>So all-in-all, I wouldn't recommend using this method.</p>
-
-</div>
-</article>
-
-
-<hr>
-<aside>
-<h2>Revisions</h2>
-<ol>
-  
-  <li> 2021-06-30 : first published </li>
-  
-</ol>
-</aside>
-
-
-<hr>
-<ul><li>Next: <a href="/posts/ansible_better_http_api/">Faking a better HttpApi plugin</a></li><li>Previous: <a href="/posts/ansible_writing_facts_plugin/">Writing a Vars Plugin in Ansible</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/ansible_httpapi_plugins/ -->
-</body>
-</html>
+</div></article><aside><hr/><h2>Revisions</h2><ol><li>2021-06-30 : first published</li></ol></aside><hr/><ul><li>Next: <a href="/posts/ansible_better_http_api/">Faking a better HttpApi plugin</a></li><li>Previous: <a href="/posts/ansible_writing_facts_plugin/">Writing a Vars Plugin in Ansible</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

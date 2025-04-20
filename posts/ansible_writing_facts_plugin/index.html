@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Writing a Vars Plugin in Ansible</title>
-	<meta name="description" content="How to write an Action Plugin in Ansible. These let you load variables.">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Writing a Vars Plugin in Ansible</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/ansible/" class="post-tag">ansible</a>
-</aside>
-
-
-
-<aside id="seriesbox">
-<p> Member of series: </p>
-
-  
-  <a href="/series/ansible plugins/" class="post-tag">ansible plugins</a>
-
-</aside>
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Writing a Vars Plugin in Ansible</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Writing a Vars Plugin in Ansible"/><meta property="og:type" content="article"/><meta property="og:description" content="How to write an Action Plugin in Ansible. These let you load variables."/><meta property="og:url" content="/posts/ansible_writing_facts_plugin/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Writing a Vars Plugin in Ansible</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/ansible/" class="post-tag">ansible</a></aside><aside id="seriesbox"><p>Member of series: </p><a href="/series/ansible-plugins/" class="post-tag">ansible plugins</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#using-hosts-and-groups">Using hosts and groups</a></li><li><a href="#loading-files">Loading files</a></li><li><a href="#execution">Execution</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="writing-a-vars-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-vars-plugin-in-ansible">Writing a Vars Plugin in Ansible</a></h1>
+      </nav></aside><div class="content"><h1 id="writing-a-vars-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-vars-plugin-in-ansible">Writing a Vars Plugin in Ansible</a></h1>
 <p>Often there are facts you wish were just ambiently available, especially if you are working with cloud infrastructure. For example, you might want to have your subscription id, tenant id, user object id, contents of a resource group, and many other things. You could have tasks which set these as facts, but that severely limits your ability to resume at a task.</p>
 <h2 id="basic-outline" tabindex="-1"><a class="direct-link" href="#basic-outline">Basic outline</a></h2>
 <p>The most basic version of a vars plugin is just a reflectable classname and method name.</p>
@@ -395,41 +346,4 @@
 </ul>
 <p>This can be specified with the option specified in the documentation.</p>
 <p>This is why you want your plugin to implement a load phase and some form of caching!</p>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/ansible_httpapi_plugins/">Understanding Ansible HttpApi plugins</a></li><li>Previous: <a href="/posts/ansible_writing_filter_plugin/">Writing a Filter Plugin in Ansible</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/ansible_writing_facts_plugin/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/ansible_httpapi_plugins/">Understanding Ansible HttpApi plugins</a></li><li>Previous: <a href="/posts/ansible_writing_filter_plugin/">Writing a Filter Plugin in Ansible</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

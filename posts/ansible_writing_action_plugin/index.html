@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Writing an Action Plugin in Ansible</title>
-	<meta name="description" content="How to write an Action Plugin in Ansible. These let you add custom tasks to your playbooks">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Writing an Action Plugin in Ansible</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/ansible/" class="post-tag">ansible</a>
-</aside>
-
-
-
-<aside id="seriesbox">
-<p> Member of series: </p>
-
-  
-  <a href="/series/ansible plugins/" class="post-tag">ansible plugins</a>
-
-</aside>
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Writing an Action Plugin in Ansible</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Writing an Action Plugin in Ansible"/><meta property="og:type" content="article"/><meta property="og:description" content="How to write an Action Plugin in Ansible. These let you add custom tasks to your playbooks"/><meta property="og:url" content="/posts/ansible_writing_action_plugin/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Writing an Action Plugin in Ansible</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/ansible/" class="post-tag">ansible</a></aside><aside id="seriesbox"><p>Member of series: </p><a href="/series/ansible-plugins/" class="post-tag">ansible plugins</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#documenting-your-plugin">Documenting your plugin</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#run-another-module%2Faction-plugin">Run another module/action plugin</a></li><li><a href="#run-a-freeform-command">Run a freeform command</a></li><li><a href="#adding-a-fact">Adding a fact</a></li><li><a href="#using-an-existing-filter">Using an existing filter</a></li></ol></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="writing-an-action-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-an-action-plugin-in-ansible">Writing an Action Plugin in Ansible</a></h1>
+      </nav></aside><div class="content"><h1 id="writing-an-action-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-an-action-plugin-in-ansible">Writing an Action Plugin in Ansible</a></h1>
 <p>It's common to want to wrap up a task in Ansible into a reusable unit. This is especially common with common shell commands. Ansible has a few ways to do that.</p>
 <ol>
 <li>Including a task list</li>
@@ -149,53 +100,4 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <h3 id="using-an-existing-filter" tabindex="-1"><a class="direct-link" href="#using-an-existing-filter">Using an existing filter</a></h3>
 <p>If you want to use an existing filter plugin (perhaps to format your output), you can just import them from the Ansible package:</p>
 <pre class="language-python"><code class="language-python"><span class="highlight-line"><span class="token keyword">from</span> ansible<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">.</span>core <span class="token keyword">import</span> to_json<span class="token punctuation">,</span> quote</span></code></pre>
-
-</div>
-</article>
-
-
-<hr>
-<aside>
-<h2>Revisions</h2>
-<ol>
-  
-  <li> 2021-02-17 : first published </li>
-  
-  <li> 2021-02-22 : + section on documenting the action plugin </li>
-  
-</ol>
-</aside>
-
-
-<hr>
-<ul><li>Next: <a href="/posts/ansible_writing_filter_plugin/">Writing a Filter Plugin in Ansible</a></li><li>Previous: <a href="/posts/microstack/">SSL with Microstack</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/ansible_writing_action_plugin/ -->
-</body>
-</html>
+</div></article><aside><hr/><h2>Revisions</h2><ol><li>2021-02-17 : first published</li><li>2021-02-22 : + section on documenting the action plugin</li></ol></aside><hr/><ul><li>Next: <a href="/posts/ansible_writing_filter_plugin/">Writing a Filter Plugin in Ansible</a></li><li>Previous: <a href="/posts/microstack/">SSL with Microstack</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

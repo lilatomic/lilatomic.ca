@@ -1,47 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Eleventy Include Code File Verbatim</title>
-	<meta name="description" content="An Eleventy shortcode to include a code file verbatim">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Eleventy Include Code File Verbatim</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/eleventy/" class="post-tag">eleventy</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Eleventy Include Code File Verbatim</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Eleventy Include Code File Verbatim"/><meta property="og:type" content="article"/><meta property="og:description" content="An Eleventy shortcode to include a code file verbatim"/><meta property="og:url" content="/posts/eleventy_include_code_verbatim/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Eleventy Include Code File Verbatim</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/eleventy/" class="post-tag">eleventy</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#whole-file">Whole file</a></li><li><a href="#partial-files">Partial files</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="eleventy-include-code-file-verbatim" tabindex="-1"><a class="direct-link" href="#eleventy-include-code-file-verbatim">Eleventy Include Code File Verbatim</a></h1>
+      </nav></aside><div class="content"><h1 id="eleventy-include-code-file-verbatim" tabindex="-1"><a class="direct-link" href="#eleventy-include-code-file-verbatim">Eleventy Include Code File Verbatim</a></h1>
 <p>I didn't find what I needed, so I wrote it. It was pretty simple. In your &quot;.eleventy.js&quot; file, somewhere in the big <code>module.exports</code> function, add this little snippet:</p>
 <h2 id="whole-file" tabindex="-1"><a class="direct-link" href="#whole-file">Whole file</a></h2>
 <pre class="language-js"><code class="language-js"><span class="highlight-line"><span class="token keyword">const</span> resource_path <span class="token operator">=</span> <span class="token string">"_includes/resources/"</span><span class="token punctuation">;</span></span>
@@ -72,53 +31,4 @@
 <span class="highlight-line">	<span class="token punctuation">}</span></span>
 <span class="highlight-line"><span class="token punctuation">)</span><span class="token punctuation">;</span></span></code></pre>
 <p>This is backwards-compatible with the initial pass. The unusual bounds (<a href="https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html">non-dijkstra</a>) make it easy to just look at the line numbers in an editor in the 1-starting convention used by everyone. I would try to persuade everyone to stop using the convention we all make fun of Matlab for, but I already have enough trouble getting <a href="https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/">the actual accessibility feature of tabs</a> adopted.</p>
-
-</div>
-</article>
-
-
-<hr>
-<aside>
-<h2>Revisions</h2>
-<ol>
-  
-  <li> 2021-02-24 : first published </li>
-  
-  <li> 2021-11-15 : add ability to pull in line ranges </li>
-  
-</ol>
-</aside>
-
-
-<hr>
-<ul><li>Next: <a href="/posts/azure_function_durable_testing/">Testing Azure Durable Functions in Python</a></li><li>Previous: <a href="/posts/bicep/">Having fun with Azure Bicep</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/eleventy_include_code_verbatim/ -->
-</body>
-</html>
+</div></article><aside><hr/><h2>Revisions</h2><ol><li>2021-02-24 : first published</li><li>2021-11-15 : add ability to pull in line ranges</li></ol></aside><hr/><ul><li>Next: <a href="/posts/azure_function_durable_testing/">Testing Azure Durable Functions in Python</a></li><li>Previous: <a href="/posts/bicep/">Having fun with Azure Bicep</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

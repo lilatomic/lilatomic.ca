@@ -1,48 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>The DNS Shenanigans that make Azure Private Endpoints Work</title>
-	<meta name="description" content="Azure private endpoints allow you to privately access services via their public DNS names. DNS shenanigans are at play.">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>The DNS Shenanigans that make Azure Private Endpoints Work</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/azure/" class="post-tag">azure</a>
-  <a href="/tags/hindsight/" class="post-tag">hindsight</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>The DNS Shenanigans that make Azure Private Endpoints Work</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="The DNS Shenanigans that make Azure Private Endpoints Work"/><meta property="og:type" content="article"/><meta property="og:description" content="Azure private endpoints allow you to privately access services via their public DNS names. DNS shenanigans are at play."/><meta property="og:url" content="/posts/azure-private-endpoint-dns/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>The DNS Shenanigans that make Azure Private Endpoints Work</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/azure/" class="post-tag">azure</a><a href="/tags/hindsight/" class="post-tag">hindsight</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#how-it-works">How it works</a><ol><li><a href="#a-resource-with-no-pes">A resource with no PEs</a></li><li><a href="#a-resource-with-a-pe">A resource with a PE</a></li></ol></li><li><a href="#shenanigans!">Shenanigans!</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<!-- prettier-ignore-start -->
+      </nav></aside><div class="content"><!-- prettier-ignore-start -->
 <!-- prettier-ignore-end -->
 <h1 id="the-dns-shenanigans-that-make-azure-private-endpoints-work" tabindex="-1"><a class="direct-link" href="#the-dns-shenanigans-that-make-azure-private-endpoints-work">The <abbr title="Domain Name System">DNS</abbr> Shenanigans that make Azure Private Endpoints Work</a></h1>
 <p>In Azure, you can create a <abbr title="Private Endpoint">PE</abbr> to an IaaS service, like blobstores. These allow you to have a &quot;local&quot; IP in a <abbr title="Virtual network">VNet</abbr> to the &quot;internet&quot; resource. Convenient. Just as convenient is that you can access them via their public <abbr title="Domain Name System">DNS</abbr> name: &quot;<a href="http://myblobs.blob.core.windows.net">myblobs.blob.core.windows.net</a>&quot; will work whether you're on the public Internet or your <abbr title="Virtual network">VNet</abbr>.<br>
@@ -77,41 +35,4 @@ How this works is interesting. The <abbr title="Domain Name System">DNS</abbr> n
 <p>The privatelink <abbr title="Domain Name System">DNS</abbr> zone is needed for the <abbr title="Private Endpoint">PE</abbr> to work. This <abbr title="Domain Name System">DNS</abbr> zone will only contain entries of PEs linked to it. But, every resource that has a <abbr title="Private Endpoint">PE</abbr> anywhere has the <abbr title="Canonical name, a pointer to another domain name">CNAME</abbr> redirect to a private endpoint. This means that if you try to use the public endpoint to access a resource that has a private endpoint, you will receive an NX for the privatelink domain and won't be able to. For example, our Private <abbr title="Domain Name System">DNS</abbr> zone from above only contains a record for <a href="http://myblobstorepe.privatelink.blob.core.windows.net">myblobstorepe.privatelink.blob.core.windows.net</a>, and it doesn't have a record for <a href="http://publicblob.privatelink.core.windows.net">publicblob.privatelink.core.windows.net</a>; therefore, we get NXDOMAIN and can't access a publicly accessible resource.</p>
 <p>This requirement for a private <abbr title="Domain Name System">DNS</abbr> zone that will NX other records also prevents you from using service endpoints and private endpoints together in similar circumstances. You'll have to complete the <abbr title="Domain Name System">DNS</abbr> chain yourself.</p>
 <p>One solution is to add the missing <abbr title="Domain Name System">DNS</abbr> record manually. In our example, we could add the record <code>publicblob.privatelink.blob.core.windows.net. 60 IN CNAME blob.yto22prdstr03c.store.core.windows.net.</code>. This is fiddly. Finding the value for the target requires some manual intervention. The target is obviously internal to Azure. I have no idea how often or if ever it changes. From my experience, it hasn't changed in a year. But is also clearly linked to the region and zones the storage account is in, so it could change suddenly if the owner of the storage account reconfigures it in ways that would seem safe.</p>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/migrating-tox-to-pants/">Migrating a project from tox to Pants</a></li><li>Previous: <a href="/posts/azure_function_durable_testing/">Testing Azure Durable Functions in Python</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/azure-private-endpoint-dns/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/migrating-tox-to-pants/">Migrating a project from tox to Pants</a></li><li>Previous: <a href="/posts/azure_function_durable_testing/">Testing Azure Durable Functions in Python</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

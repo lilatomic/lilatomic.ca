@@ -1,49 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SSL with Microstack</title>
-	<meta name="description" content="Microstack is Openstack in a Snap! let&#39;s add some SSL to it">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>SSL with Microstack</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/infra/" class="post-tag">infra</a>
-  <a href="/tags/openstack/" class="post-tag">openstack</a>
-  <a href="/tags/trying/" class="post-tag">trying</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>SSL with Microstack</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="SSL with Microstack"/><meta property="og:type" content="article"/><meta property="og:description" content="Microstack is Openstack in a Snap! let's add some SSL to it"/><meta property="og:url" content="/posts/microstack/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>SSL with Microstack</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/infra/" class="post-tag">infra</a><a href="/tags/openstack/" class="post-tag">openstack</a><a href="/tags/trying/" class="post-tag">trying</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#setting-up-https-on-horizon-(the-dashboard)">Setting up HTTPS on Horizon (the dashboard)</a></li><li><a href="#ssl-cert">SSL Cert</a></li><li><a href="#nginx">Nginx</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="ssl-with-microstack" tabindex="-1"><a class="direct-link" href="#ssl-with-microstack">SSL with Microstack</a></h1>
+      </nav></aside><div class="content"><h1 id="ssl-with-microstack" tabindex="-1"><a class="direct-link" href="#ssl-with-microstack">SSL with Microstack</a></h1>
 <h2 id="setting-up-https-on-horizon-(the-dashboard)" tabindex="-1"><a class="direct-link" href="#setting-up-https-on-horizon-(the-dashboard)">Setting up HTTPS on Horizon (the dashboard)</a></h2>
 <p>Let's follow the docs <a href="https://docs.openstack.org/horizon/latest/admin/customize-configure.html#configure-dashboard">here</a></p>
 <p>The config files for microstack are all in the snap directory, so look in <code>/var/snap/microstack/common/etc</code>. We want to change the hostname by replacing the relevant lines:</p>
@@ -72,41 +29,4 @@
 <span class="highlight-line">	<span class="token punctuation">}</span></span>
 <span class="highlight-line"><span class="token punctuation">}</span></span>
 <span class="highlight-line"></span></code></pre>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li><li>Previous: <a href="/posts/changing_password_on_kartoza_osm/">Changing the password on kartoza/docker-osm</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/microstack/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li><li>Previous: <a href="/posts/changing_password_on_kartoza_osm/">Changing the password on kartoza/docker-osm</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

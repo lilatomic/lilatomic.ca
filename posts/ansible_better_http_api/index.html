@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Faking a better HttpApi plugin</title>
-	<meta name="description" content="How I faked a new class of plugins in Ansible, in this case for HTTP API connections">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Faking a better HttpApi plugin</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/ansible/" class="post-tag">ansible</a>
-</aside>
-
-
-
-<aside id="seriesbox">
-<p> Member of series: </p>
-
-  
-  <a href="/series/ansible plugins/" class="post-tag">ansible plugins</a>
-
-</aside>
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Faking a better HttpApi plugin</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Faking a better HttpApi plugin"/><meta property="og:type" content="article"/><meta property="og:description" content="How I faked a new class of plugins in Ansible, in this case for HTTP API connections"/><meta property="og:url" content="/posts/ansible_better_http_api/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Faking a better HttpApi plugin</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/ansible/" class="post-tag">ansible</a></aside><aside id="seriesbox"><p>Member of series: </p><a href="/series/ansible-plugins/" class="post-tag">ansible plugins</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#development">Development</a><ol><li><a href="#the-goal">The goal</a></li><li><a href="#supplying-connection-information">Supplying connection information</a></li><li><a href="#basic-requests">Basic requests</a></li><li><a href="#more-methods">More methods</a></li><li><a href="#more-parameters">More parameters</a></li><li><a href="#simple-auths">Simple Auths</a></li><li><a href="#better-returns">Better returns</a></li><li><a href="#friendlier-api">Friendlier API</a></li><li><a href="#documentation">Documentation</a></li></ol></li><li><a href="#final-version">Final Version</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="faking-a-better-httpapi-plugin" tabindex="-1"><a class="direct-link" href="#faking-a-better-httpapi-plugin">Faking a better HttpApi plugin</a></h1>
+      </nav></aside><div class="content"><h1 id="faking-a-better-httpapi-plugin" tabindex="-1"><a class="direct-link" href="#faking-a-better-httpapi-plugin">Faking a better HttpApi plugin</a></h1>
 <p>The builtin HttpApi plugins are not great, as <a href="/posts/ansible_httpapi_plugins/">I wrote about before</a>. This makes interacting with HTTP APIs kind of a pain. It also means that all the collections which make heavy use of HTTP APIs write their frameworks on top of the bad one to make it less bad. Instead of that, we're just going to bypass the connection plugin stack, and the Ansible Plugin situation entirely.</p>
 <p><a href="#final-version">TLDR</a></p>
 <h2 id="development" tabindex="-1"><a class="direct-link" href="#development">Development</a></h2>
@@ -869,41 +820,4 @@ RETURN <span class="token operator">=</span> <span class="token triple-quoted-st
 <span class="highlight-line">    "url": "https://httpbin.org/bearer"</span>
 <span class="highlight-line">  }</span>
 """</span></code></pre>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/bicep/">Having fun with Azure Bicep</a></li><li>Previous: <a href="/posts/ansible_httpapi_plugins/">Understanding Ansible HttpApi plugins</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/ansible_better_http_api/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/bicep/">Having fun with Azure Bicep</a></li><li>Previous: <a href="/posts/ansible_httpapi_plugins/">Understanding Ansible HttpApi plugins</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

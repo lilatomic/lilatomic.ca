@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Writing a Filter Plugin in Ansible</title>
-	<meta name="description" content="How to write a Filter Plugin in Ansible. These let you process some data">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Writing a Filter Plugin in Ansible</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/ansible/" class="post-tag">ansible</a>
-</aside>
-
-
-
-<aside id="seriesbox">
-<p> Member of series: </p>
-
-  
-  <a href="/series/ansible plugins/" class="post-tag">ansible plugins</a>
-
-</aside>
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Writing a Filter Plugin in Ansible</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Writing a Filter Plugin in Ansible"/><meta property="og:type" content="article"/><meta property="og:description" content="How to write a Filter Plugin in Ansible. These let you process some data"/><meta property="og:url" content="/posts/ansible_writing_filter_plugin/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Writing a Filter Plugin in Ansible</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/ansible/" class="post-tag">ansible</a></aside><aside id="seriesbox"><p>Member of series: </p><a href="/series/ansible-plugins/" class="post-tag">ansible plugins</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#basic-outline">Basic outline</a></li><li><a href="#documenting-your-plugin">Documenting your plugin</a></li><li><a href="#common-things-you'd-want-to-do">Common things you'd want to do</a><ol><li><a href="#using-an-existing-filter">Using an existing filter</a></li><li><a href="#including-other-parameters-in-your-filter">Including other parameters in your filter</a></li><li><a href="#building-an-extractor">Building an extractor</a></li></ol></li><li><a href="#abusing-filters-as-functions">Abusing filters as functions</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="writing-a-filter-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-filter-plugin-in-ansible">Writing a Filter Plugin in Ansible</a></h1>
+      </nav></aside><div class="content"><h1 id="writing-a-filter-plugin-in-ansible" tabindex="-1"><a class="direct-link" href="#writing-a-filter-plugin-in-ansible">Writing a Filter Plugin in Ansible</a></h1>
 <p>You might find that you're doing the same kind of data-munging in multiple places. There are many cases where you'd want to pull this into a little named package:</p>
 <ul>
 <li>It requires logic which can't be expressed simply in basic jinja filters</li>
@@ -235,41 +186,4 @@ EXAMPLES <span class="token operator">=</span> <span class="token triple-quoted-
 <span class="highlight-line">		<span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"storageaccount_lifecycle_rule"</span><span class="token punctuation">:</span> rule<span class="token punctuation">}</span></span>
 <span class="highlight-line"></span></code></pre>
 <p>And yes, you can also build filters to construct those <code>filters</code> and <code>blob_actions</code>, and make a terrible filter chain. But maybe don't and just write a one-off plugin.</p>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/ansible_writing_facts_plugin/">Writing a Vars Plugin in Ansible</a></li><li>Previous: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/ansible_writing_filter_plugin/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/ansible_writing_facts_plugin/">Writing a Vars Plugin in Ansible</a></li><li>Previous: <a href="/posts/ansible_writing_action_plugin/">Writing an Action Plugin in Ansible</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

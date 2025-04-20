@@ -1,50 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Testing Azure Durable Functions in Python</title>
-	<meta name="description" content="It is possible to test Azure Durable Functions in Python, but it&#39;s more difficult than you&#39;d want and not for the reasons you&#39;d expect">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Testing Azure Durable Functions in Python</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/serverless/" class="post-tag">serverless</a>
-  <a href="/tags/azure/" class="post-tag">azure</a>
-  <a href="/tags/testing/" class="post-tag">testing</a>
-  <a href="/tags/python/" class="post-tag">python</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Testing Azure Durable Functions in Python</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Testing Azure Durable Functions in Python"/><meta property="og:type" content="article"/><meta property="og:description" content="It is possible to test Azure Durable Functions in Python, but it's more difficult than you'd want and not for the reasons you'd expect"/><meta property="og:url" content="/posts/azure_function_durable_testing/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Testing Azure Durable Functions in Python</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/serverless/" class="post-tag">serverless</a><a href="/tags/azure/" class="post-tag">azure</a><a href="/tags/testing/" class="post-tag">testing</a><a href="/tags/python/" class="post-tag">python</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#background-%3A-python-generators">Background : Python Generators</a></li><li><a href="#background-%3A-a-basic-executor">Background : A basic executor</a></li><li><a href="#background-%3A-examining-the-source-code">Background : Examining the source code</a><ol><li><a href="#user-code-generator">User code generator</a></li><li><a href="#iterating-over-the-tasks">Iterating over the tasks</a></li></ol></li><li><a href="#mocking-durable-functions">Mocking durable functions</a><ol><li><a href="#durableorchestrationcontext">DurableOrchestrationContext</a></li><li><a href="#creating-a-mock-executor">Creating a mock executor</a></li><li><a href="#mocking-the-evaluation-of-remote-calls">Mocking the evaluation of remote calls</a></li></ol></li><li><a href="#making-a-useful-mocking-library">Making a useful mocking library</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<!-- prettier-ignore-start -->
+      </nav></aside><div class="content"><!-- prettier-ignore-start -->
 <!-- prettier-ignore-end -->
 <h1 id="testing-azure-durable-functions-in-python" tabindex="-1"><a class="direct-link" href="#testing-azure-durable-functions-in-python">Testing Azure Durable Functions in Python</a></h1>
 <p><a href="#making-a-useful-mocking-library">TLDR</a></p>
@@ -512,41 +468,4 @@ We should try for a similar API to <code>unittest.mock</code>. Implementing it i
 <span class="highlight-line">		<span class="token keyword">assert</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>_find_called<span class="token punctuation">(</span>action_type<span class="token punctuation">,</span> function_name<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span></span>
 <span class="highlight-line">		</span>
 <span class="highlight-line"></span></code></pre>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li><li>Previous: <a href="/posts/eleventy_include_code_verbatim/">Eleventy Include Code File Verbatim</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/azure_function_durable_testing/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li><li>Previous: <a href="/posts/eleventy_include_code_verbatim/">Eleventy Include Code File Verbatim</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

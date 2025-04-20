@@ -1,49 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Having fun with Azure Bicep</title>
-	<meta name="description" content="Bicep is a different way of deploying resources on Azure. It is hopefully less painful than ARM templates.">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Having fun with Azure Bicep</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/trying/" class="post-tag">trying</a>
-  <a href="/tags/bicep/" class="post-tag">bicep</a>
-  <a href="/tags/azure/" class="post-tag">azure</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Having fun with Azure Bicep</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Having fun with Azure Bicep"/><meta property="og:type" content="article"/><meta property="og:description" content="Bicep is a different way of deploying resources on Azure. It is hopefully less painful than ARM templates."/><meta property="og:url" content="/posts/bicep/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Having fun with Azure Bicep</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/trying/" class="post-tag">trying</a><a href="/tags/bicep/" class="post-tag">bicep</a><a href="/tags/azure/" class="post-tag">azure</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#some-basic-bicep">Some basic BICEP</a></li><li><a href="#control-flow">Control flow</a></li><li><a href="#modules">Modules</a></li><li><a href="#extensions-%3A-roles%2C-policies%2C-locks%2C-and-diagnostics">Extensions : Roles, Policies, Locks, and Diagnostics</a></li><li><a href="#scopes">Scopes</a></li><li><a href="#doing-arbitrary-things-with-deployment-scripts">Doing arbitrary things with deployment scripts</a></li><li><a href="#summary">Summary</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="having-fun-with-azure-bicep" tabindex="-1"><a class="direct-link" href="#having-fun-with-azure-bicep">Having fun with Azure Bicep</a></h1>
+      </nav></aside><div class="content"><h1 id="having-fun-with-azure-bicep" tabindex="-1"><a class="direct-link" href="#having-fun-with-azure-bicep">Having fun with Azure Bicep</a></h1>
 <p>Bicep is a different way of deploying resources on Azure. It is hopefully less painful than ARM templates. Following are my thoughts as I evaluate bicep as something we should incorporate in our stack. Hopefully they're useful for you if you're doing the same.</p>
 <p>First I have to make fun of Azure for creating their own language instead of embedding it in existing languages like AWS did with the CDK. In the FAQ they have this gem explaining their reasoning:</p>
 <p>Why create a new language instead of using an existing one?</p>
@@ -282,41 +239,4 @@ Even ignoring &quot;advanced&quot; use cases for modifying modules, adding role 
 <p>In the end, this is just a less painful way to write ARM templates. Bicep isn't a replacement for ARM templates so much as it's a replacement for JSON. It's obviously less painful than JSON for ARM templates, and obviously we'll be using it instead of JSON.</p>
 <p>I even think this might be better than az-cli commands, since it is about as verbose but comes with fun idempotency features. The problem becomes integrating it with other deployment tools, such as Ansible. The parameters file is pretty gross but does allow for specifying things as structured data, but so is templating a parent module with the parameters filled in. I'll probably look for a cooler solution, maybe an Ansible plugin.</p>
 <p>But it's no CDK, and still has <em>all</em> of the problems that ARM templates.</p>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/eleventy_include_code_verbatim/">Eleventy Include Code File Verbatim</a></li><li>Previous: <a href="/posts/ansible_better_http_api/">Faking a better HttpApi plugin</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/bicep/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/eleventy_include_code_verbatim/">Eleventy Include Code File Verbatim</a></li><li>Previous: <a href="/posts/ansible_better_http_api/">Faking a better HttpApi plugin</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

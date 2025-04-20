@@ -1,49 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Migrate Files Between Git Repositories</title>
-	<meta name="description" content="How to move files from one git repository to another">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Migrate Files Between Git Repositories</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/howto/" class="post-tag">howto</a>
-  <a href="/tags/using/" class="post-tag">using</a>
-  <a href="/tags/git/" class="post-tag">git</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Migrate Files Between Git Repositories</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Migrate Files Between Git Repositories"/><meta property="og:type" content="article"/><meta property="og:description" content="How to move files from one git repository to another"/><meta property="og:url" content="/posts/git_migrate_folder_between_repos/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Migrate Files Between Git Repositories</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/howto/" class="post-tag">howto</a><a href="/tags/using/" class="post-tag">using</a><a href="/tags/git/" class="post-tag">git</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#howto">HowTo</a></li><li><a href="#result">Result</a></li><li><a href="#example">Example</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="migrate-files-between-git-repositories" tabindex="-1"><a class="direct-link" href="#migrate-files-between-git-repositories">Migrate Files Between Git Repositories</a></h1>
+      </nav></aside><div class="content"><h1 id="migrate-files-between-git-repositories" tabindex="-1"><a class="direct-link" href="#migrate-files-between-git-repositories">Migrate Files Between Git Repositories</a></h1>
 <p>Sometimes you decide that some files belong in a different git repo. For me, I've needed to pull IAC scattered across many libraries into a common repo. I've also used this to move code from a specific repo into a common library repo. You can also move split a service or transfer one. Copying files is trivial; copying them with history takes a bit. We use git subtree to transfer all the history.</p>
 <h2 id="howto" tabindex="-1"><a class="direct-link" href="#howto">HowTo</a></h2>
 <p>The following assumes that you want to do the transfer locally. Clone both repositories.</p>
@@ -104,41 +61,4 @@
 * 1f5d476 init
 </code></pre>
 </figure>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/git_workflow_for_debugging/">A Git Workflow for Debug builds</a></li><li>Previous: <a href="/posts/enwiden/">Enwiden the Internet</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/git_migrate_folder_between_repos/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/git_workflow_for_debugging/">A Git Workflow for Debug builds</a></li><li>Previous: <a href="/posts/enwiden/">Enwiden the Internet</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

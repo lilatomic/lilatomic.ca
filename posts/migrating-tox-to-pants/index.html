@@ -1,48 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Migrating a project from tox to Pants</title>
-	<meta name="description" content="Lets walk through migrating a Python project from tox to the Pants build system">
-	<link rel="stylesheet" href="/css/index.css">
-	<link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
-	<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml"
-		  title="lilatomic">
-	<link rel="alternate" href="/feed/feed.json" type="application/json"
-		  title="lilatomic">
-</head>
-<body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="/">lilatomic</a></h1>
-	</header>
-	<div id="main">
-		<main  class="tmpl-post" >
-
-			
-<article>
-<h1>Migrating a project from tox to Pants</h1>
-
-<aside id="tagbox">
-<p>Tags</p>
-
-  <a href="/tags/python/" class="post-tag">python</a>
-  <a href="/tags/howto/" class="post-tag">howto</a>
-</aside>
-
-
-
-
-
-<aside id="toc">
-	<nav class="toc" >
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Migrating a project from tox to Pants</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Migrating a project from tox to Pants"/><meta property="og:type" content="article"/><meta property="og:description" content="Lets walk through migrating a Python project from tox to the Pants build system"/><meta property="og:url" content="/posts/migrating-tox-to-pants/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Migrating a project from tox to Pants</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/python/" class="post-tag">python</a><a href="/tags/howto/" class="post-tag">howto</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#initialise-pants">Initialise Pants</a><ol><li><a href="#telling-pants-about-our-files">Telling Pants about our files</a></li><li><a href="#telling-pants-about-our-package">Telling Pants about our package</a></li></ol></li><li><a href="#porting-linters-included-in-pants">Porting linters included in Pants</a><ol><li><a href="#isort">isort</a></li><li><a href="#flake8">flake8</a></li></ol></li><li><a href="#adding-custom-tools">Adding custom tools</a><ol><li><a href="#a-tool-from-pypi">A tool from PyPI</a></li><li><a href="#a-tool-from-your-repo">A tool from your repo</a></li><li><a href="#a-tool-that-generates-files">A tool that generates files</a></li></ol></li><li><a href="#tests">Tests</a><ol><li><a href="#testing-scripts-and-commands-defined-in-setup">Testing scripts and commands defined in setup</a></li><li><a href="#code-coverage">Code coverage</a></li></ol></li><li><a href="#assessment-and-conclusion">Assessment and Conclusion</a></li></ol>
-      </nav>
-</aside>
-
-<div class="content">
-<h1 id="migrating-a-project-from-tox-to-pants" tabindex="-1"><a class="direct-link" href="#migrating-a-project-from-tox-to-pants">Migrating a project from tox to Pants</a></h1>
+      </nav></aside><div class="content"><h1 id="migrating-a-project-from-tox-to-pants" tabindex="-1"><a class="direct-link" href="#migrating-a-project-from-tox-to-pants">Migrating a project from tox to Pants</a></h1>
 <p>Tox is a fine environment manager and test command runner. I think the Pants build system has advantages. I'm also a contributor. Let's port one of <a href="https://github.com/lilatomic/grafanarmadillo">my projects, grafanarmadillo</a>. TLDR: <a href="https://github.com/lilatomic/grafanarmadillo/pull/19">MR HERE</a></p>
 <h2 id="initialise-pants" tabindex="-1"><a class="direct-link" href="#initialise-pants">Initialise Pants</a></h2>
 <p>After <a href="https://www.pantsbuild.org/2.18/docs/getting-started/installing-pants">getting Pants</a>, run <code>pants --version</code> to initialise the repository. This gives us an empty Pants config file. We're going to bump the version up to at least 2.20, because we've done some great work making it easier to incorporate tools.</p>
@@ -248,41 +206,4 @@ You can wrap the <code>python_distribution</code> target in a <code>pex_binary</
 <p>Pants has an advantage with standardisation, both in its cli interface and with the plugins already written for it. <code>pants lint</code> will run all the linters in all Pants repositories; I don't have to remember to run <code>tox -e lint,radon,prreqs</code> for this repository, and a different set for a different repository. The existing plugins also make it easy to run add other tools, such a ruff, by just adding that as a plugin.</p>
 <p>Pants also has an advantage with multilingual repositories. We have repositories with Python, shell scripts, Terraform, and Helm charts; Pants can lint them all, and again always with <code>pants lint</code>.</p>
 <p>With a repository as small as this one, Pants's ability to detect changes isn't visible. But it can make a serious difference with a repository like <a href="https://github.com/lilatomic/llamazure">llamazure</a> which creates several integration-heavy libraries. Only running relevant integration tests significantly reduces iteration time. Pants does that automatically.</p>
-
-</div>
-</article>
-
-
-
-<hr>
-<ul><li>Next: <a href="/posts/enwiden/">Enwiden the Internet</a></li><li>Previous: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li>
-</ul>
-
-		</main>
-		<nav class="nav">
-			<ul>
-				<li class="nav-item"><a
-						href="/">Home</a></li>
-				<li class="nav-item"><a
-						href="/posts/">Archive</a></li>
-				<li class="nav-item"><a
-						href="/recipes/">Recipes</a></li>
-				<li class="nav-item"><a
-						href="/tags/">Tags</a></li>
-				<li class="nav-item"><a
-						href="/series/">Series</a></li>
-				<li class="nav-item"><a
-						href="/about/">About Me</a></li>
-				<li class="nav-item"><a
-						href="/colophon/">Colophon</a></li>
-				<li class="nav-item"><a
-						href="/feedlist/">Feeds</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<footer></footer>
-
-<!-- Current page: /posts/migrating-tox-to-pants/ -->
-</body>
-</html>
+</div></article><hr/><ul><li>Next: <a href="/posts/enwiden/">Enwiden the Internet</a></li><li>Previous: <a href="/posts/azure-private-endpoint-dns/">The DNS Shenanigans that make Azure Private Endpoints Work</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

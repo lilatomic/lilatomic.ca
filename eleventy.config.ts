@@ -103,13 +103,18 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addExtension(["11ty.jsx", "11ty.ts", "11ty.tsx"], {
 		key: "11ty.js",
 		compile: function () {
-			return async (content: EleventyPage) => {
-				const result = await jsxToString(content.page.rawInput.render());
-				return `<!doctype html>\n${result}`;
+			return async (data) => {
+				// console.log("data:", data)
+				// console.log("this", this)
+				const content = await this.defaultRenderer(data);
+				// console.log("content", content)
+				const result = await jsxToString(content);
+				return result
 			}
 		}
 	})
-	// eleventyConfig.addTemplateFormats("11ty.jsx", "11ty.tsx",)
+	eleventyConfig.addTemplateFormats("11ty.jsx", "11ty.tsx",)
+	eleventyConfig.addWatchTarget("./_includes/components")
 
 	/* Markdown Overrides */
 	let markdownLibrary = MarkdownIt({

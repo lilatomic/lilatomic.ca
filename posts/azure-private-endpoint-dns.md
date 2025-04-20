@@ -5,7 +5,7 @@ date: 2024-02-11
 tags:
   - azure
   - hindsight
-layout: layouts/post.njk
+layout: post
 ---
 
 <!-- prettier-ignore-start -->

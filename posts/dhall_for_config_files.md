@@ -5,7 +5,7 @@ date: 2020-11-04
 tags:
   - dhall
   - using
-layout: layouts/post.njk
+layout: post
 ---
 # Dhall for Config Files
 

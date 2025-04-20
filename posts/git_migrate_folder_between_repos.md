@@ -6,7 +6,7 @@ tags:
   - howto
   - using
   - git
-layout: layouts/post.njk
+layout: post
 ---
 
 # Migrate Files Between Git Repositories

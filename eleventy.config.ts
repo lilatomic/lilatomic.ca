@@ -36,7 +36,7 @@ module.exports = function (eleventyConfig) {
 
 	eleventyConfig.setDataDeepMerge(true);
 
-	eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
+	eleventyConfig.addLayoutAlias("post", "layouts/post.11ty.tsx");
 
 	eleventyConfig.addFilter("readableDate", dateObj => {
 		return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat("yyyy-LL-dd");

@@ -1,15 +1,15 @@
 ---
 title: Common Dhall Tasks for Config Files
-description: How to do that thing you want to do in Dhall 
+description: How to do that thing you want to do in Dhall
 date: 2020-12-09
 tags:
   - dhall
   - using
-layout: layouts/post.njk
+layout: post
 ---
 # Common Dhall Tasks for Config Files
 
-This page describes common tasks in using Dhall for generating config files. It provides the step-by-step for implementing these common features. 
+This page describes common tasks in using Dhall for generating config files. It provides the step-by-step for implementing these common features.
 
 ## Enums (Sum Types)
 
@@ -121,7 +121,7 @@ Sometimes you've got a field which is a value of Type a _or_ Type b. A sum type 
 
 Sometimes you want a field to not appear if there is no value defined.
 
-We'll define a helper function to render optionals. I use it frequently so I gave it a short name. Mine adds a newline automatically, so they don't appear if the option doesn't render. 
+We'll define a helper function to render optionals. I use it frequently so I gave it a short name. Mine adds a newline automatically, so they don't appear if the option doesn't render.
 
 :/render/ro.dhall
 ``` dhall

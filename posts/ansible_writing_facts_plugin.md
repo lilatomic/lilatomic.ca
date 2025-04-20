@@ -5,7 +5,7 @@ date: 2021-03-10
 tags:
   - ansible
 series: [ansible plugins]
-layout: layouts/post.njk
+layout: post
 ---
 
 # Writing a Vars Plugin in Ansible

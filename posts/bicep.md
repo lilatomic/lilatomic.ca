@@ -6,7 +6,7 @@ tags:
   - trying
   - bicep
   - azure
-layout: layouts/post.njk
+layout: post
 buildscript: bicep.xonsh
 ---
 

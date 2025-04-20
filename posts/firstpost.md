@@ -4,7 +4,7 @@ description: Hi hello
 date: 2020-09-30
 tags:
   - off-topic
-layout: layouts/post.njk
+layout: post
 ---
 
 ## What's happening here

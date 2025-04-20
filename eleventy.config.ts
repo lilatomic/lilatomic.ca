@@ -104,7 +104,7 @@ module.exports = function (eleventyConfig) {
 			return async (data) => {
 				const content = await this.defaultRenderer(data);
 				const result = await render(content, {data, s: eleventyConfig.javascript});
-				return result
+				return "<!DOCTYPE html>" + result
 			}
 		}
 	})

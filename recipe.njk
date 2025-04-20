@@ -4,13 +4,5 @@ pagination:
   size: 1
   alias: recipe
 permalink: "recipes/{{ recipe.name | slugify }}.html"
-layout: layouts/base.njk
+layout: layouts/recipe.11ty.tsx
 ---
-<article>
-<h1>{{ recipe.name }}</h1>
-{% if recipe.original_url %}
-<a href="{{ recipe.original_url }}"> recipe source </a>
-{% endif %}
-
-{% recipeTable recipe %}
-</article>

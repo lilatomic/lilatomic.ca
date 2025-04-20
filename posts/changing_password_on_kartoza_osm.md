@@ -5,7 +5,7 @@ date: 2021-02-10
 tags:
   - kartoza/osm
   - hindsight
-layout: layouts/post.njk
+layout: post
 ---
 Default credentials are not acceptable. [OWASP link](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/04-Authentication_Testing/02-Testing_for_Default_Credentials)
 

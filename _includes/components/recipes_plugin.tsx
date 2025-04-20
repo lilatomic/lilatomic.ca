@@ -1,8 +1,16 @@
-const util = require('util')
-const {Recipe, Operation, Ingredient} = require('./models')
+import util from 'util';
+import {Ingredient, Operation, Recipe} from './models';
 
 class Cell {
-	constructor(content, x, y, width, height, style, children = []) {
+	content: string
+	x: number
+	y: number
+	width: number
+	height: number
+	style: string
+	children: Cell[]
+
+	constructor(content: string, x: number, y: number, width: number, height: number, style: string, children: Cell[] = []) {
 		this.content = content;
 		this.x = x;
 		this.y = y;
@@ -13,7 +21,7 @@ class Cell {
 	}
 }
 
-function getMaxDepth(item) {
+function getMaxDepth(item: Ingredient|Operation) {
 	if (item instanceof Ingredient) {
 		return 0;
 	} else if (item instanceof Operation) {
@@ -22,6 +30,8 @@ function getMaxDepth(item) {
 }
 
 class IngredientIterator {
+	value: number
+
 	constructor() {
 		this.value = 0
 	}
@@ -31,7 +41,7 @@ class IngredientIterator {
 	}
 }
 
-function getContent(item) {
+function getContent(item: Ingredient|Operation) {
 	if (item instanceof Ingredient) {
 		return `${item.quantity} ${item.unit} - ${item.name}`;
 	} else if (item instanceof Operation) {
@@ -44,7 +54,7 @@ function getContent(item) {
 }
 
 
-function createCellRepresentation(it, item, parent_xpos) {
+function createCellRepresentation(it: IngredientIterator, item: Ingredient|Operation, parent_xpos: number) {
 	const xPosition = getMaxDepth(item);
 	if (item instanceof Ingredient) {
 		return new Cell(getContent(item), xPosition, it.increment(), parent_xpos - xPosition, 1, "recipe_ingredient");
@@ -56,11 +66,11 @@ function createCellRepresentation(it, item, parent_xpos) {
 	}
 }
 
-function _flatten(cell) {
+function _flatten(cell: Cell): Cell[] {
 	return [cell, ...cell.children.flatMap(_flatten)];
 }
 
-function _compare_cells(a, b) {
+function _compare_cells(a: Cell, b: Cell) {
 	if (a.y > b.y) return 1;
 	if (a.y < b.y) return -1;
 	if (a.x > b.x) return 1;
@@ -68,7 +78,7 @@ function _compare_cells(a, b) {
 	return 0;
 }
 
-function generateTable(root) {
+function generateTable(root: Cell) {
 	const flattened = _flatten(root).map(e => new Cell(e.content, e.x, e.y, e.width, e.height, e.style));
 	const sorted = flattened.sort(_compare_cells);
 
@@ -77,23 +87,22 @@ function generateTable(root) {
 		while (tableRows.length <= cell.y) {
 			tableRows.push([]);
 		}
-		tableRows[cell.y].push(`<td colspan="${cell.width}" rowspan="${cell.height}" class="${cell.style}">${cell.content}</td>`);
+		tableRows[cell.y].push(<td colspan={cell.width} rowspan={cell.height} class={cell.style}>{cell.content}</td>);
 	}
 
-	return `<table class="recipe">
-		${tableRows.map(row => `<tr>${row.join('')}</tr>`).join('\n')}
-	</table>`;
+	return <table class="recipe">
+		{tableRows.map(row => <tr>{row}</tr>)}
+	</table>;
 }
 
-function renderRecipe(recipe) {
-	root_instruction = recipe.instructions
-	cells = createCellRepresentation(new IngredientIterator(), root_instruction, getMaxDepth(root_instruction) + 1)
-	table = generateTable(cells)
-	return table
+export function renderRecipe(recipe: Recipe) {
+	const root_instruction = recipe.instructions
+	const cells = createCellRepresentation(new IngredientIterator(), root_instruction, getMaxDepth(root_instruction) + 1)
+	return generateTable(cells)
 }
 
-test_recipe = new Recipe(
-	name = "testRecipe",
+const test_recipe = new Recipe(
+	"testRecipe",
 	new Operation(
 		"J", "", [
 			new Operation("I", "", [
@@ -111,7 +120,7 @@ function d(a) {
 	console.log(util.inspect(a, {showHidden: false, depth: null, colors: true}))
 }
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
 	eleventyConfig.addShortcode("recipeTable", function (data) {
 		return renderRecipe(data);
 	});

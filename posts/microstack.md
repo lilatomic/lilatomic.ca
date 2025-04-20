@@ -6,7 +6,7 @@ tags:
   - infra
   - openstack
   - trying
-layout: layouts/post.njk
+layout: post
 ---
 
 # SSL with Microstack

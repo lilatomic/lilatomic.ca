@@ -5,7 +5,7 @@ date: 2025-04-01
 tags:
   - using
   - git
-layout: layouts/post.njk
+layout: post
 ---
 
 # A Git Workflow for Debug builds

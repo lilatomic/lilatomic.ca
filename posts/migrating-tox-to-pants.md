@@ -5,7 +5,7 @@ date: 2024-03-22
 tags:
   - python
   - howto
-layout: layouts/post.njk
+layout: post
 ---
 
 # Migrating a project from tox to Pants

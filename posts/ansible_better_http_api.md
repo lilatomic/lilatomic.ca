@@ -6,7 +6,7 @@ tags:
   - ansible
 #   - "series/ansible_plugins"
 series: [ansible plugins]
-layout: layouts/post.njk
+layout: post
 ---
 
 # Faking a better HttpApi plugin

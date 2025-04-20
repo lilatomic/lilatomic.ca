@@ -7,7 +7,7 @@ tags:
   - azure
   - testing
   - python
-layout: layouts/post.njk
+layout: post
 buildscript: azure_function_durable_testing.xonsh
 ---
 

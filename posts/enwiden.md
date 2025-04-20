@@ -4,7 +4,7 @@ description: Make the Internet full-width
 date: 2024-10-12
 tags:
   - off-topic
-layout: layouts/post.njk
+layout: post
 ---
 
 # Enwiden the Internet

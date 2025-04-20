@@ -6,14 +6,14 @@ tags:
   - python
   - infra
   - using
-layout: layouts/post.njk
+layout: post
 ---
 
 <!-- prettier-ignore-start -->
 *[CD]: Continuous delivery
 *[DB]: Database
 *[K8s]: Kubernetes
-*[SaaS]: Software as a Service 
+*[SaaS]: Software as a Service
 *[SLF]: ServerLess Function
 <!-- prettier-ignore-end -->
 

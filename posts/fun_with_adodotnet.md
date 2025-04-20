@@ -6,7 +6,7 @@ tags:
   - VB
   - dotnet
   - hindsight
-layout: layouts/post.njk
+layout: post
 ---
 
 # Fun with ADO.NET
@@ -17,7 +17,7 @@ layout: layouts/post.njk
 
 Maybe you've got some code which is like the following, which accesses a field by a column reference. This particular snippet converts DBNull to Nothing (null), which is kinda useful I guess.
 
-``` vb 
+``` vb
 Public Shared Function GetField(ByVal row As EntityBase, ByVal field As DataColumn) As Object
 	Dim obj As Object = row.DataRow.Item(field)
 	If TypeOf obj Is DBNull Then
@@ -27,7 +27,7 @@ Public Shared Function GetField(ByVal row As EntityBase, ByVal field As DataColu
 End Function
 ```
 
-You might find that you're getting some error about `"Column '{{ColumnName}}' does not belong to table {{TableName}}."`, but you are 100% sure that the column actually is there. Maybe you've even cracked it open in the debugger and checked that the Table definitely has that column. 
+You might find that you're getting some error about `"Column '{{ColumnName}}' does not belong to table {{TableName}}."`, but you are 100% sure that the column actually is there. Maybe you've even cracked it open in the debugger and checked that the Table definitely has that column.
 
 ### Possible Cause
 

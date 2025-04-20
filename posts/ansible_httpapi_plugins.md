@@ -9,7 +9,7 @@ tags:
   - ansible
 #   - "series/ansible_plugins"
 series: [ansible plugins]
-layout: layouts/post.njk
+layout: post
 ---
 
 # Understanding Ansible HttpApi plugins

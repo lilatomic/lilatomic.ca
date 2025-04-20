@@ -9,7 +9,7 @@ revisions:
     desc: "add ability to pull in line ranges"
 tags:
   - eleventy
-layout: layouts/post.njk
+layout: post
 ---
 
 # Eleventy Include Code File Verbatim

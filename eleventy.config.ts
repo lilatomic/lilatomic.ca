@@ -1,15 +1,19 @@
-const { DateTime } = require("luxon");
-const fs = require("fs");
-const pluginRss = require("@11ty/eleventy-plugin-rss");
-const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
-const pluginNavigation = require("@11ty/eleventy-navigation");
-const pluginLinkTo = require("eleventy-plugin-link_to");
-const markdownIt = require("markdown-it");
-const anchor = require("markdown-it-anchor");
+import {DateTime} from "luxon";
+import fs from "fs";
+import pluginRss from "@11ty/eleventy-plugin-rss";
+import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
+import pluginNavigation from "@11ty/eleventy-navigation";
+import pluginLinkTo from "eleventy-plugin-link_to";
+import pluginTOC from 'eleventy-plugin-toc';
 
-const pluginTOC = require('eleventy-plugin-toc')
+import MarkdownIt from 'markdown-it'
+import markdownItAnchor from "markdown-it-anchor";
+import markdownitAbbr from 'markdown-it-abbr';
+import markdownItFootnote from 'markdown-it-footnote';
 
-const pluginRecipes = require("recipes/recipes_plugin")
+import { render } from "preact-render-to-string";
+
+import recipesdb from "./_data/recipesdb";
 
 const groupBy = function (xs, extractor) {
 	return xs.reduce(function (rv, x) {
@@ -30,19 +34,17 @@ module.exports = function (eleventyConfig) {
 
 	eleventyConfig.addPlugin(pluginLinkTo);
 
-	eleventyConfig.addPlugin(pluginRecipes)
-
 	eleventyConfig.setDataDeepMerge(true);
 
-	eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
+	eleventyConfig.addLayoutAlias("post", "layouts/post.11ty.tsx");
 
 	eleventyConfig.addFilter("readableDate", dateObj => {
-		return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat("yyyy-LL-dd");
+		return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat("yyyy-LL-dd");
 	});
 
 	// https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#valid-date-string
 	eleventyConfig.addFilter('htmlDateString', (dateObj) => {
-		return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat('yyyy-LL-dd');
+		return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
 	});
 
 	// Get the first `n` elements of a collection.
@@ -95,18 +97,34 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("css");
 	eleventyConfig.addPassthroughCopy("CNAME");
 
+	/* tsx */
+	eleventyConfig.addExtension(["11ty.jsx", "11ty.ts", "11ty.tsx"], {
+		key: "11ty.js",
+		compile: function () {
+			return async (data) => {
+				const content = await this.defaultRenderer(data);
+				const result = await render(content, {data, s: eleventyConfig.javascript});
+				return "<!DOCTYPE html>" + result
+			}
+		}
+	})
+	eleventyConfig.addTemplateFormats("11ty.jsx", "11ty.tsx",)
+	eleventyConfig.addWatchTarget("./_includes/components")
+
 	/* Markdown Overrides */
-	let markdownLibrary = markdownIt({
+	let markdownLibrary = MarkdownIt({
 		html: true,
 		breaks: true,
 		linkify: true
-	}).use(anchor, {
-		permalink: anchor.permalink.headerLink({
-			class: "direct-link",
-		}),
-	}).use(require('markdown-it-abbr')
-	).use(require('markdown-it-footnote')
-	);
+	})
+		.use(markdownItAnchor, {
+			permalink: markdownItAnchor.permalink.headerLink({
+				class: "direct-link",
+			}),
+		})
+		.use(markdownitAbbr)
+		.use(markdownItFootnote);
+
 	eleventyConfig.setLibrary("md", markdownLibrary);
 
 	// Browsersync Overrides
@@ -129,7 +147,7 @@ module.exports = function (eleventyConfig) {
 	const resource_path = "_includes/resources/";
 	eleventyConfig.addShortcode(
 		"include_raw",
-		function (path, start = 1, end = -1, indent="") {
+		function (path, start = 1, end = -1, indent = "") {
 			let lines = fs
 				.readFileSync(resource_path + path)
 				.toString()
@@ -144,23 +162,17 @@ module.exports = function (eleventyConfig) {
 		}
 	);
 
+	eleventyConfig.addGlobalData("recipesdb", recipesdb)
+
 	return {
 		templateFormats: [
 			"md",
 			"njk",
 			"html",
-			"liquid"
+			"liquid",
+			"11ty.ts",
+			"11ty.tsx",
 		],
-
-		// If your site lives in a different subdirectory, change this.
-		// Leading or trailing slashes are all normalized away, so don’t worry about those.
-
-		// If you don’t have a subdirectory, use "" or "/" (they do the same thing)
-		// This is only used for link URLs (it does not affect your file structure)
-		// Best paired with the `url` filter: https://www.11ty.dev/docs/filters/url/
-
-		// You can also pass this in on the command line using `--pathprefix`
-		// pathPrefix: "/",
 
 		markdownTemplateEngine: "njk",
 		htmlTemplateEngine: "njk",

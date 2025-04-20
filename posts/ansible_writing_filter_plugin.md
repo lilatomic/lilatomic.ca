@@ -6,7 +6,7 @@ revisions:
 tags:
   - ansible
 series: [ansible plugins]
-layout: layouts/post.njk
+layout: post
 ---
 
 # Writing a Filter Plugin in Ansible

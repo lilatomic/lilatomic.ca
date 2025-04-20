@@ -13,24 +13,22 @@
 		  title="{{ metadata.title }}">
 </head>
 <body>
-<div class="ctn">
-	<header>
-		<h1 class="home"><a id="home" href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
-	</header>
-	<div id="main">
-		<main {% if templateClass %} class="{{ templateClass }}" {% endif %}>
+<header>
+	<h1 class="home"><a id="home" href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
+</header>
+<div id="main">
+	<main {% if templateClass %} class="{{ templateClass }}" {% endif %}>
 
-			{{ content | safe }}
-		</main>
-		<nav class="nav">
-			<ul>
-				{%- for entry in collections.all | eleventyNavigation %}
-				<li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a
-						href="{{ entry.url | url }}">{{ entry.title }}</a></li>
-				{%- endfor %}
-			</ul>
-		</nav>
-	</div>
+		{{ content | safe }}
+	</main>
+	<nav class="nav">
+		<ul>
+			{%- for entry in collections.all | eleventyNavigation %}
+			<li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a
+					href="{{ entry.url | url }}">{{ entry.title }}</a></li>
+			{%- endfor %}
+		</ul>
+	</nav>
 </div>
 <footer></footer>
 

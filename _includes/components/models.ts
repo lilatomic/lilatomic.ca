@@ -51,3 +51,15 @@ export class Recipe {
 		this.status = status
 	}
 }
+
+export class RecipeBundle {
+	name: string
+	versions: Recipe[]
+	description?: string
+
+	constructor(name: string, versions: Recipe[], description?: string) {
+		this.name = name;
+		this.versions = versions;
+		this.description = description;
+	}
+}

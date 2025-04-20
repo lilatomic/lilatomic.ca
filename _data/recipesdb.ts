@@ -1,4 +1,4 @@
-import {Ingredient, Operation, Recipe, RecipeStatus} from "../_includes/components/models"
+import {Ingredient, Operation, Recipe, RecipeBundle, RecipeStatus} from "../_includes/components/models"
 
 const c = "c"
 const t = "t"
@@ -43,62 +43,67 @@ function simmer(children, heat = "low") {
 	return new Operation("Simmer", `on ${heat} heat`, children)
 }
 
-const tarragon_and_lemon_olive_oil_cake = new Recipe(
+const tarragon_and_lemon_olive_oil_cake =
+	new RecipeBundle(
 	"Lemon & Tarragon Olive Oil Cake",
-	new Operation("Glaze", "when cake is completely cool", [
+	[new Recipe(
+		"Lemon & Tarragon Olive Oil Cake",
+		new Operation("Glaze", "when cake is completely cool", [
 
-		new Operation("Brush", "while cake is still warm", [
-				bake(
-					[
-						mix([
-							mix(
-								[
-									new Operation("Whisk", "Whisk together", [
-										new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
-											new Ingredient("sugar", "150", "g"),
-											new Ingredient("tarragon", "3", "g"),
-											new Ingredient("lemon zest", "1", "u")
-										]),
-										new Ingredient("egg", "2", "u")
-									])
-									,
-									new Ingredient("olive oil", "180", "ml"),
-									new Ingredient("buttermilk", "240", "ml"),
-									new Ingredient("lemon juice", "1", "b")
-								],
-								"slowly stream in until emulsified",
-							),
-							mix(
-								[
-									new Ingredient("salt", "0.5", "t"),
-									new Ingredient("flour", "190", "g"),
-									new Ingredient("baking powder", "1.5", "t"),
-									new Ingredient("baking soda", "0.5", "t"),
-								],
-								"",
-							),
-						], "dry into wet in 2 additions")
-					],
-					350,
-					"30~40 minutes"
-				),
-				new Operation("Cool and strain", null, [
-					new Operation("Simmer", "for 3 minutes", [
-						new Operation("Form simple syrup", "on medium heat", [
-							new Ingredient("water", 100, "g"),
-							new Ingredient("sugar", 100, "g"),
-						]),
-						new Ingredient("tarragon", 3, "g")
+			new Operation("Brush", "while cake is still warm", [
+					bake(
+						[
+							mix([
+								mix(
+									[
+										new Operation("Whisk", "Whisk together", [
+											new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
+												new Ingredient("sugar", "150", "g"),
+												new Ingredient("tarragon", "3", "g"),
+												new Ingredient("lemon zest", "1", "u")
+											]),
+											new Ingredient("egg", "2", "u")
+										])
+										,
+										new Ingredient("olive oil", "180", "ml"),
+										new Ingredient("buttermilk", "240", "ml"),
+										new Ingredient("lemon juice", "1", "b")
+									],
+									"slowly stream in until emulsified",
+								),
+								mix(
+									[
+										new Ingredient("salt", "0.5", "t"),
+										new Ingredient("flour", "190", "g"),
+										new Ingredient("baking powder", "1.5", "t"),
+										new Ingredient("baking soda", "0.5", "t"),
+									],
+									"",
+								),
+							], "dry into wet in 2 additions")
+						],
+						350,
+						"30~40 minutes"
+					),
+					new Operation("Cool and strain", null, [
+						new Operation("Simmer", "for 3 minutes", [
+							new Operation("Form simple syrup", "on medium heat", [
+								new Ingredient("water", 100, "g"),
+								new Ingredient("sugar", 100, "g"),
+							]),
+							new Ingredient("tarragon", 3, "g")
+						])
 					])
-				])
-			]
-		),
-		new Operation("Form icing", "dissolve cream into sugar until desired consistency", [
-			new Ingredient("icing sugar", 100, "g"),
-			new Ingredient("heavy cream", "3~5", "b")
-		])
-	]),
-	"https://madeincookware.com/blogs/how-to-make-tarragon-olive-oil-cake"
+				]
+			),
+			new Operation("Form icing", "dissolve cream into sugar until desired consistency", [
+				new Ingredient("icing sugar", 100, "g"),
+				new Ingredient("heavy cream", "3~5", "b")
+			])
+		]),
+		"https://madeincookware.com/blogs/how-to-make-tarragon-olive-oil-cake"
+	)
+	]
 )
 
 const lavender_tea_bread = (() => {
@@ -119,7 +124,7 @@ const lavender_tea_bread = (() => {
 	])
 	const baked = mix([milk, wet, dry], "alternating wet and dry into creamed butter, sugar, and eggs")
 		.andThen((o) => bake([o], 350, "50m"))
-	return new Recipe("Lavender Tea Bread", baked)
+	return new RecipeBundle("Lavender Tea Bread", [new Recipe("Lavender Tea Bread", baked)])
 })();
 
 const cranberry_lemon_biscotti = (() => {
@@ -146,9 +151,7 @@ const cranberry_lemon_biscotti = (() => {
 		.thenDo("Slice and turn", "roughly 3/8\" or 1cm")
 		.andThen((o) => bake([o], 300, "15m~20m"))
 
-	return new Recipe(
-		"Cranberry-Lemon Biscotti", biscotti
-	)
+	return new RecipeBundle("Cranberry-Lemon Biscotti", [new Recipe("Cranberry-Lemon Biscotti", biscotti)])
 })()
 
 const cornbread_0 = (() => {
@@ -199,10 +202,11 @@ const cornbread_1 = (() => {
 	)
 })()
 
+const cornbread = new RecipeBundle("Cornbread", [cornbread_0, cornbread_1])
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
 	cranberry_lemon_biscotti,
-	cornbread_0,
-	cornbread_1,
+	cornbread,
 ]

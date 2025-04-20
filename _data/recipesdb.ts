@@ -1,4 +1,4 @@
-import {Ingredient, Operation, Recipe, RecipeBundle, RecipeStatus} from "../_includes/components/models"
+import {Ingredient, Operation, Recipe, RecipeBundle, RecipeStatus, Stuff, Stuffs} from "../_includes/components/models"
 
 const c = "c"
 const t = "t"
@@ -27,7 +27,7 @@ function bake(children, temperature, time) {
 	);
 }
 
-function mix(children, how: string | undefined = undefined) {
+function mix(children: Stuffs, how: string | undefined = undefined): Operation {
 	return new Operation("🔀Mix", how, children)
 }
 
@@ -35,7 +35,7 @@ function cream(children) {
 	return mix(children, "Cream until actually light and fluffy")
 }
 
-function whisk(children, until = undefined) {
+function whisk(children: Stuffs, until = undefined) {
 	if (until) {
 		return new Operation("whisk", "Whisk " + until, children)
 	} else {
@@ -43,11 +43,15 @@ function whisk(children, until = undefined) {
 	}
 }
 
-function simmer(children, heat = "low") {
-	return new Operation("Simmer", `on ${heat} heat`, children)
+function simmer(children: Stuffs, heat = "low", until?: string) {
+	let instruction = `on ${heat} heat`
+	if (until) {
+		instruction += ` (until ${until})`
+	}
+	return new Operation("Simmer", instruction, children)
 }
 
-function chill(op, time: string, where: string = "fridge") {
+function chill(op: Stuff, time: string, where: string = "fridge") {
 	return new Operation("❄", `chill in ${where} for ${time}`, [op])
 }
 
@@ -229,9 +233,38 @@ function pistachio_cookies() {
 		[
 			new Recipe("Original", _mk([], [new Ingredient("pistachios", 130, g)]), original_url, "The original recipe, but with butter replaced with shortening. I realised that this basically doesn't have any water in it. The cookies turned out like shortbread made with shortening instead of butter: crumbly and without structural integrity. They could probably hold together a little better. I would recommend cooling them before handling, as (like other shortening shortbreads) they're a little tacky."),
 			new Recipe("Increased binding", _mk([new Ingredient("water", 2, b)], [new Ingredient("pistachios", 65, g), new Ingredient("walnuts", 65, g)]), original_url, "This one should have a bit more structural integrity. Also cutting the pistachios 50/50 with walnuts because pistachios are expensive.", RecipeStatus.DEVELOPMENT),
-		]
+		],
+		"Delicious shortbread-like cookies",
 	)
 }
+
+const luzina = (() => {
+	const quince = new Ingredient("quince", 1.125, "kg")
+		.thenDo("Prep", "peel, core, chunk")
+		.thenDo("mush", "use a food processor to make smooth")
+	const paste = mix([
+		quince,
+		new Ingredient("sugar", 0.56, "kg"),
+		new Ingredient("lemon juice", 2, b),
+		new Ingredient("water", 0.250, "kg"),
+		new Ingredient("cardamon pods", 1, t).thenDo("grind", "in a mortar&pestle or spice grinder")
+	])
+		.thenDo("Bring to a boil", "on medium-high heat")
+		.andThen((o) => simmer([o], "medium", "very thick"))
+	const pan = new Operation(
+		"spread", "spread on bottom of pan (23cm*23cm) covered in parchment paper. This will help prevent sticking", [new Ingredient("almonds (ground)", 1, c)]
+	)
+		.andThen((o) => new Operation("spread", "spread the paste into pan", [o, paste]))
+		.thenDo("let dry", "let dry until no longer tacky, either in a warm-ish place (on top of the fridge) or in a dry place (in the fridge)")
+
+	return new RecipeBundle(
+		"Luzina",
+		[new Recipe(
+			"Pre-process", pan, "https://veredguttman.com/iraqi-quince-and-almond-candies-luzina/", "This variant mushes the quince before they become sticky jam.", RecipeStatus.DEVELOPMENT,
+		)],
+		"Delicious quince jam squares. The colour is a striking red."
+	)
+})()
 
 const cornbread = new RecipeBundle("Cornbread", [cornbread_0, cornbread_1])
 
@@ -241,4 +274,5 @@ export default [
 	cranberry_lemon_biscotti,
 	cornbread,
 	pistachio_cookies(),
+	luzina,
 ]

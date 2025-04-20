@@ -31,6 +31,10 @@ function mix(children, how: string | undefined = undefined) {
 	return new Operation("🔀Mix", how, children)
 }
 
+function cream(children) {
+	return mix(children, "Cream until actually light and fluffy")
+}
+
 function whisk(children, until = undefined) {
 	if (until) {
 		return new Operation("whisk", "Whisk " + until, children)
@@ -43,68 +47,72 @@ function simmer(children, heat = "low") {
 	return new Operation("Simmer", `on ${heat} heat`, children)
 }
 
+function chill(op, time: string, where: string = "fridge") {
+	return new Operation("❄", `chill in ${where} for ${time}`, [op])
+}
+
 const tarragon_and_lemon_olive_oil_cake =
 	new RecipeBundle(
-	"Lemon & Tarragon Olive Oil Cake",
-	[new Recipe(
 		"Lemon & Tarragon Olive Oil Cake",
-		new Operation("Glaze", "when cake is completely cool", [
+		[new Recipe(
+			"Lemon & Tarragon Olive Oil Cake",
+			new Operation("Glaze", "when cake is completely cool", [
 
-			new Operation("Brush", "while cake is still warm", [
-					bake(
-						[
-							mix([
-								mix(
-									[
-										new Operation("Whisk", "Whisk together", [
-											new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
-												new Ingredient("sugar", "150", "g"),
-												new Ingredient("tarragon", "3", "g"),
-												new Ingredient("lemon zest", "1", "u")
-											]),
-											new Ingredient("egg", "2", "u")
-										])
-										,
-										new Ingredient("olive oil", "180", "ml"),
-										new Ingredient("buttermilk", "240", "ml"),
-										new Ingredient("lemon juice", "1", "b")
-									],
-									"slowly stream in until emulsified",
-								),
-								mix(
-									[
-										new Ingredient("salt", "0.5", "t"),
-										new Ingredient("flour", "190", "g"),
-										new Ingredient("baking powder", "1.5", "t"),
-										new Ingredient("baking soda", "0.5", "t"),
-									],
-									"",
-								),
-							], "dry into wet in 2 additions")
-						],
-						350,
-						"30~40 minutes"
-					),
-					new Operation("Cool and strain", null, [
-						new Operation("Simmer", "for 3 minutes", [
-							new Operation("Form simple syrup", "on medium heat", [
-								new Ingredient("water", 100, "g"),
-								new Ingredient("sugar", 100, "g"),
-							]),
-							new Ingredient("tarragon", 3, "g")
+				new Operation("Brush", "while cake is still warm", [
+						bake(
+							[
+								mix([
+									mix(
+										[
+											new Operation("Whisk", "Whisk together", [
+												new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
+													new Ingredient("sugar", "150", "g"),
+													new Ingredient("tarragon", "3", "g"),
+													new Ingredient("lemon zest", "1", "u")
+												]),
+												new Ingredient("egg", "2", "u")
+											])
+											,
+											new Ingredient("olive oil", "180", "ml"),
+											new Ingredient("buttermilk", "240", "ml"),
+											new Ingredient("lemon juice", "1", "b")
+										],
+										"slowly stream in until emulsified",
+									),
+									mix(
+										[
+											new Ingredient("salt", "0.5", "t"),
+											new Ingredient("flour", "190", "g"),
+											new Ingredient("baking powder", "1.5", "t"),
+											new Ingredient("baking soda", "0.5", "t"),
+										],
+										"",
+									),
+								], "dry into wet in 2 additions")
+							],
+							350,
+							"30~40 minutes"
+						),
+						new Operation("Cool and strain", null, [
+							new Operation("Simmer", "for 3 minutes", [
+								new Operation("Form simple syrup", "on medium heat", [
+									new Ingredient("water", 100, "g"),
+									new Ingredient("sugar", 100, "g"),
+								]),
+								new Ingredient("tarragon", 3, "g")
+							])
 						])
-					])
-				]
-			),
-			new Operation("Form icing", "dissolve cream into sugar until desired consistency", [
-				new Ingredient("icing sugar", 100, "g"),
-				new Ingredient("heavy cream", "3~5", "b")
-			])
-		]),
-		"https://madeincookware.com/blogs/how-to-make-tarragon-olive-oil-cake"
+					]
+				),
+				new Operation("Form icing", "dissolve cream into sugar until desired consistency", [
+					new Ingredient("icing sugar", 100, "g"),
+					new Ingredient("heavy cream", "3~5", "b")
+				])
+			]),
+			"https://madeincookware.com/blogs/how-to-make-tarragon-olive-oil-cake"
+		)
+		]
 	)
-	]
-)
 
 const lavender_tea_bread = (() => {
 	const milk = simmer([
@@ -202,6 +210,29 @@ const cornbread_1 = (() => {
 	)
 })()
 
+function pistachio_cookies() {
+	function _mk(additional_wet: Ingredient[], nuts: Ingredient[]) {
+		const dry = mix([new Operation("Chop", "Pulse in a food processor until small crumbs form", nuts), new Ingredient("flour", 281, g)])
+		return cream(
+			[new Ingredient("Shortening", 226, g), new Ingredient("Sugar", 90, g)]
+		)
+			.andThen((o) => mix([o, new Ingredient("vanilla", 1, t), new Ingredient("almond extract", 1, t), ...additional_wet])
+			)
+			.andThen((o) => mix([o, dry], "cookie dough will be thick"))
+			.andThen((o) => chill(o, "30m", "fridge"))
+			.andThen((o) => bake([o], 350, "15m"))
+	}
+
+	const original_url = "https://sallysbakingaddiction.com/pistachio-cookies/#tasty-recipes-67708"
+	return new RecipeBundle(
+		"Pistachio cookies",
+		[
+			new Recipe("Original", _mk([], [new Ingredient("pistachios", 130, g)]), original_url, "The original recipe, but with butter replaced with shortening. I realised that this basically doesn't have any water in it. The cookies turned out like shortbread made with shortening instead of butter: crumbly and without structural integrity. They could probably hold together a little better. I would recommend cooling them before handling, as (like other shortening shortbreads) they're a little tacky."),
+			new Recipe("Increased binding", _mk([new Ingredient("water", 2, b)], [new Ingredient("pistachios", 65, g), new Ingredient("walnuts", 65, g)]), original_url, "This one should have a bit more structural integrity. Also cutting the pistachios 50/50 with walnuts because pistachios are expensive.", RecipeStatus.DEVELOPMENT),
+		]
+	)
+}
+
 const cornbread = new RecipeBundle("Cornbread", [cornbread_0, cornbread_1])
 
 export default [
@@ -209,4 +240,5 @@ export default [
 	lavender_tea_bread,
 	cranberry_lemon_biscotti,
 	cornbread,
+	pistachio_cookies(),
 ]

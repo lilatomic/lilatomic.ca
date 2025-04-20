@@ -173,7 +173,7 @@ const cornbread_0 = (() => {
 		.andThen((o) => bake([o], 350, "20m"))
 
 	return new Recipe(
-		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="/recipes/cornbread-1">Cornbread 1</a>', RecipeStatus.DEPRECATED
+		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="#cornbread-1">Cornbread 1</a>', RecipeStatus.DEPRECATED
 	)
 })()
 
@@ -198,7 +198,7 @@ const cornbread_1 = (() => {
 		.andThen((o) => bake([o], 350, "20m"))
 
 	return new Recipe(
-		"Cornbread 1", wet, "https://sallysbakingaddiction.com/my-favorite-cornbread/", 'This one is more crumbly and was universally preferred to <a href="/recipes/cornbread-0">Cornbread 0</a>'
+		"Cornbread 1", wet, "https://sallysbakingaddiction.com/my-favorite-cornbread/", 'This one is more crumbly and was universally preferred to <a href="#cornbread-0">Cornbread 0</a>'
 	)
 })()
 

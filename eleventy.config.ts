@@ -11,10 +11,9 @@ import markdownItAnchor from "markdown-it-anchor";
 import markdownitAbbr from 'markdown-it-abbr';
 import markdownItFootnote from 'markdown-it-footnote';
 
-import {jsxToString} from "jsx-async-runtime";
+import { render } from "preact-render-to-string";
 
-import recipesdb from "data/recipesdb";
-import mymetadata from "data/metadata.json";
+import recipesdb from "./_data/recipesdb";
 
 const groupBy = function (xs, extractor) {
 	return xs.reduce(function (rv, x) {
@@ -103,11 +102,8 @@ module.exports = function (eleventyConfig) {
 		key: "11ty.js",
 		compile: function () {
 			return async (data) => {
-				// console.log("data:", data)
-				// console.log("this", this)
 				const content = await this.defaultRenderer(data);
-				// console.log("content", content)
-				const result = await jsxToString(content);
+				const result = await render(content, {data, s: eleventyConfig.javascript});
 				return result
 			}
 		}
@@ -166,7 +162,6 @@ module.exports = function (eleventyConfig) {
 		}
 	);
 
-	eleventyConfig.addGlobalData("mymetadata", mymetadata)
 	eleventyConfig.addGlobalData("recipesdb", recipesdb)
 
 	return {

@@ -18,7 +18,7 @@
 	},
 	"author": {
 		"name": "Daniel Goldman",
-		"email": "zachleatherman@gmail.com",
+		"email": "danielgoldman4@gmail.com",
 		"url": "https://lilatomic.ca/"
 	},
 	"license": "MIT",
@@ -29,20 +29,23 @@
 	"devDependencies": {
 		"@11ty/eleventy": "^3.1.0-beta.1",
 		"@11ty/eleventy-navigation": "^0.3.2",
-		"@11ty/eleventy-plugin-rss": "^2.0.2",
+		"@11ty/eleventy-plugin-rss": "^2.0.3",
 		"@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
-		"eleventy-plugin-link_to": "^0.4.0",
+		"eleventy-plugin-link_to": "^0.4.1",
 		"markdown-it": "^14.1.0",
 		"markdown-it-anchor": "^9.2.0",
 		"spellchecker-cli": "^6.2.0",
-		"tsx": "^4.19.3",
-		"data": "file:_data"
+		"tsx": "^4.19.3"
 	},
 	"dependencies": {
 		"eleventy-plugin-toc": "^1.1.0",
 		"markdown-it-abbr": "^2.0.0",
 		"markdown-it-footnote": "^4.0.0",
 		"npm": "^10.4.0",
-		"jsx-async-runtime": "^1.0.0"
+		"preact": "^10.22.0",
+		"preact-render-to-string": "^6.5.5"
+	},
+	"overrides": {
+		"@11ty/eleventy": "^3.1.0-beta.1"
 	}
 }

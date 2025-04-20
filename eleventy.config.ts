@@ -13,7 +13,8 @@ import markdownItFootnote from 'markdown-it-footnote';
 
 import {jsxToString} from "jsx-async-runtime";
 
-import pluginRecipes from "recipes/recipes_plugin";
+import recipesdb from "data/recipesdb";
+import mymetadata from "data/metadata.json";
 
 const groupBy = function (xs, extractor) {
 	return xs.reduce(function (rv, x) {
@@ -33,8 +34,6 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginTOC)
 
 	eleventyConfig.addPlugin(pluginLinkTo);
-
-	eleventyConfig.addPlugin(pluginRecipes);
 
 	eleventyConfig.setDataDeepMerge(true);
 
@@ -166,6 +165,9 @@ module.exports = function (eleventyConfig) {
 			return String(selected_lines.map(line => indent + line).join("\n"));
 		}
 	);
+
+	eleventyConfig.addGlobalData("mymetadata", mymetadata)
+	eleventyConfig.addGlobalData("recipesdb", recipesdb)
 
 	return {
 		templateFormats: [

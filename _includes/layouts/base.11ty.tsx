@@ -23,12 +23,14 @@ export function MainLayout({children, title}): JSX.Element {
 			</head>
 			<body>
 			<header>
-				<h1 class="home"><a href={"/"}>{metadata.title}</a></h1>
+				<h1 id="home" class="home"><a href={"/"}>{metadata.title}</a></h1>
 			</header>
-			<main>
-				{children}
-			</main>
-			<Nav/>
+			<div id="main">
+				<main>
+					{children}
+				</main>
+				<Nav/>
+			</div>
 			</body>
 			</html>
 		</>

@@ -8,6 +8,10 @@ export class Ingredient {
 		this.quantity = quantity
 		this.unit = unit
 	}
+
+	thenDo(name: string, instructions: string) {
+		return new Operation(name, instructions, [this]);
+	}
 }
 
 export class Operation {
@@ -30,6 +34,9 @@ export class Operation {
 	}
 }
 
+export type Stuff = Ingredient | Operation
+export type Stuffs = (Ingredient | Operation)[]
+
 export enum RecipeStatus {
 	TESTED = 'tested',
 	DEVELOPMENT = 'development',
@@ -43,7 +50,7 @@ export class Recipe {
 	description?: string
 	status: RecipeStatus
 
-	constructor(name, instructions, original_url = null, description = null, status = RecipeStatus.TESTED) {
+	constructor(name: string, instructions: Operation, original_url = null, description = null, status = RecipeStatus.TESTED) {
 		this.name = name;
 		this.instructions = instructions;
 		this.original_url = original_url;

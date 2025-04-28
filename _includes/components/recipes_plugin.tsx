@@ -43,7 +43,14 @@ class IngredientIterator {
 
 function getContent(item: Ingredient|Operation) {
 	if (item instanceof Ingredient) {
-		return `${item.quantity} ${item.unit} - ${item.name}`;
+		let q;
+		if (typeof item.quantity === 'number') {
+			q = (Math.round((item.quantity + Number.EPSILON) * 100) / 100)
+		} else {
+			q = item.quantity
+		}
+
+		return `${q} ${item.unit} - ${item.name}`;
 	} else if (item instanceof Operation) {
 		if (item.instructions) {
 			return `${item.name} : ${item.instructions}`;
@@ -63,6 +70,9 @@ function createCellRepresentation(it: IngredientIterator, item: Ingredient|Opera
 		const yPosition = Math.min(...children.map(e => e.y));
 		const height = children.reduce((sum, child) => sum + child.height, 0);
 		return new Cell(getContent(item), xPosition, yPosition, parent_xpos - xPosition, height, "recipe_operation", children);
+	} else {
+		console.log(item)
+		throw new Error(`cannot create cell representation item=${item}`);
 	}
 }
 

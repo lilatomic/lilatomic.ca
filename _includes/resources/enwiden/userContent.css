@@ -53,3 +53,15 @@ html.html__responsive body.question-page.unified-theme div.container div#content
 .text-token-text-primary div {
 	max-width: none !important;
 }
+
+/* wordpress */
+.site-container,
+.wprm-recipe
+{
+	max-width: 100% !important;
+}
+
+:root {
+	--global-content-width: 100% !important;
+
+}

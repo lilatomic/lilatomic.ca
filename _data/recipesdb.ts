@@ -21,7 +21,7 @@ function format_temperature(temperature, unit = "f") {
 	return `${round(t_f).toFixed(0)}°F / ${round(t_c).toFixed(0)}°C`;
 }
 
-function bake(children, temperature, time) {
+function bake(children: Stuffs, temperature, time) {
 	return new Operation(
 		"🔥Bake", `at ${format_temperature(temperature)} for ${time}`, children
 	);
@@ -53,6 +53,16 @@ function simmer(children: Stuffs, heat = "low", until?: string) {
 
 function chill(op: Stuff, time: string, where: string = "fridge") {
 	return new Operation("❄", `chill in ${where} for ${time}`, [op])
+}
+
+function mix_in_well(dry, wet, until?: string) {
+	let text = "Make a well in the dry ingredients. Add the wet ingredients to this well."
+	if (until) {
+		text += ` Mix until ${until}`
+	} else {
+		text += " Mix."
+	}
+	return new Operation("Mix with well", text + " Mix.", [dry, wet])
 }
 
 const tarragon_and_lemon_olive_oil_cake =
@@ -285,6 +295,35 @@ const luzina = (() => {
 
 const cornbread = new RecipeBundle("Cornbread", [cornbread_0, cornbread_1])
 
+const cannoli = (() => {
+	const filling = new Ingredient("ricotta cheese", 3, c)
+		.thenDo("strain", "strain under refrigeration for 24h")
+		.thenDo("sift", "push through a seive for smoothness")
+		.andThen((o) => new Operation("sweeten", "add sugar until desired sweetness", [o, new Ingredient("sugar", .5, c)]))
+	const pastry = mix([
+		new Ingredient("flour", 4 / 3, c),
+		new Ingredient("sugar", 2, b),
+		new Ingredient("cocoa powder", 1, t),
+		new Ingredient("cinnamon", 1, t),
+		new Ingredient("butter", 2, b)
+	])
+		.andThen((o) => mix_in_well(o, mix([
+			new Ingredient("egg", 1, u),
+			new Ingredient("dry white wine", 2, b),
+		])))
+		.andThen((o) => chill(o, "20m"))
+		.thenDo("Roll out", "roll dough out thinly and cut into circles to fit around cannoli tubes with some overlap. Wrap around greased tubes, using beaten egg whites to seal.")
+		.andThen((o) => bake([o], 350, 15))
+		.andThen((o) => chill(o, "20m", "counter"))
+		.andThen((o) => new Operation("fill", "use a piping bag to fill the cannoli", [o, filling]))
+
+	return new RecipeBundle(
+		"Cannoli",
+		[new Recipe("Italian Homemade Baked Cannoli", pastry, "https://anitalianinmykitchen.com/baked-cannoli/#recipe", null, RecipeStatus.DEVELOPMENT)],
+		"They're the dessert. The stuffed pasta are cannelloni."
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -292,4 +331,5 @@ export default [
 	cornbread,
 	pistachio_cookies(),
 	luzina,
+	cannoli,
 ]

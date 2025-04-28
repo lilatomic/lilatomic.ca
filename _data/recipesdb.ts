@@ -119,24 +119,41 @@ const tarragon_and_lemon_olive_oil_cake =
 	)
 
 const lavender_tea_bread = (() => {
-	const milk = simmer([
-		new Ingredient("milk", 0.75, "c"),
-		new Ingredient("lavender (finely chopped)", 3, "b"),
-	])
-	const wet = mix([
-		new Ingredient("butter", 6, "b"),
-		new Ingredient("sugar", 1, "c"),
-		new Ingredient("egg", 2, "u"),
-	])
-		.andThen((o) => new Operation("Beat", "add eggs 1 at a time", [o]))
-	const dry = mix([
-		new Ingredient("flour", 2, "c"),
-		new Ingredient("baking powder", 1.5, "t"),
-		new Ingredient("salt", 0.25, "t"),
-	])
-	const baked = mix([milk, wet, dry], "alternating wet and dry into creamed butter, sugar, and eggs")
-		.andThen((o) => bake([o], 350, "50m"))
-	return new RecipeBundle("Lavender Tea Bread", [new Recipe("Lavender Tea Bread", baked)])
+
+	function _r(vanilla: boolean) {
+		const milk = simmer([
+			new Ingredient("milk", 0.75, "c"),
+			new Ingredient("lavender (finely chopped)", 3, "b"),
+		])
+		const wet_base = mix([
+			new Ingredient("butter", 6, "b"),
+			new Ingredient("sugar", 1, "c"),
+		])
+
+		let wet;
+		if (vanilla) {
+			wet = wet_base.andThen((o) => new Operation("Beat", "add eggs 1 at a time", [o, new Ingredient("egg", 2, u), new Ingredient("vanilla", 1, t)]));
+		} else {
+			wet = wet_base.andThen((o) => new Operation("Beat", "add eggs 1 at a time", [o, new Ingredient("egg", 2, u),]))
+		}
+
+		const dry = mix([
+			new Ingredient("flour", 2, "c"),
+			new Ingredient("baking powder", 1.5, "t"),
+			new Ingredient("salt", 0.25, "t"),
+		])
+		return mix([milk, wet, dry], "alternating wet and dry into creamed butter, sugar, and eggs")
+			.andThen((o) => bake([o], 350, "50m"))
+	}
+
+	return new RecipeBundle(
+		"Lavender Tea Bread",
+		[
+			new Recipe("original", _r(false), null, null, RecipeStatus.DEPRECATED),
+			new Recipe("with vanilla", _r(true), null, "with added vanilla",),
+		],
+		"The hot milk acts to gelatinise the starch (like a tangzhong or a yu-dane in breadmaking). This keeps them fluffy for much longer (up to several weeks refrigerated)."
+	)
 })();
 
 const cranberry_lemon_biscotti = (() => {

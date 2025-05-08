@@ -324,6 +324,20 @@ const cannoli = (() => {
 	)
 })()
 
+function lemon_sugar_cookies() {
+	const dry = mix([new Ingredient("flour", 320, g), new Ingredient("baking powder", 1, t), new Ingredient("salt", 1 / 2, t)])
+	const cookies = cream([new Ingredient("butter", 170, g), new Ingredient("sugar", 150, g), new Ingredient("brown sugar", 50, g), new Ingredient("lemon zest", 1, u)])
+		.andThen((o) => mix([o, new Ingredient("egg", 2, u)]))
+		.andThen((o) => mix([o, new Ingredient("lemon juice", 1, u), dry]), "alternating dry and lemon juice, until just combined")
+		.andThen((o) => chill(o, "1h"))
+		.andThen((o) => bake([o], 350, 12))
+
+	return new RecipeBundle(
+		"Lemon Sugar Cookies",
+		[new Recipe("From Glen and Friends Cooking", cookies, "https://www.youtube.com/watch?v=3tmgem9jd8k", null, RecipeStatus.TESTED)],
+	)
+}
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -332,4 +346,5 @@ export default [
 	pistachio_cookies(),
 	luzina,
 	cannoli,
+	lemon_sugar_cookies(),
 ]

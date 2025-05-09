@@ -34,6 +34,7 @@ export function Recipe(this, {recipe}: { recipe: Recipe }) {
 
 export function RecipeBundles({bundle}: { bundle: RecipeBundle }) {
 	return (<>
+		{bundle.description && <p>{bundle.description}</p>}
 		{bundle.versions.toReversed().map(recipe => <Recipe recipe={recipe}/>)}
 	</>)
 }

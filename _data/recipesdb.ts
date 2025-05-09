@@ -325,16 +325,24 @@ const cannoli = (() => {
 })()
 
 function lemon_sugar_cookies() {
-	const dry = mix([new Ingredient("flour", 320, g), new Ingredient("baking powder", 1, t), new Ingredient("salt", 1 / 2, t)])
-	const cookies = cream([new Ingredient("butter", 170, g), new Ingredient("sugar", 150, g), new Ingredient("brown sugar", 50, g), new Ingredient("lemon zest", 1, u)])
-		.andThen((o) => mix([o, new Ingredient("egg", 2, u)]))
-		.andThen((o) => mix([o, new Ingredient("lemon juice", 1, u), dry]), "alternating dry and lemon juice, until just combined")
-		.andThen((o) => chill(o, "1h"))
-		.andThen((o) => bake([o], 350, 12))
+
+	function cookie(use_shortening: boolean, extra_liquid: Stuffs) {
+		const dry = mix([new Ingredient("flour", 320, g), new Ingredient("baking powder", 1, t), new Ingredient("salt", 1 / 2, t)])
+		const cookies = cream([new Ingredient(use_shortening ? "shortening" : "butter", 170, g), new Ingredient("sugar", 150, g), new Ingredient("brown sugar", 50, g), new Ingredient("lemon zest", 1, u)])
+			.andThen((o) => mix([o, new Ingredient("egg", 2, u), ...extra_liquid]))
+			.andThen((o) => mix([o, new Ingredient("lemon juice", 1, u), dry]), "alternating dry and lemon juice, until just combined")
+			.andThen((o) => chill(o, "1h"))
+			.andThen((o) => bake([o], 350, 12))
+		return cookies
+	}
 
 	return new RecipeBundle(
 		"Lemon Sugar Cookies",
-		[new Recipe("From Glen and Friends Cooking", cookies, "https://www.youtube.com/watch?v=3tmgem9jd8k", null, RecipeStatus.TESTED)],
+		[
+			new Recipe("From Glen and Friends Cooking", cookie(true, []), "https://www.youtube.com/watch?v=3tmgem9jd8k", null, RecipeStatus.TESTED),
+			new Recipe("With shortening", cookie(true, [new Ingredient("vanilla", 1, t)]), "https://www.youtube.com/watch?v=3tmgem9jd8k", "The shortening makes them fall apart a bit more, as it tends to do.", RecipeStatus.TESTED),
+		],
+		"Low sweetness. Works well with 1-for-1 gluten-free flour"
 	)
 }
 

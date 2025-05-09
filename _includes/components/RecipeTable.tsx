@@ -22,9 +22,10 @@ export function RecipeTable({recipe}: { recipe: Recipe }) {
 
 export function Recipe(this, {recipe}: { recipe: Recipe }) {
 	const f = this.context.s.functions;
-	const ref_slug = `#${f.slugify(recipe.name)}`;
+	const ref_slug = f.slugify(recipe.name);
+	const ref_slug_target = `#${f.slugify(recipe.name)}`
 	return (<>
-		<h2 id={ref_slug} tabindex={-1}><RecipeStatusIndicator status={recipe.status}/><a class="direct-link" href={ref_slug}>{recipe.name}</a></h2>
+		<h2 id={ref_slug} tabindex={-1} class="recipe"><RecipeStatusIndicator status={recipe.status}/><a class="direct-link" href={ref_slug_target}>{recipe.name}</a></h2>
 
 		{recipe.original_url && <a href={recipe.original_url}>recipe source</a>}
 		{recipe.description && <p dangerouslySetInnerHTML={{__html: recipe.description}}/>}

@@ -352,6 +352,11 @@ td {
 	min-width: 10vw;
 }
 
+:target {
+	background-color: var(--tag_body);
+	scroll-margin-top: 2rem;
+}
+
 /*smol horizontal*/
 @media screen and (max-width: 850px) {
 	#main {

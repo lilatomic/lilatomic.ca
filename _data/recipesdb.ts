@@ -65,6 +65,8 @@ function mix_in_well(dry, wet, until?: string) {
 	return new Operation("Mix with well", text + " Mix.", [dry, wet])
 }
 
+// Recipes
+
 const tarragon_and_lemon_olive_oil_cake =
 	new RecipeBundle(
 		"Lemon & Tarragon Olive Oil Cake",
@@ -346,6 +348,40 @@ function lemon_sugar_cookies() {
 	)
 }
 
+const orange_salad = (() => {
+
+	const dressing = whisk([
+		new Ingredient("orange zest", 3, u),
+		new Ingredient("orange juice", 3, u),
+		new Ingredient("honey", 1, b),
+		new Ingredient("dijon mustard", 1, b),
+		new Ingredient("poppy seeds", 1, t),
+		new Ingredient("salt", 1 / 4, t),
+		new Ingredient("pepper", 1 / 4, t),
+	]).andThen((o) => new Operation("whisk", "gradually whisk in oil", [o, new Ingredient("olive oil", 2, b)], ))
+
+	const body = mix([
+		new Ingredient("fresh spinach", 4, c),
+		new Ingredient("boston lettuce", 4, c),
+		new Ingredient("red onion (sliced)", 1 / 2, c),
+		new Ingredient("pecan pieces (chopped)", 1 / 2, c).thenDo("toast", undefined),
+		new Ingredient("orange", 3, u).thenDo("remove peel and pith", undefined),
+	])
+
+	return new RecipeBundle(
+		"Orange Salad",
+		[
+			new Recipe(
+				"From Canadian Living",
+				mix([body, dressing], "pour dressing over salad and toss to coat"),
+				"https://www.canadianliving.com/food/recipe/an-especially-good-green-salad-1",
+				"An especially good orange salad",
+				RecipeStatus.TESTED,
+			)
+		]
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -355,4 +391,5 @@ export default [
 	luzina,
 	cannoli,
 	lemon_sugar_cookies(),
+	orange_salad,
 ]

@@ -8,5 +8,13 @@ eleventyNavigation:
 
 <h1>Archive</h1>
 
+<h2>Posts</h2>
+
 {% set postslist = collections.posts %}
 {% include "postslist.njk" %}
+
+<h2>Readings</h2>
+
+{% set postslist = collections.reading %}
+{% include "postslist.njk" %}
+

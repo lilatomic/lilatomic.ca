@@ -11,7 +11,7 @@ import markdownItAnchor from "markdown-it-anchor";
 import markdownitAbbr from 'markdown-it-abbr';
 import markdownItFootnote from 'markdown-it-footnote';
 
-import { render } from "preact-render-to-string";
+import {render} from "preact-render-to-string";
 
 import recipesdb from "./_data/recipesdb";
 
@@ -92,6 +92,15 @@ module.exports = function (eleventyConfig) {
 
 		return Object.entries(items).map(e => [e[0], e[1].sort((a, b) => a.data.date - b.data.date)])
 	})
+
+	eleventyConfig.addCollection("articles", function (collectionApi) {
+		const posts = collectionApi.getFilteredByTag("posts");
+		const readings = collectionApi.getFilteredByTag("reading");
+
+		return [...posts, ...readings].sort((a, b) => {
+			return a.date - b.date; // oldest first
+		});
+	});
 
 	eleventyConfig.addPassthroughCopy("img");
 	eleventyConfig.addPassthroughCopy("css");

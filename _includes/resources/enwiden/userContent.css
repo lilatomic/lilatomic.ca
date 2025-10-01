@@ -63,5 +63,9 @@ html.html__responsive body.question-page.unified-theme div.container div#content
 
 :root {
 	--global-content-width: 100% !important;
+}
 
+/*software carpentry*/
+.container {
+	max-width: 100% !important;
 }

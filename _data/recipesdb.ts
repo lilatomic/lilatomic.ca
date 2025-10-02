@@ -21,9 +21,9 @@ function format_temperature(temperature, unit = "f") {
 	return `${round(t_f).toFixed(0)}°F / ${round(t_c).toFixed(0)}°C`;
 }
 
-function bake(children: Stuffs, temperature, time) {
+function bake(child: Stuff, temperature, time) {
 	return new Operation(
-		"🔥Bake", `at ${format_temperature(temperature)} for ${time}`, children
+		"🔥Bake", `at ${format_temperature(temperature)} for ${time}`, [child]
 	);
 }
 
@@ -76,36 +76,35 @@ const tarragon_and_lemon_olive_oil_cake =
 
 				new Operation("Brush", "while cake is still warm", [
 						bake(
-							[
-								mix([
-									mix(
-										[
-											new Operation("Whisk", "Whisk together", [
-												new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
-													new Ingredient("sugar", "150", "g"),
-													new Ingredient("tarragon", "3", "g"),
-													new Ingredient("lemon zest", "1", "u")
-												]),
-												new Ingredient("egg", "2", "u")
-											])
-											,
-											new Ingredient("olive oil", "180", "ml"),
-											new Ingredient("buttermilk", "240", "ml"),
-											new Ingredient("lemon juice", "1", "b")
-										],
-										"slowly stream in until emulsified",
-									),
-									mix(
-										[
-											new Ingredient("salt", "0.5", "t"),
-											new Ingredient("flour", "190", "g"),
-											new Ingredient("baking powder", "1.5", "t"),
-											new Ingredient("baking soda", "0.5", "t"),
-										],
-										"",
-									),
-								], "dry into wet in 2 additions")
-							],
+							mix([
+								mix(
+									[
+										new Operation("Whisk", "Whisk together", [
+											new Operation("Mash", "Use the sugar to mash the lemon zest and tarragon together, for example in a mortar and pestle", [
+												new Ingredient("sugar", "150", "g"),
+												new Ingredient("tarragon", "3", "g"),
+												new Ingredient("lemon zest", "1", "u")
+											]),
+											new Ingredient("egg", "2", "u")
+										])
+										,
+										new Ingredient("olive oil", "180", "ml"),
+										new Ingredient("buttermilk", "240", "ml"),
+										new Ingredient("lemon juice", "1", "b")
+									],
+									"slowly stream in until emulsified",
+								),
+								mix(
+									[
+										new Ingredient("salt", "0.5", "t"),
+										new Ingredient("flour", "190", "g"),
+										new Ingredient("baking powder", "1.5", "t"),
+										new Ingredient("baking soda", "0.5", "t"),
+									],
+									"",
+								),
+							], "dry into wet in 2 additions")
+							,
 							350,
 							"30~40 minutes"
 						),
@@ -155,7 +154,7 @@ const lavender_tea_bread = (() => {
 			new Ingredient("salt", 0.25, "t"),
 		])
 		return mix([milk, wet, dry], "alternating wet and dry into creamed butter, sugar, and eggs")
-			.andThen((o) => bake([o], 350, "50m"))
+			.andThen((o) => bake(o, 350, "50m"))
 	}
 
 	return new RecipeBundle(
@@ -187,10 +186,10 @@ const cranberry_lemon_biscotti = (() => {
 	])
 		.andThen((o) => mix([dry, o], "until slightly stiff but still soft"))
 		.thenDo("Turn out", "divide into 2 loaves")
-		.andThen((o) => bake([o], 350, "20m"))
+		.andThen((o) => bake(o, 350, "20m"))
 		.thenDo("Cool", "for 5m")
 		.thenDo("Slice and turn", "roughly 3/8\" or 1cm")
-		.andThen((o) => bake([o], 300, "15m~20m"))
+		.andThen((o) => bake(o, 300, "15m~20m"))
 
 	return new RecipeBundle("Cranberry-Lemon Biscotti", [new Recipe("Cranberry-Lemon Biscotti", biscotti)])
 })()
@@ -211,7 +210,7 @@ const cornbread_0 = (() => {
 	])
 	const instructions = dry
 		.andThen((o) => mix([o, wet], "wet into dry, until just incorporated"))
-		.andThen((o) => bake([o], 350, "20m"))
+		.andThen((o) => bake(o, 350, "20m"))
 
 	return new Recipe(
 		"Cornbread 0", instructions, "https://www.earthfoodandfire.com/the-best-dairy-free-cornbread/", 'This one is more cake-like, I prefer <a href="#cornbread-1">Cornbread 1</a>', RecipeStatus.DEPRECATED
@@ -236,7 +235,7 @@ const cornbread_1 = (() => {
 		.andThen((o) => mix([o, new Ingredient("egg", 1, u)]))
 		.andThen((o) => mix([o, new Ingredient("buttermilk", 240, g),]))
 		.andThen((o) => mix([o, dry], "wet into dry, avoid overmixing"))
-		.andThen((o) => bake([o], 350, "20m"))
+		.andThen((o) => bake(o, 350, "20m"))
 
 	return new Recipe(
 		"Cornbread 1", wet, "https://sallysbakingaddiction.com/my-favorite-cornbread/", 'This one is more crumbly and was universally preferred to <a href="#cornbread-0">Cornbread 0</a>'
@@ -253,7 +252,7 @@ function pistachio_cookies() {
 			)
 			.andThen((o) => mix([o, dry], "cookie dough will be thick"))
 			.andThen((o) => chill(o, "30m", "fridge"))
-			.andThen((o) => bake([o], 350, "15m"))
+			.andThen((o) => bake(o, 350, "15m"))
 	}
 
 	const original_url = "https://sallysbakingaddiction.com/pistachio-cookies/#tasty-recipes-67708"
@@ -315,7 +314,7 @@ const cannoli = (() => {
 		])))
 		.andThen((o) => chill(o, "20m"))
 		.thenDo("Roll out", "roll dough out thinly and cut into circles to fit around cannoli tubes with some overlap. Wrap around greased tubes, using beaten egg whites to seal.")
-		.andThen((o) => bake([o], 350, 15))
+		.andThen((o) => bake(o, 350, 15))
 		.andThen((o) => chill(o, "20m", "counter"))
 		.andThen((o) => new Operation("fill", "use a piping bag to fill the cannoli", [o, filling]))
 
@@ -334,7 +333,7 @@ function lemon_sugar_cookies() {
 			.andThen((o) => mix([o, new Ingredient("egg", 2, u), ...extra_liquid]))
 			.andThen((o) => mix([o, new Ingredient("lemon juice", 1, u), dry]), "alternating dry and lemon juice, until just combined")
 			.andThen((o) => chill(o, "1h"))
-			.andThen((o) => bake([o], 350, 12))
+			.andThen((o) => bake(o, 350, 12))
 		return cookies
 	}
 
@@ -358,7 +357,7 @@ const orange_salad = (() => {
 		new Ingredient("poppy seeds", 1, t),
 		new Ingredient("salt", 1 / 4, t),
 		new Ingredient("pepper", 1 / 4, t),
-	]).andThen((o) => new Operation("whisk", "gradually whisk in oil", [o, new Ingredient("olive oil", 2, b)], ))
+	]).andThen((o) => new Operation("whisk", "gradually whisk in oil", [o, new Ingredient("olive oil", 2, b)],))
 
 	const body = mix([
 		new Ingredient("fresh spinach", 4, c),
@@ -382,6 +381,120 @@ const orange_salad = (() => {
 	)
 })()
 
+const maple_cookies = (() => {
+
+	const cookie = (use_shortening: boolean, icing_liquid: Stuff, mixed_sugar: boolean, use_nuts: boolean): Operation => {
+		const shortening = use_shortening ? "shortening" : "butter"
+		const sugar = mixed_sugar ? [new Ingredient("sugar", 100, g), new Ingredient("brown sugar", 100, g)] : [new Ingredient("brown sugar", 200, g)]
+		const icing = whisk(
+			[
+				icing_liquid,
+				new Ingredient("maple syrup", 113, g),
+				new Ingredient("icing sugar", 112, g),
+			]
+		)
+		let batter = mix([
+			mix([
+				new Ingredient("flour", 292, g),
+				new Ingredient("baking poweder", 1, t),
+				new Ingredient("salt", 1 / 4, t),
+			]),
+			mix([
+				mix([
+					cream([new Ingredient(shortening, 113, g), ...sugar]),
+					new Ingredient("egg", 1, u)
+				]),
+				new Ingredient("maple syrup", 113, g),
+				new Ingredient("vanilla extract", 1, t),
+				new Ingredient("maple extract", 1, t),
+			])
+		])
+
+		if (use_nuts) {
+			batter = batter.andThen((o) => mix([o, new Ingredient("pecans", 120, g)]))
+		}
+
+		const cookies = batter.andThen((o) => chill(o, "3 hours"))
+			.andThen((o) => bake(o, 350, 12))
+
+		return new Operation("ice", "drizzle over cooled cookies", [cookies, icing])
+	}
+
+	return new RecipeBundle(
+		"Maple Brown Sugar Cookies",
+		[
+			new Recipe(
+				"From Sally's Baking Addiction",
+				cookie(false, new Ingredient("butter", 28, g).thenDo("melt", undefined), false, true),
+				"https://sallysbakingaddiction.com/maple-brown-sugar-cookies/",
+				"",
+				RecipeStatus.TESTED,
+			),
+			new Recipe(
+				"The usual transform",
+				cookie(true, new Ingredient("milk", 28, g), true, false),
+				RecipeStatus.TESTED,
+			)
+		]
+	)
+})()
+
+const apple_cinnamon_oatmeal_cookies = (() => {
+	const cookie = (use_shortening: boolean, icing_liquid: Stuff) => {
+		const shortening = use_shortening ? "shortening" : "butter"
+
+		const icing = whisk(
+			[
+				icing_liquid,
+				new Ingredient("maple syrup", 113, g),
+				new Ingredient("icing sugar", 112, g),
+			]
+		)
+
+		const dry = mix([
+			new Ingredient("oats", 170, g),
+			new Ingredient("flour", 156, g),
+			new Ingredient("baking powder", 1 / 2, t),
+			new Ingredient("salt", 1 / 2, t),
+			new Ingredient("cinnamon", 1, t),
+			new Ingredient("allspice", 1, t),
+			new Ingredient("nutmeg", 1, t),
+		])
+		const wet = mix([
+			cream([new Ingredient(shortening, 113, g), new Ingredient("brown sugar", 100, g), new Ingredient("sugar", 100, g)]),
+			new Ingredient("applesauce", 160, g).thenDo("reduce", "reduce to 1/2"),
+			new Ingredient("egg", 1, u),
+			new Ingredient("vanilla", 1, t),
+		])
+
+		const cookies = mix([wet, dry,]).andThen((o) => mix([
+			o,
+			new Ingredient("apples", 90, g).thenDo("dice", undefined),
+			new Ingredient("walnuts", 63, g)
+		])).andThen((o) => bake(o, 350, 14))
+
+		return new Operation("Ice", "drizzle over cooled cookies", [cookies, icing])
+	}
+
+	return new RecipeBundle(
+		"Apple Cinnamon Oatmeal Cookies",
+		[
+			new Recipe(
+				"From Sally's Baking Addiction",
+				cookie(false, new Ingredient("butter", 28, g).thenDo("melt", undefined)),
+				"https://sallysbakingaddiction.com/apple-cinnamon-oatmeal-cookies/",
+				"",
+				RecipeStatus.DEVELOPMENT,
+			),
+			new Recipe(
+				"The usual transform",
+				cookie(true, new Ingredient("milk", 28, g)),
+				RecipeStatus.DEVELOPMENT,
+			)
+		]
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -392,4 +505,6 @@ export default [
 	cannoli,
 	lemon_sugar_cookies(),
 	orange_salad,
+	maple_cookies,
+	apple_cinnamon_oatmeal_cookies,
 ]

@@ -396,7 +396,7 @@ const maple_cookies = (() => {
 		let batter = mix([
 			mix([
 				new Ingredient("flour", 292, g),
-				new Ingredient("baking poweder", 1, t),
+				new Ingredient("baking powder", 1, t),
 				new Ingredient("salt", 1 / 4, t),
 			]),
 			mix([
@@ -499,6 +499,50 @@ const apple_cinnamon_oatmeal_cookies = (() => {
 	)
 })()
 
+const apple_crumb_cake = (() => {
+	const dry = mix([
+		new Ingredient("flour", 313, g),
+		new Ingredient("baking powder", 1.5, t),
+		new Ingredient("salt", 1 / 2, t),
+	])
+	const apples = new Ingredient("apples", 375, g).thenDo("chop", undefined).andThen((o) => mix([o, new Ingredient("cinnamon", 2, b)]))
+	const topping = mix([
+		new Ingredient("brown sugar", 100, g),
+		new Ingredient("sugar", 100, g),
+		new Ingredient("cinnamon", 1, b),
+		new Ingredient("salt", 1 / 2, t),
+	])
+		.andThen((o) => cream([o, new Ingredient("shortening", 226, g),]))
+		.andThen((o) => mix([o, new Ingredient("flour", 313, g)], "Mix until crumbly. Do not overmix"))
+
+	const cake = cream([
+		new Ingredient("shortening", 170, g),
+		new Ingredient("sugar", 250, g),
+	])
+		.andThen((o) => mix(
+			[o, new Ingredient("egg", 3, u), new Ingredient("skyr/greek yoghurt", 240, g), new Ingredient("vanilla", 2, t)]
+		))
+		.andThen((o) => mix([o, dry]))
+		.thenDo("spread batter into pan", undefined)
+		.andThen((o) => new Operation("Top", "top with apples", [o, apples]))
+		.andThen((o) => new Operation("Top", "top with crumble", [o, topping]))
+		.andThen((o) => bake(o, 350, 40))
+
+	return new RecipeBundle(
+		"Apple Crumb Cake",
+		[
+			new Recipe(
+				"Usual transforms",
+				cake,
+				"https://sallysbakingaddiction.com/apple-crumb-cake",
+				undefined,
+				RecipeStatus.DEVELOPMENT,
+			)
+		],
+		""
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -511,4 +555,5 @@ export default [
 	orange_salad,
 	maple_cookies,
 	apple_cinnamon_oatmeal_cookies,
+	apple_crumb_cake,
 ]

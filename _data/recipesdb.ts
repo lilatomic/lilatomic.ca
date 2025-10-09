@@ -433,6 +433,8 @@ const maple_cookies = (() => {
 			new Recipe(
 				"The usual transform",
 				cookie(true, new Ingredient("milk", 28, g), true, false),
+				undefined,
+				"",
 				RecipeStatus.TESTED,
 			)
 		]
@@ -489,6 +491,8 @@ const apple_cinnamon_oatmeal_cookies = (() => {
 			new Recipe(
 				"The usual transform",
 				cookie(true, new Ingredient("milk", 28, g)),
+				undefined,
+				"",
 				RecipeStatus.DEVELOPMENT,
 			)
 		]

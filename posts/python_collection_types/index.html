@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>Python Collection Types for Typehinting</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="Python Collection Types for Typehinting"/><meta property="og:type" content="article"/><meta property="og:description" content="An explanation of Python's type hierarchy of collection classes for typehinting"/><meta property="og:url" content="/posts/python_collection_types/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>Python Collection Types for Typehinting</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/python/" class="post-tag">python</a></aside><aside id="toc"><nav class="toc" >
+        <ol><li><a href="#linear-types">Linear Types</a></li><li><a href="#mapping-types">Mapping Types</a></li><li><a href="#nonlinear-types">Nonlinear Types</a></li><li><a href="#async-types">Async Types</a></li><li><a href="#other-types">Other Types</a></li></ol>
+      </nav></aside><div class="content"><h1 id="python-collection-types-for-typehinting" tabindex="-1"><a class="direct-link" href="#python-collection-types-for-typehinting">Python Collection Types for Typehinting</a></h1>
+<p>I've split the collection structure into these segments</p>
+<ul>
+<li>linear types : list-like collections. Use <code>Sequence</code> or <code>MutableSequence</code></li>
+<li>mapping types : key-value collections. Use <code>Mapping</code> or <code>MutableMapping</code></li>
+<li>nonlinear types : unordered collections. Use <code>Set</code> or <code>MutableSet</code>. For generators, it's <code>Generator[YieldT]</code><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</li>
+<li>async types : async-coloured collections</li>
+<li>other types : other things</li>
+</ul>
+<h2 id="linear-types" tabindex="-1"><a class="direct-link" href="#linear-types">Linear Types</a></h2>
+<p>The linear types are list-like. If you want to manipulate the collection, you will probably want <code>Sequence</code> (which includes <code>tuple</code> and <code>list</code>) or <code>MutableSequence</code>. If all you need is to traverse it, use <code>Iterable</code></p>
+<p>Instead of using <code>TupleOf = tuple[T, ...]</code>, use <code>Sequence[T]</code>.</p>
+<img class="mermaid" src="/img/mermaid/python_collection_types-1.svg" alt= "Class hierarchy of linear types">
+<h2 id="mapping-types" tabindex="-1"><a class="direct-link" href="#mapping-types">Mapping Types</a></h2>
+<p>Mapping types are key-value pairs, or something like that. Use <code>Mapping</code> or <code>MutableMapping</code>, which includes <code>dict</code> and<br>
+several relatives.</p>
+<img class="mermaid" src="/img/mermaid/python_collection_types-2.svg" alt= "Class hierarchy of mapping types">
+<h2 id="nonlinear-types" tabindex="-1"><a class="direct-link" href="#nonlinear-types">Nonlinear Types</a></h2>
+<p>These collections have unordered membership, but are not associated with values. This does not extend to other semantics of <code>set</code>. For example, a <code>KeysView</code> can have duplicates, although <code>set</code> does not. You are probably not interested in MappingView.</p>
+<img class="mermaid" src="/img/mermaid/python_collection_types-3.svg" alt= "Class hierarchy of nonlinear types">
+<h2 id="async-types" tabindex="-1"><a class="direct-link" href="#async-types">Async Types</a></h2>
+<img class="mermaid" src="/img/mermaid/python_collection_types-4.svg" alt= "Class hierarchy for async types">
+<h2 id="other-types" tabindex="-1"><a class="direct-link" href="#other-types">Other Types</a></h2>
+<p>If you think about it, a mapping is a function that turns keys into values. So a <code>Callable</code> is sortof a mapping type.</p>
+<img class="mermaid" src="/img/mermaid/python_collection_types-5.svg" alt= "Class hierarchy of other types">
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>The full signature is <code>Generator[YieldType, SendType, ReturnType]</code>, but <code>SendType</code> and <code>ReturnType</code> default to <code>None</code> so you can just use <code>Generator[YieldType]</code>. You can also just use <code>Iterator[YieldType]</code>. You <em>could</em> also use <code>Iterable[YieldType]</code>, but you might be confused that you can't start multiple <code>Iterators</code> of it (double-traversal will confuse everything). <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</div></article><hr/><ul><li>Previous: <a href="/posts/git_workflow_for_debugging/">A Git Workflow for Debug builds</a></li></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

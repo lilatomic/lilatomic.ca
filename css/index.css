@@ -399,3 +399,8 @@ td {
 		min-width: 40vw;
 	}
 }
+
+/* mermaid */
+.mermaid {
+	max-height: 50vh;
+}

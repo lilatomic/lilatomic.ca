@@ -543,6 +543,33 @@ const apple_crumb_cake = (() => {
 	)
 })()
 
+const french_toast = (()=>{
+	const custard = mix([
+		new Ingredient("eggs", 5, u),
+		new Ingredient("milk", 360, g),
+		new Ingredient("vanilla extract", 1.5, t),
+	])
+
+	const french_toast = new Operation("Make caramel", "Bring to a boil. Stir. Boil for 2 minutes, until brown, thick, and bubbly. Turn off heat.", [
+		new Ingredient("brown sugar", 200, g),
+		new Ingredient("butter", 113, g),
+	]).thenDo("Spread", "Spread into 9 inch * 13 inch casserole dish")
+		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, u)]))
+		.andThen((o)=> new Operation("Cover", "cover with berries", [o, new Ingredient("blueberries", 1.5, c)]))
+		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, u)]))
+		.andThen((o) => new Operation("Pour", "pour custard evenly. Cover with plastic wrap and press down slightly so the bread absorbs the custard", [o, custard]))
+		.andThen((o) => chill(o, "overnight"))
+		.andThen((o) => bake(o, 350, 45))
+
+		return new RecipeBundle(
+			"French Toast",
+			[
+				new Recipe("My mom's version", french_toast, null, "We make this casserole every brunch we host. It's always a big hit, takes little effort, and is made in advance; making it ideal for entertaining.", RecipeStatus.TESTED)
+			],
+			"French toast is a delicious breakfast treat. Making it in a casserole dish is easy and make-ahead, ideal for entertaining."
+		)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -556,4 +583,5 @@ export default [
 	maple_cookies,
 	apple_cinnamon_oatmeal_cookies,
 	apple_crumb_cake,
+	french_toast
 ]

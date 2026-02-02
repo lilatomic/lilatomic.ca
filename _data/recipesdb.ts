@@ -550,13 +550,14 @@ const french_toast = (()=>{
 		new Ingredient("vanilla extract", 1.5, t),
 	])
 
+	const bread_slice_unit = "thick slices";
 	const french_toast = new Operation("Make caramel", "Bring to a boil. Stir. Boil for 2 minutes, until brown, thick, and bubbly. Turn off heat.", [
 		new Ingredient("brown sugar", 200, g),
 		new Ingredient("butter", 113, g),
 	]).thenDo("Spread", "Spread into 9 inch * 13 inch casserole dish")
-		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, u)]))
+		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, bread_slice_unit)]))
 		.andThen((o)=> new Operation("Cover", "cover with berries", [o, new Ingredient("blueberries", 1.5, c)]))
-		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, u)]))
+		.andThen((o) => new Operation("Cover", "cover with bread", [o, new Ingredient("Bread (brioche or challah)", 6, "thick slices")]))
 		.andThen((o) => new Operation("Pour", "pour custard evenly. Cover with plastic wrap and press down slightly so the bread absorbs the custard", [o, custard]))
 		.andThen((o) => chill(o, "overnight"))
 		.andThen((o) => bake(o, 350, 45))

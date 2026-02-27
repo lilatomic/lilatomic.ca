@@ -571,6 +571,39 @@ const french_toast = (()=>{
 		)
 })()
 
+const banana_cake = (()=> {
+	const banana_cake = cream([new Ingredient("Butter", 3/4, c), new Ingredient("Sugar", 1, c)])
+		.andThen((o)=> mix([o, new Ingredient("Egg", 2, u)]))
+		.andThen((o)=> mix([o, new Ingredient("Bananas", 4/3, c), new Ingredient("Vanilla Extract", 1, t)]))
+		.andThen((o) => mix([o, new Ingredient("Flour", 2, c), new Ingredient("Baking Powder", 1, t), new Ingredient("Salt", 1/2, t)]))
+		.andThen((o) => mix([o, new Ingredient("Chocolate Chips", 1.25, c)]))
+		.andThen((o) => bake(o, 350, 34))
+
+	return new RecipeBundle(
+		"Banana Cake",
+		[new Recipe("NordicWare's version", banana_cake, null, "The version from NordicWare's label on their mini-loaf tins", RecipeStatus.DEVELOPMENT)],
+		"Banana bread is really more of a cake",
+	)
+})()
+
+const banana_bread = (() => {
+	const banana_bread = mix([new Ingredient("Banana", 280, g), new Ingredient("Egg", 1, u)])
+		.andThen((o) => mix([o, new Ingredient("Yeast", 3, g)]))
+		.andThen((o) => mix([o, new Ingredient("Butter", 28, g).thenDo("melt", undefined)]))
+		.andThen((o) => mix([o, new Ingredient("Fruit/nuts/chocolate chips", 80, g)]))
+		.andThen((o) => mix([o, new Ingredient("Salt", 3, g), new Ingredient("Flour", 350, g)]))
+		.thenDo("Cover and let rise", "until doubled in size")
+		.thenDo("Knead")
+		.thenDo("Divide", "into 12 equal portions, form buns")
+		.andThen((o) => bake(o, 375, 15))
+
+	return new RecipeBundle(
+		"Banana Bread",
+		[new Recipe("Some random video", banana_bread, null, "A version I found on the internet ages ago", RecipeStatus.TESTED)],
+		"It's actually like bread, not cake",
+	)
+})()
+
 export default [
 	tarragon_and_lemon_olive_oil_cake,
 	lavender_tea_bread,
@@ -584,5 +617,7 @@ export default [
 	maple_cookies,
 	apple_cinnamon_oatmeal_cookies,
 	apple_crumb_cake,
-	french_toast
+	french_toast,
+	banana_cake,
+	banana_bread,
 ]

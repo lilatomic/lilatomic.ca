@@ -192,6 +192,26 @@ module.exports = function (eleventyConfig) {
 		return `<div class="noteblock noteblock-caution">\n🔥 ${content}\n</div>`;
 	});
 
+	eleventyConfig.addShortcode("source", (url, label = "src") => {
+		const ariaLabel =
+			label === "src"
+				? "View source code"
+				: `View source code: ${label}`;
+
+		return `<a
+        class="source-link"
+        href="${url}"
+        aria-label="${ariaLabel}"
+        title="View source code"
+      >
+        <span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span>
+        <span class="source-link__label">${label}</span>
+      </a>`;
+	});
+
 	eleventyConfig.addGlobalData("recipesdb", recipesdb)
 
 	return {

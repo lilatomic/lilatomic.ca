@@ -299,15 +299,6 @@ a[href].post-tag:visited {
 	display: inline;
 }
 
-/* Warning */
-.warning {
-	background-color: #ffc;
-	padding: 1em 0.625em; /* 16px 10px /16 */
-}
-.warning ol:only-child {
-	margin: 0;
-}
-
 /* Direct Links / Markdown Headers */
 .direct-link {
 	font-family: sans-serif;
@@ -355,6 +346,69 @@ td {
 :target {
 	background-color: var(--tag_body);
 	scroll-margin-top: 2rem;
+}
+
+/* note blocks like Github markdown */
+
+.noteblock {
+	padding: 0.5em 1em;
+	margin-bottom: 1em;
+	border-left: 0.25em solid;
+}
+
+.noteblock-note {
+	border-color: #1f6feb;
+}
+
+.noteblock-warning {
+	border-color: #9e6a03;
+}
+
+.noteblock-tip {
+	border-color: #238636;
+}
+
+.noteblock-important {
+	border-color: #8957e5;
+}
+
+.noteblock-caution {
+	border-color: #da3633;
+}
+
+/* source links */
+
+.source-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+
+	margin-left: 0.2rem;
+	padding: 0 0.125rem;
+
+	border: 1px solid var(--tag_body, currentColor);
+	border-radius: 999px;
+
+	font-size: 0.75em;
+	line-height: 1.5;
+
+	text-decoration: none;
+	opacity: 0.75;
+
+	vertical-align: middle;
+}
+
+.source-link:hover,
+.source-link:focus-visible {
+	opacity: 1;
+}
+
+.source-link__icon {
+	font-family: monospace;
+}
+
+.source-link__label {
+	white-space: nowrap;
 }
 
 /*smol horizontal*/

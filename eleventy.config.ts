@@ -171,6 +171,27 @@ module.exports = function (eleventyConfig) {
 		}
 	);
 
+
+	eleventyConfig.addPairedShortcode("note", function (content) {
+		return `<div class="noteblock noteblock-note">\n🗒 ${content}\n</div>`;
+	});
+
+	eleventyConfig.addPairedShortcode("warning", function (content) {
+		return `<div class="noteblock noteblock-warning">\n⚠️ ${content}\n</div>`;
+	});
+
+	eleventyConfig.addPairedShortcode("tip", function (content) {
+		return `<div class="noteblock noteblock-tip">\n💡 ${content}\n</div>`;
+	});
+
+	eleventyConfig.addPairedShortcode("important", function (content) {
+		return `<div class="noteblock noteblock-important">\n❗ ${content}\n</div>`;
+	});
+
+	eleventyConfig.addPairedShortcode("caution", function (content) {
+		return `<div class="noteblock noteblock-caution">\n🔥 ${content}\n</div>`;
+	});
+
 	eleventyConfig.addGlobalData("recipesdb", recipesdb)
 
 	return {

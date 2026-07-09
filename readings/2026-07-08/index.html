@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>2026-07-08</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="2026-07-08"/><meta property="og:type" content="article"/><meta property="og:description" content="Reading notes for 2026-07-08"/><meta property="og:url" content="/readings/2026-07-08/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>2026-07-08</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/reading/" class="post-tag">reading</a></aside><aside id="toc"><nav class="toc" >
+        <ol><li><a href="#scalability-but-at-what-cost">Scalability but at what COST</a></li><li><a href="#a-logical-method-for-center-of-gravity-analysis">A Logical Method for Center-of-Gravity Analysis</a></li><li><a href="#the-restrictive-syntax-of-genesis-i-1">The Restrictive Syntax of Genesis i 1</a></li><li><a href="#conceptualizing-a-nonnatural-entity%3A-anthropomorphism-in-god-concepts">Conceptualizing a Nonnatural Entity: Anthropomorphism in God Concepts</a></li><li><a href="#93%25-of-paint-splatters-are-valid-perl-programs">93% of Paint Splatters are Valid Perl Programs</a></li></ol>
+      </nav></aside><div class="content"><h2 id="scalability-but-at-what-cost" tabindex="-1"><a class="direct-link" href="#scalability-but-at-what-cost">Scalability but at what COST</a></h2>
+<p><a
+        class="source-link"
+        href="https://www.usenix.org/system/files/conference/hotos15/hotos15-paper-mcsherry.pdf"
+        aria-label="View source code: pdf"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">pdf</span><br>
+</a></p>
+<p>Distributed computing is scalable, yes, but is it good? This paper introduces the concept of the Configuration Outperforming a Single Thread (COST). How large a cluster does it take to outperform a single thread running on an average laptop? Sometimes it's ludicrous. A whole 128 cores can't outcompete one little laptop just chugging away. A single thread also enables using algorithms that don't distribute but that can be even more performant.</p>
+<p>For me, the biggest takeaway is that there is incredible power in just not scaling at all. A single-threaded implementation has none of the complexity of a distributed system. For development, you just do that locally, and running it happens instantly (not when the cluster gets around to it). Operationally, you don't need a whole cluster to exist and all the metadata that goes with getting your job registered with the corporate cluster and all that.</p>
+<p>The shortcoming is that this applies mostly to graph workloads, which aren't as embarrassingly parallelizable as workloads where you actually want a map-reduce. For those, scaling will probably help more. On the other hand, they make some pretty large servers these days, so getting 1TB of RAM (or more) for the speedup of single-node in-memory processing is achievable. You can do a lot of Big Data with that footprint without needing a cluster or data stored in columnar object storage and all that. Just write it to directly-attached NVME drives.</p>
+<h2 id="a-logical-method-for-center-of-gravity-analysis" tabindex="-1"><a class="direct-link" href="#a-logical-method-for-center-of-gravity-analysis">A Logical Method for Center-of-Gravity Analysis</a></h2>
+<p><a
+        class="source-link"
+        href="https://www.armyupress.army.mil/Portals/7/military-review/Archives/English/MilitaryReview_20071031_art009.pdf"
+        aria-label="View source code: pdf"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">pdf</span><br>
+</a></p>
+<p>A good primer on the ends-ways-means approach to strategy, center-of-gravity analysis, and the link between the two.</p>
+<ul>
+<li>Ends: your goals</li>
+<li>Ways: actions you can take</li>
+<li>Means: resources you have</li>
+<li>Center of gravity: the primary source of power</li>
+</ul>
+<p>Oversimplified, identify the goal, how you're getting there, and what resources you need to do it. The center of gravity is the thing that has the resources and capabilities to achieve your goals.</p>
+<h2 id="the-restrictive-syntax-of-genesis-i-1" tabindex="-1"><a class="direct-link" href="#the-restrictive-syntax-of-genesis-i-1">The Restrictive Syntax of Genesis i 1</a></h2>
+<p><a
+        class="source-link"
+        href="http://individual.utoronto.ca/holmstedt/Holmstedt_GenesisRelative_VT2008.pdf"
+        aria-label="View source code: pdf"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">pdf</span><br>
+</a></p>
+<p>An examination of literally the first word in the book of Genesis. A glimpse into the weeds of textual analysis and what it takes to make a robust argument about biblical texts.</p>
+<h2 id="conceptualizing-a-nonnatural-entity%3A-anthropomorphism-in-god-concepts" tabindex="-1"><a class="direct-link" href="#conceptualizing-a-nonnatural-entity%3A-anthropomorphism-in-god-concepts">Conceptualizing a Nonnatural Entity: Anthropomorphism in God Concepts</a></h2>
+<p><a
+        class="source-link"
+        href="https://www.sciencedirect.com/science/article/pii/S0010028596900171"
+        aria-label="View source code: sciencedirect"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">sciencedirect</span><br>
+</a></p>
+<p>Many people have concepts that their god is omnipotent, omniscient, and all that. But it turns out that a lot of people just think of their god as a person, spatially and temporally limited. Fascinating. I wish the sample size were larger.</p>
+<h2 id="93%25-of-paint-splatters-are-valid-perl-programs" tabindex="-1"><a class="direct-link" href="#93%25-of-paint-splatters-are-valid-perl-programs">93% of Paint Splatters are Valid Perl Programs</a></h2>
+<p><a
+        class="source-link"
+        href="https://www.mcmillen.dev/sigbovik/2019.pdf"
+        aria-label="View source code: pdf"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">pdf</span><br>
+</a> It's a SIGBOVIK paper. That and the title explain everything. Good for a chuckle.</p>
+</div></article><hr/><ul></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>

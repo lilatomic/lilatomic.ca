@@ -1,16 +1,71 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>2025-11-24</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:title" content="2025-11-24"/><meta property="og:type" content="article"/><meta property="og:description" content="Reading notes for 2025-11-24"/><meta property="og:url" content="/readings/2025-11-24/"/><link rel="stylesheet" href="/css/index.css"/><link rel="stylesheet" href="/css/prism-base16-monokai.dark.css"/><link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="lilatomic"/><link rel="alternate" href="/feed/feed.json" type="application/json" title="lilatomic"/></head><body><header><h1 id="home" class="home"><a href="/">lilatomic</a></h1></header><div id="main"><main><article><h1>2025-11-24</h1><aside id="tagbox"><p>Tags: </p><a href="/tags/reading/" class="post-tag">reading</a></aside><aside id="toc"><nav class="toc" >
         <ol><li><a href="#infrastructure-with-ux-on-the-team">Infrastructure with UX on the team</a></li><li><a href="#rock-the-jvm-interview-with-haoyi-li">Rock the JVM interview with Haoyi Li</a></li><li><a href="#pyjsx">PyJSX</a></li><li><a href="#using-postgres-schemas-to-separate-data-of-your-saas-application-in-django">Using Postgres schemas to separate data of your SaaS application in Django</a></li></ol>
       </nav></aside><div class="content"><h2 id="infrastructure-with-ux-on-the-team" tabindex="-1"><a class="direct-link" href="#infrastructure-with-ux-on-the-team">Infrastructure with UX on the team</a></h2>
-<p><a href="https://youtu.be/0-DSjLk6X-U">source</a></p>
+<p><a
+        class="source-link"
+        href="https://youtu.be/0-DSjLk6X-U"
+        aria-label="View source code: youtube"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">youtube</span><br>
+</a></p>
 <p>There's always talk about how &quot;Platform Engineering involves product thinking&quot;. This talk actually presents what that looks like. It also shows what that looks like as a continued project with evolution of the offering. One technique they used was to leverage Terraform overrides to allow their users to extend the platform. (In contrast to using templates to generate repos, in which the modifications are done to the generated code.) They leverage this to identify the shortcomings of the platform: If 60% of users are overriding a certain aspect, that's a signal that they failed to capture a requirement.</p>
 <h2 id="rock-the-jvm-interview-with-haoyi-li" tabindex="-1"><a class="direct-link" href="#rock-the-jvm-interview-with-haoyi-li">Rock the JVM interview with Haoyi Li</a></h2>
-<p><a href="https://youtu.be/a-uME7QBlxg">source</a></p>
+<p><a
+        class="source-link"
+        href="https://youtu.be/a-uME7QBlxg"
+        aria-label="View source code: youtube"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">youtube</span><br>
+</a></p>
 <p>A casual chat with Haoyi Li. He's involved in the Scala ecosystem, focusing on practical tools that are well thought through. The important takeaway for me was about promoting your open source projects. If you've gone through all the work of making your open-source tool, you should put in the remainder to make a blog post and do some promotion.</p>
 <h2 id="pyjsx" tabindex="-1"><a class="direct-link" href="#pyjsx">PyJSX</a></h2>
-<p><a href="https://youtu.be/FYBQX6n5HOE">source</a><br>
-<a href="https://github.com/tomasr8/pyjsx">repo</a></p>
+<p><a
+        class="source-link"
+        href="https://youtu.be/FYBQX6n5HOE"
+        aria-label="View source code: youtube"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">youtube</span><br>
+</a><br>
+<a
+        class="source-link"
+        href="https://github.com/tomasr8/pyjsx"
+        aria-label="View source code: github"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">github</span><br>
+</a></p>
 <p>JSX lets you write HTML mixed in with your code. I've long maintained that the best part of React is actually just the ability to create webpages with components (instead of templates); and that most people would be happy with just that part of it and none of the frontend. This brings that experience to Python! Pretty neat.</p>
 <h2 id="using-postgres-schemas-to-separate-data-of-your-saas-application-in-django" tabindex="-1"><a class="direct-link" href="#using-postgres-schemas-to-separate-data-of-your-saas-application-in-django">Using Postgres schemas to separate data of your SaaS application in Django</a></h2>
-<p><a href="https://youtu.be/z7BSxZrDjW4">source</a></p>
+<p><a
+        class="source-link"
+        href="https://youtu.be/z7BSxZrDjW4"
+        aria-label="View source code: youtube"
+        title="View source code"
+      ><br>
+<span
+          class="source-link__icon"
+          aria-hidden="true"
+        >&lt;/&gt;</span><br>
+<span class="source-link__label">youtube</span><br>
+</a></p>
 <p>A clever use of Postgres Schemas to keep data separate. This requires some integration with Django. But because it's implementable in middleware, you can assure that you're always enforcing checks on organisational access. (That is, you can't forget to add a check to only show items from the user's org and leak all other org's info). The downside is that aggregations <em>for you</em> are much harder. For example, if you're trying to figure out how many users each tenant has (to identify small/medium/large tenants), you have to make queries against each schema or so some shenanigans.</p>
 </div></article><hr/><ul></ul></main><nav class="nav"><ul><li class="nav-item"><a href="/">Home</a></li><li class="nav-item"><a href="/posts/">Archive</a></li><li class="nav-item"><a href="/recipes/">Recipes</a></li><li class="nav-item"><a href="/tags/">Tags</a></li><li class="nav-item"><a href="/series/">Series</a></li><li class="nav-item"><a href="/about/">About Me</a></li><li class="nav-item"><a href="/colophon/">Colophon</a></li><li class="nav-item"><a href="/feedlist/">Feeds</a></li></ul></nav></div></body></html>
